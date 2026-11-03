@@ -50,6 +50,8 @@ export default defineConfig({
     assetsInlineLimit: process.env.INLINE ? 100_000_000 : 4096,
     rollupOptions: {
       output: {
+        // the single-file preview (INLINE=1) needs everything in one script
+        inlineDynamicImports: !!process.env.INLINE,
         // separate, long-cached vendor chunk: returning visitors only re-download the app code
         manualChunks: process.env.INLINE
           ? undefined
