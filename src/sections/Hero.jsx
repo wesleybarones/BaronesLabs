@@ -15,6 +15,7 @@ const avatarFiles = import.meta.glob('../assets/wesley-avatar.webp', { eager: tr
 const AVATAR = Object.values(avatarFiles)[0] ?? ABOUT_PHOTO
 import { IconArrow, IconArrowDown } from '../components/Icons'
 import HudCorners from '../components/ui/HudCorners'
+import NeonSign from '../components/NeonSign'
 
 function Chip({ children, className = '', style }) {
   return (
@@ -89,7 +90,7 @@ export default function Hero() {
       {/* HUD frame (desktop) */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-x-6 bottom-6 top-[96px] hidden xl:block"
+        className="pointer-events-none absolute inset-x-6 bottom-6 top-[96px] hidden min-[1400px]:block"
         initial={{ opacity: 0 }}
         animate={{ opacity: show ? 1 : 0 }}
         transition={{ duration: 1, delay: 0.9 }}
@@ -215,23 +216,6 @@ export default function Hero() {
               <HudCorners inset={-12} size={22} />
             </motion.figure>
 
-            {/* neon sign (depth 3, in front) */}
-            <motion.p
-              className="pointer-events-none absolute inset-x-0 bottom-[13%] flex justify-center"
-              style={{ x: d3x, y: d3y }}
-              initial={{ opacity: 0 }}
-              animate={show ? { opacity: 1 } : {}}
-              transition={{ delay: 1.3, duration: 0.01 }}
-            >
-              {show && (
-                <span className="neon-sign -rotate-[4deg] text-center text-[40px] leading-[0.95] sm:text-[48px] lg:text-[clamp(40px,3.6vw,58px)]">
-                  {t.hero.neon[0]}
-                  <br />
-                  <span className="neon-dim">{t.hero.neon[1]}</span>
-                </span>
-              )}
-            </motion.p>
-
             {/* floating HUD chips (depth 3) */}
             <Chip className="-left-[6%] top-[12%]" style={{ x: d3x, y: d3y }}>
               {t.hero.chips[0]}
@@ -243,6 +227,15 @@ export default function Hero() {
               {t.hero.chips[2]}
             </Chip>
           </div>
+
+          {/* neon "projetos do zero": outside the photo — left of the frame on desktop, below it on mobile */}
+          <NeonSign
+            lines={t.hero.neon}
+            show={show}
+            arrow="right"
+            className="absolute bottom-[14%] right-full z-10 mr-6 hidden xl:block"
+          />
+          <NeonSign lines={t.hero.neon} show={show} arrow="up" className="mt-10 flex justify-center xl:hidden" />
         </motion.div>
       </div>
 
