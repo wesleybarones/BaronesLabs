@@ -4,11 +4,15 @@ import { useLang } from '../i18n/LangContext'
 import { scrollToId, useApp } from '../lib/AppContext'
 import { useFinePointer, useIsDesktop, useReducedMotion } from '../lib/hooks'
 import { EASE } from '../lib/motion'
-import { PROJECTS, waLink } from '../config'
+import { waLink } from '../config'
 import RevealHeading from '../components/ui/RevealHeading'
 import Button from '../components/ui/Button'
 import { LogoSymbol } from '../components/Logo'
-import { Laptop, Phone } from '../components/Mockups'
+import { ABOUT_PHOTO } from '../config'
+
+// Avatar do hero: usa src/assets/wesley-avatar.webp quando existir; senão, cai na foto padrão.
+const avatarFiles = import.meta.glob('../assets/wesley-avatar.webp', { eager: true, import: 'default' })
+const AVATAR = Object.values(avatarFiles)[0] ?? ABOUT_PHOTO
 import { IconArrow, IconArrowDown } from '../components/Icons'
 import HudCorners from '../components/ui/HudCorners'
 
@@ -60,8 +64,6 @@ export default function Hero() {
   const hexRot = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 40])
 
   const show = ready
-  const lap = PROJECTS[0]
-  const pho = PROJECTS[1] ?? PROJECTS[0]
 
   return (
     <section
@@ -163,37 +165,64 @@ export default function Hero() {
 
         {/* VISUAL */}
         <motion.div
-          className="relative mx-auto w-full max-w-[520px] lg:col-span-5 lg:max-w-none"
+          className="relative mx-auto w-full max-w-[420px] px-4 sm:max-w-[480px] lg:col-span-5 lg:max-w-none lg:px-6"
           style={{ y: mockY }}
           initial={{ opacity: 0, scale: 0.94, filter: 'blur(14px)' }}
           animate={show ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : {}}
           transition={{ duration: 1.1, ease: EASE, delay: 0.75 }}
         >
-          <div className="relative aspect-[1/0.92]">
-            {/* hex watermark */}
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-[560px]">
+            {/* hex watermark (depth 1) */}
             <motion.div
               aria-hidden
-              className="absolute inset-[-8%] opacity-[0.13]"
+              className="absolute inset-[-14%] opacity-[0.16]"
               style={{ x: d1x, y: d1y, rotate: hexRot }}
             >
               <LogoSymbol className="h-full w-full" />
             </motion.div>
-            <div aria-hidden className="absolute inset-[10%] rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.22),transparent_65%)] blur-2xl" />
+            <div aria-hidden className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.20),transparent_65%)] blur-2xl" />
 
-            <motion.div className="absolute left-0 top-[12%] w-[86%]" style={{ x: d2x, y: d2y }}>
-              <Laptop accent={lap.accent} name={lap.name} label={t.portfolio.preview} src={lap.desktop} alt={lap.name} />
-            </motion.div>
-            <motion.div className="absolute bottom-[2%] right-[2%] w-[27%]" style={{ x: d3x, y: d3y }}>
-              <Phone accent={pho.accent} name={pho.name} label={t.portfolio.preview} src={pho.mobile} alt={pho.name} />
-            </motion.div>
+            {/* avatar (depth 2) */}
+            <motion.figure className="group absolute inset-0" style={{ x: d2x, y: d2y }}>
+              <div aria-hidden className="absolute inset-0 translate-x-[-6px] translate-y-[4px] border border-magenta/50" />
+              <div className="relative h-full w-full overflow-hidden border border-cyan/70 shadow-[0_0_40px_rgba(0,240,255,0.22)]">
+                <img
+                  src={AVATAR}
+                  alt={t.hero.avatarAlt}
+                  className="h-full w-full object-cover object-[50%_30%]"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+                {/* lens scan: a thin cyan line sweeps the glasses every few seconds */}
+                {!reduce && (
+                  <motion.span
+                    aria-hidden
+                    className="absolute inset-x-0 h-[2px] bg-cyan/70 shadow-[0_0_14px_#00F0FF] mix-blend-screen"
+                    initial={{ top: '0%', opacity: 0 }}
+                    animate={{ top: ['8%', '92%'], opacity: [0, 0.9, 0.9, 0] }}
+                    transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 4.5, ease: 'easeInOut', delay: 2 }}
+                  />
+                )}
+                <div aria-hidden className="bg-scanlines pointer-events-none absolute inset-0 opacity-40" />
+                <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg via-bg/50 to-transparent" />
+                <figcaption className="hud absolute bottom-4 left-4 right-4 flex items-center justify-between text-[10px] text-cyan/80">
+                  <span>ID · W.BARONES</span>
+                  <span className="flex items-center gap-2">
+                    <span className="live-dot scale-75" aria-hidden /> ONLINE
+                  </span>
+                </figcaption>
+              </div>
+              <HudCorners inset={-12} size={22} />
+            </motion.figure>
 
-            <Chip className="left-[4%] top-[2%]" style={{ x: d3x, y: d3y }}>
+            {/* floating HUD chips (depth 3) */}
+            <Chip className="-left-[6%] top-[14%]" style={{ x: d3x, y: d3y }}>
               {t.hero.chips[0]}
             </Chip>
-            <Chip className="right-[-2%] top-[30%]" style={{ x: d1x, y: d1y }}>
+            <Chip className="-right-[5%] top-[38%]" style={{ x: d1x, y: d1y }}>
               {t.hero.chips[1]}
             </Chip>
-            <Chip className="bottom-[8%] left-[10%]" style={{ x: d2x, y: d2y }}>
+            <Chip className="-left-[4%] bottom-[18%]" style={{ x: d2x, y: d2y }}>
               {t.hero.chips[2]}
             </Chip>
           </div>

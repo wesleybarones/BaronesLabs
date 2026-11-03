@@ -45,6 +45,7 @@ const pt = {
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'role',
+    avatarAlt: 'Wesley Barones com óculos futurista; no reflexo das lentes, um notebook mostra a seção de pacotes deste site',
   },
   marquee: [
     'Landing pages',
@@ -333,6 +334,7 @@ const en = {
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'scroll',
+    avatarAlt: "Wesley Barones wearing futuristic glasses; the lenses reflect a laptop showing this site's packages section",
   },
   marquee: [
     'Landing pages',
@@ -620,6 +622,7 @@ const es = {
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'desliza',
+    avatarAlt: 'Wesley Barones con lentes futuristas; en el reflejo, una laptop muestra la sección de paquetes de este sitio',
   },
   marquee: [
     'Landing pages',
