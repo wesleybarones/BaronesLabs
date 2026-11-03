@@ -217,6 +217,7 @@ const pt = {
           'Domínio + hospedagem',
           'WhatsApp, formulário e mapa',
           '3 alterações grátis + prioridade',
+          'Bônus: e-book “Feche vendas pelo WhatsApp”',
         ],
         cta: 'Quero o Premium',
       },
@@ -233,10 +234,12 @@ const pt = {
   guaranteeBonus: { label: '// GARANTIA + BÔNUS', title: 'Risco zero. E ainda tem *bônus*.' },
   bonus: {
     label: '// BÔNUS',
-    title: 'E-book *“Como divulgar seu site”*.',
-    text: 'Um guia prático para levar clientes até a sua página nos primeiros dias no ar.',
-    badge: 'Grátis em todos os pacotes',
-    cover: { kicker: 'Barones Labs · Guia', title: 'Como divulgar seu site', vol: 'VOL.01' },
+    title: 'E-books *bônus* para vender mais.',
+    text: 'Uma série de guias práticos da Barones Labs, com a mesma cara do seu site.',
+    books: [
+      { vol: 'VOL.01', title: 'Como divulgar seu site', desc: 'Do link na bio ao Google: 30 dias para levar clientes até o seu site.', badge: 'Todos os pacotes', short: 'Bônus', premium: false },
+      { vol: 'VOL.02', title: 'Feche vendas pelo WhatsApp', desc: 'Roteiros prontos para transformar conversa em venda, no WhatsApp e no telefone.', badge: 'Exclusivo Premium', short: 'Premium', premium: true },
+    ],
   },
   guarantee: {
     label: '// GARANTIA',
@@ -523,6 +526,7 @@ const en = {
           'Domain + hosting',
           'WhatsApp, contact form & map',
           '3 free revisions + priority',
+          'Bonus: “Close sales on WhatsApp” e-book',
         ],
         cta: 'I want Premium',
       },
@@ -544,10 +548,12 @@ const en = {
   guaranteeBonus: { label: '// GUARANTEE + BONUS', title: 'Zero risk. Plus a *bonus*.' },
   bonus: {
     label: '// BONUS',
-    title: 'E-book *“How to promote your website”*.',
-    text: 'A practical guide to bringing customers to your page in its first days live.',
-    badge: 'Free with every package',
-    cover: { kicker: 'Barones Labs · Guide', title: 'How to promote your website', vol: 'VOL.01' },
+    title: 'Bonus *e-books* to sell more.',
+    text: 'A series of practical Barones Labs guides, with the same look as your website.',
+    books: [
+      { vol: 'VOL.01', title: 'How to promote your website', desc: 'From your bio link to Google: 30 days to bring customers to your site.', badge: 'Every package', short: 'Bonus', premium: false },
+      { vol: 'VOL.02', title: 'Close sales on WhatsApp', desc: 'Ready-made scripts to turn conversations into sales, on WhatsApp and on the phone.', badge: 'Premium only', short: 'Premium', premium: true },
+    ],
   },
   guarantee: {
     label: '// GUARANTEE',
@@ -834,6 +840,7 @@ const es = {
           'Dominio + hosting',
           'WhatsApp, formulario y mapa',
           '3 cambios gratis + prioridad',
+          'Bono: e-book “Cierra ventas por WhatsApp”',
         ],
         cta: 'Quiero el Premium',
       },
@@ -855,10 +862,12 @@ const es = {
   guaranteeBonus: { label: '// GARANTÍA + BONO', title: 'Riesgo cero. Y además, un *bono*.' },
   bonus: {
     label: '// BONO',
-    title: 'E-book *“Cómo promocionar tu sitio”*.',
-    text: 'Una guía práctica para llevar clientes a tu página en sus primeros días en línea.',
-    badge: 'Gratis en todos los paquetes',
-    cover: { kicker: 'Barones Labs · Guía', title: 'Cómo promocionar tu sitio', vol: 'VOL.01' },
+    title: 'E-books *de regalo* para vender más.',
+    text: 'Una serie de guías prácticas de Barones Labs, con la misma estética de tu sitio.',
+    books: [
+      { vol: 'VOL.01', title: 'Cómo promocionar tu sitio', desc: 'Del link en la bio a Google: 30 días para llevar clientes a tu sitio.', badge: 'Todos los paquetes', short: 'Bono', premium: false },
+      { vol: 'VOL.02', title: 'Cierra ventas por WhatsApp', desc: 'Guiones listos para convertir conversaciones en ventas, por WhatsApp y por teléfono.', badge: 'Exclusivo Premium', short: 'Premium', premium: true },
+    ],
   },
   guarantee: {
     label: '// GARANTÍA',

@@ -1,2 +1,5 @@
 node_modules
 dist
+
+# e-books pagos: não publicar no repositório público
+ebooks/
