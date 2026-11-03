@@ -215,14 +215,31 @@ export default function Hero() {
               <HudCorners inset={-12} size={22} />
             </motion.figure>
 
+            {/* neon sign (depth 3, in front) */}
+            <motion.p
+              className="pointer-events-none absolute inset-x-0 bottom-[13%] flex justify-center"
+              style={{ x: d3x, y: d3y }}
+              initial={{ opacity: 0 }}
+              animate={show ? { opacity: 1 } : {}}
+              transition={{ delay: 1.3, duration: 0.01 }}
+            >
+              {show && (
+                <span className="neon-sign -rotate-[4deg] text-center text-[40px] leading-[0.95] sm:text-[48px] lg:text-[clamp(40px,3.6vw,58px)]">
+                  {t.hero.neon[0]}
+                  <br />
+                  <span className="neon-dim">{t.hero.neon[1]}</span>
+                </span>
+              )}
+            </motion.p>
+
             {/* floating HUD chips (depth 3) */}
-            <Chip className="-left-[6%] top-[14%]" style={{ x: d3x, y: d3y }}>
+            <Chip className="-left-[6%] top-[12%]" style={{ x: d3x, y: d3y }}>
               {t.hero.chips[0]}
             </Chip>
-            <Chip className="-right-[5%] top-[38%]" style={{ x: d1x, y: d1y }}>
+            <Chip className="-right-[5%] top-[34%]" style={{ x: d1x, y: d1y }}>
               {t.hero.chips[1]}
             </Chip>
-            <Chip className="-left-[4%] bottom-[18%]" style={{ x: d2x, y: d2y }}>
+            <Chip className="-left-[5%] top-[48%]" style={{ x: d2x, y: d2y }}>
               {t.hero.chips[2]}
             </Chip>
           </div>

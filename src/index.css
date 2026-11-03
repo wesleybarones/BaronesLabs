@@ -19,6 +19,7 @@
   --font-display: "Chakra Petch", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-neon: "Tilt Neon", "Chakra Petch", ui-sans-serif, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -474,4 +475,43 @@ html.has-custom-cursor * {
 @keyframes dot-breathe {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.45; }
+}
+
+/* ── Neon sign (hero "projetos do zero") ───── */
+.neon-sign {
+  font-family: var(--font-neon);
+  color: #f2ffff;
+  text-shadow:
+    0 0 2px #fff,
+    0 0 6px #00f0ff,
+    0 0 14px #00f0ff,
+    0 0 28px rgba(0, 240, 255, 0.8),
+    0 0 52px rgba(0, 240, 255, 0.5),
+    -3px 0 14px rgba(224, 64, 216, 0.5);
+  animation:
+    neon-on 1.4s steps(1) both,
+    neon-idle 7s steps(1) 2.4s infinite;
+}
+.neon-sign .neon-dim {
+  animation: neon-word 9s steps(1) 3s infinite;
+}
+@keyframes neon-on {
+  0% { opacity: 0.08; }
+  10% { opacity: 1; }
+  14% { opacity: 0.15; }
+  22% { opacity: 1; }
+  26% { opacity: 0.3; }
+  34%, 100% { opacity: 1; }
+}
+@keyframes neon-idle {
+  0%, 93%, 100% { opacity: 1; }
+  94% { opacity: 0.45; }
+  95% { opacity: 1; }
+  96.5% { opacity: 0.6; }
+  97.5% { opacity: 1; }
+}
+@keyframes neon-word {
+  0%, 88%, 100% { opacity: 1; }
+  89% { opacity: 0.25; }
+  90.5% { opacity: 1; }
 }

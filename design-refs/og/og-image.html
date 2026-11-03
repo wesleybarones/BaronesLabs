@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500&family=Tilt+Neon&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; background: #07080d; overflow: hidden; position: relative; font-family: Inter, sans-serif; }
+  .grid { position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(0,240,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,.05) 1px, transparent 1px);
+    background-size: 48px 48px; }
+  .glow { position: absolute; right: -80px; top: -60px; width: 760px; height: 760px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,240,255,.18), transparent 62%); }
+  .photo { position: absolute; right: 0; top: 0; width: 600px; height: 630px;
+    background: url(../../src/assets/wesley-avatar.webp) 50% 22% / cover no-repeat;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 26%); mask-image: linear-gradient(90deg, transparent 0%, #000 26%); }
+  .scan { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(255,255,255,.03) 0 1px, transparent 1px 3px); }
+  .left { position: absolute; left: 64px; top: 56px; width: 640px; }
+  .logo { height: 58px; }
+  .hud { margin-top: 44px; font: 500 15px 'JetBrains Mono', monospace; letter-spacing: .2em; text-transform: uppercase; color: rgba(0,240,255,.8); display: flex; align-items: center; gap: 12px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #ffe600; box-shadow: 0 0 10px #ffe600; }
+  h1 { margin-top: 18px; font: 700 70px/1.02 'Chakra Petch', sans-serif; color: #e8f7fa; letter-spacing: -.01em; }
+  .hl { color: #00f0ff; text-shadow: -3px 0 #e040d8; }
+  .sub { margin-top: 22px; font-size: 22px; line-height: 1.5; color: #8a9bb0; max-width: 520px; }
+  .neon { position: absolute; right: 120px; bottom: 82px; transform: rotate(-4deg); text-align: center;
+    font: 64px/0.95 'Tilt Neon', sans-serif; color: #f2ffff;
+    text-shadow: 0 0 2px #fff, 0 0 7px #00f0ff, 0 0 16px #00f0ff, 0 0 32px rgba(0,240,255,.8), 0 0 60px rgba(0,240,255,.5), -3px 0 16px rgba(224,64,216,.5); }
+  .url { position: absolute; left: 64px; bottom: 44px; font: 500 16px 'JetBrains Mono', monospace; letter-spacing: .14em; color: #55637a; }
+  .frame { position: absolute; inset: 22px; border: 1px solid rgba(0,240,255,.16); }
+  .c { position: absolute; width: 22px; height: 22px; border-color: #00f0ff; border-style: solid; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="glow"></div>
+  <div class="photo"></div>
+  <div class="scan"></div>
+  <div class="frame"></div>
+  <span class="c" style="left:22px;top:22px;border-width:2px 0 0 2px"></span>
+  <span class="c" style="right:22px;top:22px;border-width:2px 2px 0 0"></span>
+  <span class="c" style="left:22px;bottom:22px;border-width:0 0 2px 2px"></span>
+  <span class="c" style="right:22px;bottom:22px;border-width:0 2px 2px 0"></span>
+  <div class="left">
+    <img class="logo" src="../../src/assets/brand/logo.webp" alt="" />
+    <p class="hud"><span class="dot"></span>Landing pages · Wesley Barones</p>
+    <h1>Sites que fazem seus clientes dizerem <span class="hl">uau</span>.</h1>
+    <p class="sub">Visual de agência, no ar em até 48h. Domínio, hospedagem e WhatsApp inclusos.</p>
+  </div>
+  <p class="neon">projetos<br />do zero</p>
+  <p class="url">BARONES-LABS.VERCEL.APP</p>
+</body>
+</html>

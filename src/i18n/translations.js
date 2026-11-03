@@ -45,6 +45,7 @@ const pt = {
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'role',
+    neon: ['projetos', 'do zero'],
     avatarAlt: 'Wesley Barones com óculos futurista; no reflexo das lentes, um notebook mostra a seção de pacotes deste site',
   },
   marquee: [
@@ -141,6 +142,13 @@ const pt = {
       { title: 'Criação', text: 'Seu site fica pronto em 48h a 7 dias, conforme o pacote.' },
       { title: 'Ajustes e lançamento', text: 'Até 3 alterações grátis e seu site no ar, com domínio e tudo funcionando.' },
     ],
+  },
+  money: {
+    label: '// MISSÃO',
+    title: 'Meu objetivo é colocar *dinheiro* no seu bolso.',
+    text: 'Site bonito é só o começo. Cada página é pensada para transformar visita em conversa no WhatsApp, e conversa em venda.',
+    points: ['WhatsApp em toda a página', 'Carrega rápido até no 4G', 'Texto pensado para vender'],
+    cta: 'Quero vender mais',
   },
   pricing: {
     label: '// 06_PACOTES',
@@ -343,6 +351,7 @@ const en = {
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'scroll',
+    neon: ['projects', 'from scratch'],
     avatarAlt: "Wesley Barones wearing futuristic glasses; the lenses reflect a laptop showing this site's packages section",
   },
   marquee: [
@@ -439,6 +448,13 @@ const en = {
       { title: 'Build', text: 'Your website is ready in 48 hours to 7 days, depending on the package.' },
       { title: 'Tweaks & launch', text: 'Up to 3 free revisions, then your site goes live with everything working.' },
     ],
+  },
+  money: {
+    label: '// MISSION',
+    title: 'My goal is to put *money* in your pocket.',
+    text: 'A beautiful site is just the start. Every page is built to turn visits into WhatsApp conversations, and conversations into sales.',
+    points: ['WhatsApp on every screen', 'Loads fast, even on 4G', 'Copy written to sell'],
+    cta: 'I want to sell more',
   },
   pricing: {
     label: '// 06_PACKAGES',
@@ -640,6 +656,7 @@ const es = {
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'desliza',
+    neon: ['proyectos', 'desde cero'],
     avatarAlt: 'Wesley Barones con lentes futuristas; en el reflejo, una laptop muestra la sección de paquetes de este sitio',
   },
   marquee: [
@@ -736,6 +753,13 @@ const es = {
       { title: 'Creación', text: 'Tu sitio queda listo en 48 horas a 7 días, según el paquete.' },
       { title: 'Ajustes y lanzamiento', text: 'Hasta 3 cambios gratis y tu sitio en línea, con todo funcionando.' },
     ],
+  },
+  money: {
+    label: '// MISIÓN',
+    title: 'Mi objetivo es poner *dinero* en tu bolsillo.',
+    text: 'Un sitio bonito es solo el comienzo. Cada página está pensada para convertir visitas en conversaciones por WhatsApp, y conversaciones en ventas.',
+    points: ['WhatsApp en toda la página', 'Carga rápido incluso en 4G', 'Textos pensados para vender'],
+    cta: 'Quiero vender más',
   },
   pricing: {
     label: '// 06_PAQUETES',

@@ -17,6 +17,7 @@ import Solution from './sections/Solution'
 import Audience from './sections/Audience'
 import Portfolio from './sections/Portfolio'
 import Process from './sections/Process'
+import MoneyRain from './sections/MoneyRain'
 import Pricing from './sections/Pricing'
 import Bonus from './sections/Bonus'
 import Guarantee from './sections/Guarantee'
@@ -89,6 +90,7 @@ export default function App() {
           <Audience />
           <Portfolio />
           <Process />
+          <MoneyRain />
           <Pricing />
           <Bonus />
           <Guarantee />
