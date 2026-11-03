@@ -22,25 +22,30 @@ export const ABOUT_PHOTO = wesleyPhoto
   - id: identificador único (usado nas traduções do segmento em src/i18n/translations.js → portfolio.segments)
   - name: nome exibido
   - url: link do site no ar (vazio = botão desativado)
-  - desktop / mobile: prints em /public (proporção 16:10 e 9:19.5). Vazio = placeholder "PREVIEW".
+  - desktop / mobile: prints em src/assets/portfolio (proporção 16:10 e 9:19.5), importados acima. Vazio = placeholder "PREVIEW".
   - accent: cor de destaque do placeholder
 */
+import lizanoDesktop from './assets/portfolio/lizano-desktop.webp'
+import lizanoMobile from './assets/portfolio/lizano-mobile.webp'
+import papelDesktop from './assets/portfolio/papeldeparederj-desktop.webp'
+import papelMobile from './assets/portfolio/papeldeparederj-mobile.webp'
+
 export const PROJECTS = [
   {
     id: 'lizano',
     name: 'Lizano',
-    url: '',
-    desktop: '',
-    mobile: '',
+    url: 'https://www.lizano.com.br',
+    desktop: lizanoDesktop,
+    mobile: lizanoMobile,
     accent: '#E8C9A0',
   },
   {
     id: 'papeldeparederj',
-    name: 'papeldeparederj',
-    url: '',
-    desktop: '',
-    mobile: '',
-    accent: '#9FE3C8',
+    name: 'Papel de Parede RJ',
+    url: 'https://www.papeldeparederj.com.br',
+    desktop: papelDesktop,
+    mobile: papelMobile,
+    accent: '#D9B26A',
   },
 ]
 
