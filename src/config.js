@@ -7,7 +7,7 @@
 // TROCAR: substitua [SEU_NUMERO] pelo seu DDD + número.
 // Endereço definitivo do site (usado em canonical, Open Graph, sitemap e dados estruturados).
 export const SITE_URL = 'https://baroneslabs.com.br'
-export const OG_IMAGE = `${SITE_URL}/og-image.jpg?v=4`
+export const OG_IMAGE = `${SITE_URL}/og-baroneslabs.jpg`
 
 export const WHATSAPP_NUMBER = '5521990296352'
 export const WHATSAPP_DISPLAY = '+55 21 99029-6352'
