@@ -33,7 +33,7 @@ export default function FooterLogo() {
           show: { clipPath: 'inset(0 0% 0 0)', opacity: 1, transition: { duration: 1.1, ease } },
         }}
       >
-        <LogoHorizontal className="relative !h-16 md:!h-20" />
+        <LogoHorizontal className="relative !h-16 md:!h-20" loading="lazy" />
       </motion.div>
       {!reduce && (
         <motion.span

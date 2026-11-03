@@ -399,6 +399,9 @@ html.has-custom-cursor * {
     left 0.35s var(--ease-out-expo),
     right 0.35s var(--ease-out-expo);
 }
+.link-u-tall::after {
+  bottom: 12px;
+}
 .link-u:hover::after,
 .link-u:focus-visible::after,
 .link-u[aria-current="true"]::after {

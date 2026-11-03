@@ -1,0 +1,12 @@
+# Barones Labs - https://baroneslabs.com.br
+User-agent: *
+Allow: /
+
+# Rotas internas e administrativas (sem paginas publicas)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /design-refs/
+Disallow: /*?*utm_
+Disallow: /*?*fbclid
+
+Sitemap: https://baroneslabs.com.br/sitemap.xml

@@ -105,7 +105,7 @@ export default function Hero() {
         {/* TEXT */}
         <motion.div className="relative z-10 lg:col-span-7" style={{ y: textY, opacity: textO }}>
           <motion.p
-            className="hud mb-7 inline-flex items-center gap-3 border border-line bg-surface/50 px-3.5 py-2 backdrop-blur"
+            className="hud mb-6 inline-flex items-center gap-3 border border-line bg-surface/50 px-3.5 py-2 backdrop-blur"
             initial={{ opacity: 0, y: 12 }}
             animate={show ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE }}
@@ -114,13 +114,22 @@ export default function Hero() {
             {t.hero.status}
           </motion.p>
 
-          <RevealHeading as="h1" text={t.hero.title} className="h1 max-w-[14ch] text-ink !text-[clamp(40px,4.9vw,82px)]" glitch animate={show} delay={0.1} />
+          <RevealHeading
+            as="h1"
+            text={t.hero.title}
+            kicker={t.hero.kicker}
+            kickerClassName="mb-4 font-mono text-[12px] font-medium uppercase tracking-[0.2em] text-cyan/80 md:text-[13px]"
+            className="h1 max-w-[14ch] text-ink !text-[clamp(40px,4.9vw,82px)]"
+            glitch
+            animate={show}
+            delay={0.1}
+          />
 
           <motion.p
             className="lead mt-7 max-w-[540px]"
             initial={{ opacity: 0, y: 16 }}
             animate={show ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.55 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.3 }}
           >
             {t.hero.sub}
           </motion.p>
@@ -129,7 +138,7 @@ export default function Hero() {
             className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
             initial={{ opacity: 0, y: 16 }}
             animate={show ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.7 }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
           >
             <Button href={waLink(t.wa.default)} size="lg" magnetic icon={<IconArrow className="h-5 w-5" />} className="w-full sm:w-auto">
               {t.hero.cta}
@@ -153,7 +162,7 @@ export default function Hero() {
             className="mt-8 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-2 md:text-[12px]"
             initial={{ opacity: 0 }}
             animate={show ? { opacity: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            transition={{ duration: 0.8, delay: 0.55 }}
           >
             {t.hero.proof.map((p, i) => (
               <li key={p} className="flex items-center gap-5">
@@ -170,7 +179,7 @@ export default function Hero() {
           style={{ y: mockY }}
           initial={{ opacity: 0, scale: 0.94, filter: 'blur(14px)' }}
           animate={show ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 1.1, ease: EASE, delay: 0.75 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.15 }}
         >
           <div className="relative mx-auto aspect-[4/5] w-full max-w-[560px]">
             {/* hex watermark (depth 1) */}
@@ -179,7 +188,7 @@ export default function Hero() {
               className="absolute inset-[-14%] opacity-[0.16]"
               style={{ x: d1x, y: d1y, rotate: hexRot }}
             >
-              <LogoSymbol className="h-full w-full" />
+              <LogoSymbol className="h-full w-full" loading="eager" />
             </motion.div>
             <div aria-hidden className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.20),transparent_65%)] blur-2xl" />
 
@@ -189,6 +198,9 @@ export default function Hero() {
               <div className="relative h-full w-full overflow-hidden border border-cyan/70 shadow-[0_0_40px_rgba(0,240,255,0.22)]">
                 <img
                   src={AVATAR}
+                  width={1040}
+                  height={1291}
+                  loading="eager"
                   alt={t.hero.avatarAlt}
                   className="h-full w-full object-cover object-[50%_30%]"
                   fetchpriority="high"

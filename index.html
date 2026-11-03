@@ -4,48 +4,276 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#07080D" />
-    <title>Barones Labs | Landing pages de Wesley Barones</title>
-    <meta name="description" content="Conectando pessoas. Construindo Negócios. Landing pages feitas do zero, com visual de agência, no ar em até 48h. Domínio, hospedagem e WhatsApp inclusos." />
-    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
-    <link rel="canonical" href="https://barones-labs.vercel.app/" />
 
-    <!-- Preview grande ao compartilhar (WhatsApp, Instagram, Facebook, LinkedIn, X).
-         Se trocar o domínio, atualize as URLs abaixo. A imagem é public/og-image.jpg (1200×630),
-         gerada a partir de design-refs/og/og-image.html. -->
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="pt_BR" />
-    <meta property="og:locale:alternate" content="en_US" />
-    <meta property="og:locale:alternate" content="es_ES" />
-    <meta property="og:site_name" content="Barones Labs" />
-    <meta property="og:title" content="Barones Labs | Landing pages de Wesley Barones" />
-    <meta property="og:description" content="Conectando pessoas. Construindo Negócios. Landing pages feitas do zero, com visual de agência, no ar em até 48h. Domínio, hospedagem e WhatsApp inclusos." />
-    <meta property="og:url" content="https://barones-labs.vercel.app/" />
-    <meta property="og:image" content="https://barones-labs.vercel.app/og-image.jpg?v=3" />
-    <meta property="og:image:secure_url" content="https://barones-labs.vercel.app/og-image.jpg?v=3" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Wesley Barones com óculos futurista e a frase em neon projetos do zero" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Barones Labs | Landing pages de Wesley Barones" />
-    <meta name="twitter:description" content="Conectando pessoas. Construindo Negócios. Landing pages feitas do zero, com visual de agência, no ar em até 48h. Domínio, hospedagem e WhatsApp inclusos." />
-    <meta name="twitter:image" content="https://barones-labs.vercel.app/og-image.jpg?v=3" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <script type="application/ld+json">
-      {"@context":"https://schema.org","@graph":[
-        {"@type":"WebSite","@id":"https://barones-labs.vercel.app/#website","url":"https://barones-labs.vercel.app/","name":"Barones Labs","inLanguage":["pt-BR","en","es"]},
-        {"@type":"Person","@id":"https://barones-labs.vercel.app/#wesley","name":"Wesley Barones","url":"https://barones-labs.vercel.app/","jobTitle":"Criador de landing pages","sameAs":["https://instagram.com/wesleybarones"]},
-        {"@type":"Organization","@id":"https://barones-labs.vercel.app/#organization","name":"Barones Labs","url":"https://barones-labs.vercel.app/","logo":"https://barones-labs.vercel.app/apple-touch-icon.png","founder":{"@id":"https://barones-labs.vercel.app/#wesley"},"areaServed":"BR","sameAs":["https://instagram.com/wesleybarones"],
-          "makesOffer":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Criação de landing pages"}}]}
-      ]}
-    </script>
+    <!--
+      SEO. As tags com data-rh="true" são a versão em português lida por robôs que não executam
+      JavaScript (WhatsApp, Facebook, LinkedIn…). No navegador, <Seo /> (react-helmet-async)
+      as substitui pela versão do idioma escolhido. Domínio definitivo: https://baroneslabs.com.br
+      (também em src/config.js → SITE_URL, public/sitemap.xml e public/robots.txt).
+    -->
+    <title>Criação de Landing Pages em Niterói-RJ | Barones Labs</title>
+    <meta name="description" content="Landing pages com visual de agência em Niterói-RJ, no ar em até 48h, com domínio, hospedagem e WhatsApp inclusos. Peça seu orçamento agora pelo WhatsApp." data-rh="true" />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    <link rel="canonical" href="https://baroneslabs.com.br/" data-rh="true" />
+
+    <!-- Google Search Console: verificação por arquivo já publicada em /google9d5192b7753c9d3d.html.
+         Se preferir verificar por meta tag, cole o código abaixo e descomente:
+    <meta name="google-site-verification" content="COLE_AQUI_O_CODIGO" />
+    -->
+
+    <!-- Open Graph / Twitter (imagem 1200×630 em public/og-image.jpg, gerada de design-refs/og/og-image.html) -->
+    <meta property="og:type" content="website" data-rh="true" />
+    <meta property="og:site_name" content="Barones Labs" data-rh="true" />
+    <meta property="og:locale" content="pt_BR" data-rh="true" />
+    <meta property="og:url" content="https://baroneslabs.com.br/" data-rh="true" />
+    <meta property="og:title" content="Barones Labs | Conectando pessoas. Construindo Negócios." data-rh="true" />
+    <meta property="og:description" content="Landing pages com visual de agência em Niterói-RJ, no ar em até 48h, com domínio, hospedagem e WhatsApp inclusos. Peça seu orçamento agora pelo WhatsApp." data-rh="true" />
+    <meta property="og:image" content="https://baroneslabs.com.br/og-image.jpg?v=4" data-rh="true" />
+    <meta property="og:image:secure_url" content="https://baroneslabs.com.br/og-image.jpg?v=4" data-rh="true" />
+    <meta property="og:image:type" content="image/jpeg" data-rh="true" />
+    <meta property="og:image:width" content="1200" data-rh="true" />
+    <meta property="og:image:height" content="630" data-rh="true" />
+    <meta property="og:image:alt" content="Wesley Barones com óculos futurista e a frase em neon projetos do zero" data-rh="true" />
+    <meta name="twitter:card" content="summary_large_image" data-rh="true" />
+    <meta name="twitter:title" content="Barones Labs | Conectando pessoas. Construindo Negócios." data-rh="true" />
+    <meta name="twitter:description" content="Landing pages com visual de agência em Niterói-RJ, no ar em até 48h, com domínio, hospedagem e WhatsApp inclusos. Peça seu orçamento agora pelo WhatsApp." data-rh="true" />
+    <meta name="twitter:image" content="https://baroneslabs.com.br/og-image.jpg?v=4" data-rh="true" />
+    <meta name="twitter:image:alt" content="Wesley Barones com óculos futurista e a frase em neon projetos do zero" data-rh="true" />
+
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Tilt+Neon&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Dados estruturados: negócio local, site, página, breadcrumb e perguntas frequentes -->
+    <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebSite",
+   "@id": "https://baroneslabs.com.br/#website",
+   "url": "https://baroneslabs.com.br/",
+   "name": "Barones Labs",
+   "alternateName": "BaronesLabs",
+   "inLanguage": [
+    "pt-BR",
+    "en",
+    "es"
+   ],
+   "publisher": {
+    "@id": "https://baroneslabs.com.br/#business"
+   }
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://baroneslabs.com.br/#webpage",
+   "url": "https://baroneslabs.com.br/",
+   "name": "Criação de Landing Pages em Niterói-RJ | Barones Labs",
+   "description": "Landing pages com visual de agência em Niterói-RJ, no ar em até 48h, com domínio, hospedagem e WhatsApp inclusos. Peça seu orçamento agora pelo WhatsApp.",
+   "isPartOf": {
+    "@id": "https://baroneslabs.com.br/#website"
+   },
+   "about": {
+    "@id": "https://baroneslabs.com.br/#business"
+   },
+   "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "url": "https://baroneslabs.com.br/og-image.jpg?v=4",
+    "width": 1200,
+    "height": 630
+   },
+   "breadcrumb": {
+    "@id": "https://baroneslabs.com.br/#breadcrumb"
+   },
+   "inLanguage": "pt-BR"
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "https://baroneslabs.com.br/#breadcrumb",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Início",
+     "item": "https://baroneslabs.com.br/"
+    }
+   ]
+  },
+  {
+   "@type": [
+    "ProfessionalService",
+    "LocalBusiness"
+   ],
+   "@id": "https://baroneslabs.com.br/#business",
+   "name": "Barones Labs",
+   "alternateName": "BaronesLabs",
+   "description": "Estúdio de criação de landing pages em Niterói-RJ: sites com visual de agência, no ar em até 48h, com domínio, hospedagem e WhatsApp inclusos.",
+   "url": "https://baroneslabs.com.br/",
+   "logo": "https://baroneslabs.com.br/apple-touch-icon.png",
+   "image": "https://baroneslabs.com.br/og-image.jpg?v=4",
+   "telephone": "+55-21-99029-6352",
+   "priceRange": "R$ 497 – R$ 1.497",
+   "currenciesAccepted": "BRL",
+   "paymentAccepted": "Pix, cartão de crédito",
+   "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Niterói",
+    "addressRegion": "RJ",
+    "addressCountry": "BR"
+   },
+   "areaServed": [
+    {
+     "@type": "City",
+     "name": "Niterói"
+    },
+    {
+     "@type": "City",
+     "name": "Rio de Janeiro"
+    },
+    {
+     "@type": "State",
+     "name": "Rio de Janeiro"
+    },
+    {
+     "@type": "Country",
+     "name": "Brasil"
+    }
+   ],
+   "founder": {
+    "@id": "https://baroneslabs.com.br/#wesley"
+   },
+   "sameAs": [
+    "https://instagram.com/wesleybarones"
+   ],
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+55-21-99029-6352",
+    "contactType": "sales",
+    "availableLanguage": [
+     "Portuguese",
+     "English",
+     "Spanish"
+    ]
+   },
+   "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Pacotes de landing page",
+    "itemListElement": [
+     {
+      "@type": "Offer",
+      "name": "Essencial",
+      "price": "497",
+      "priceCurrency": "BRL",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Landing page Essencial",
+       "description": "Landing page enxuta, entregue em 48h."
+      }
+     },
+     {
+      "@type": "Offer",
+      "name": "Profissional",
+      "price": "897",
+      "priceCurrency": "BRL",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Landing page Profissional",
+       "description": "Landing completa com copy escrita, entregue em 3 a 5 dias."
+      }
+     },
+     {
+      "@type": "Offer",
+      "name": "Premium",
+      "price": "1497",
+      "priceCurrency": "BRL",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Landing page Premium",
+       "description": "Design exclusivo, até 3 idiomas, entregue em até 7 dias."
+      }
+     }
+    ]
+   }
+  },
+  {
+   "@type": "Person",
+   "@id": "https://baroneslabs.com.br/#wesley",
+   "name": "Wesley Barones",
+   "url": "https://baroneslabs.com.br/",
+   "jobTitle": "Criador de landing pages",
+   "worksFor": {
+    "@id": "https://baroneslabs.com.br/#business"
+   },
+   "sameAs": [
+    "https://instagram.com/wesleybarones"
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://baroneslabs.com.br/#faq",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Preciso entender de tecnologia?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Não. Você conversa comigo pelo WhatsApp e eu cuido de tudo, do domínio ao site no ar."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "O domínio fica no meu nome?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Sim, o site e o domínio são seus. O primeiro ano está incluso; a renovação a partir do segundo ano fica por sua conta."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "E se eu quiser mudar algo depois?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Você tem 3 alterações grátis após a entrega. Depois disso, pode contratar a manutenção mensal de R$ 69."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Como funciona o pagamento?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "À vista com 5% de desconto, parcelado no cartão (com juros da operadora) ou 50% na entrada e 50% na entrega."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Em quanto tempo meu site fica pronto?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Depende do pacote: Essencial em 48h, Profissional em 3 a 5 dias e Premium em até 7 dias, contando a partir do envio das informações."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "E se eu não gostar do resultado?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Você tem garantia de 7 dias após a entrega. Se não estiver satisfeito, devolvo 100% do valor."
+     }
+    }
+   ]
+  }
+ ]
+}
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <main style="font-family:system-ui,sans-serif;max-width:640px;margin:48px auto;padding:0 16px;color:#e8f7fa;background:#07080d">
+        <h1>Criação de landing pages em Niterói-RJ: Conectando pessoas. Construindo Negócios.</h1>
+        <p>Landing pages com visual de agência em Niterói-RJ, no ar em até 48h, com domínio, hospedagem e WhatsApp inclusos. Peça seu orçamento agora pelo WhatsApp.</p>
+        <p><a href="https://wa.me/5521990296352" style="color:#00f0ff">Fale no WhatsApp: +55 21 99029-6352</a> · <a href="https://instagram.com/wesleybarones" style="color:#00f0ff">@wesleybarones</a></p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

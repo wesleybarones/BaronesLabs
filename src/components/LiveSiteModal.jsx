@@ -7,8 +7,6 @@ import { EASE } from '../lib/motion'
 import HudCorners from './ui/HudCorners'
 import { IconArrowUpRight, IconClose } from './Icons'
 
-/** Can this page show other sites in an iframe? Not when it is itself embedded (e.g. a preview viewer). */
-export const canEmbed = () => typeof window !== 'undefined' && window.self === window.top
 
 /**
  * Full-screen "browser" with the real, live client site inside, so visitors can scroll and click

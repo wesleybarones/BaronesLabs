@@ -5,15 +5,19 @@
 
 // Número do WhatsApp no formato internacional, só dígitos (ex.: 5521999998888).
 // TROCAR: substitua [SEU_NUMERO] pelo seu DDD + número.
+// Endereço definitivo do site (usado em canonical, Open Graph, sitemap e dados estruturados).
+export const SITE_URL = 'https://baroneslabs.com.br'
+export const OG_IMAGE = `${SITE_URL}/og-image.jpg?v=4`
+
 export const WHATSAPP_NUMBER = '5521990296352'
 export const WHATSAPP_DISPLAY = '+55 21 99029-6352'
 
 export const INSTAGRAM_HANDLE = 'wesleybarones'
 export const INSTAGRAM_URL = `https://instagram.com/${INSTAGRAM_HANDLE}`
 
-// Foto do Wesley (coloque o arquivo em /public e informe o caminho, ex.: '/wesley.jpg').
+// Foto do Wesley (src/assets/wesley.webp).
 // Enquanto estiver vazio, aparece o placeholder estilizado.
-import wesleyPhoto from './assets/wesley.jpg'
+import wesleyPhoto from './assets/wesley.webp'
 export const ABOUT_PHOTO = wesleyPhoto
 
 /*

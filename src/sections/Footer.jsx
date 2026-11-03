@@ -27,10 +27,10 @@ export default function Footer() {
         </div>
         <nav className="md:col-span-2" aria-label={t.footer.links}>
           <h2 className="hud mb-5 text-[11px] text-ink-3">{t.footer.links}</h2>
-          <ul className="space-y-3">
+          <ul className="space-y-0">
             {links.map(([id, label]) => (
               <li key={id}>
-                <a href={`#${id}`} onClick={go(id)} className="link-u text-[15px] text-ink-2 transition-colors hover:text-ink">
+                <a href={`#${id}`} onClick={go(id)} className="link-u link-u-tall inline-flex min-h-12 min-w-12 items-center text-[15px] text-ink-2 transition-colors hover:text-ink">
                   {label}
                 </a>
               </li>
@@ -39,15 +39,15 @@ export default function Footer() {
         </nav>
         <div className="md:col-span-3">
           <h2 className="hud mb-5 text-[11px] text-ink-3">{t.footer.contact}</h2>
-          <ul className="space-y-3">
+          <ul className="space-y-0">
             <li>
-              <a href={waLink(t.wa.default)} target="_blank" rel="noopener noreferrer" className="link-u inline-flex items-center gap-2.5 text-[15px] text-ink-2 hover:text-ink">
+              <a href={waLink(t.wa.default)} target="_blank" rel="noopener noreferrer" className="link-u link-u-tall inline-flex min-h-12 items-center gap-2.5 text-[15px] text-ink-2 hover:text-ink">
                 <IconWhatsApp className="h-4 w-4 text-cyan" />
                 WhatsApp {WHATSAPP_DISPLAY}
               </a>
             </li>
             <li>
-              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="link-u inline-flex items-center gap-2.5 text-[15px] text-ink-2 hover:text-ink">
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="link-u link-u-tall inline-flex min-h-12 items-center gap-2.5 text-[15px] text-ink-2 hover:text-ink">
                 <IconInstagram className="h-4 w-4 text-cyan" />@{INSTAGRAM_HANDLE}
               </a>
             </li>
@@ -62,7 +62,7 @@ export default function Footer() {
         <div className="mx-auto flex max-w-[1360px] flex-col gap-3 px-4 py-5 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-3 md:flex-row md:items-center md:justify-between md:px-8">
           <span>{t.footer.rights}</span>
           <span className="flex items-center gap-6">
-            <a href="#top" onClick={go('top')} className="link-u hover:text-cyan">
+            <a href="#top" onClick={go('top')} className="link-u link-u-tall inline-flex min-h-12 items-center hover:text-cyan">
               ↑ {t.footer.back}
             </a>
             <span className="flex items-center gap-2 text-cyan/80">

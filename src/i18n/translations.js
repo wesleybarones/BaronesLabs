@@ -7,9 +7,12 @@
 const pt = {
   meta: {
     htmlLang: 'pt-BR',
-    title: 'Barones Labs — Conectando pessoas. Construindo Negócios.',
+    ogLocale: 'pt_BR',
+    title: 'Criação de Landing Pages em Niterói-RJ | Barones Labs',
     description:
-      'Estúdio de landing pages de Wesley Barones. Visual de agência, pronto em até 48h, com domínio, hospedagem e WhatsApp inclusos.',
+      'Landing pages com visual de agência em Niterói-RJ, no ar em até 48h, com domínio, hospedagem e WhatsApp inclusos. Peça seu orçamento agora pelo WhatsApp.',
+    ogTitle: 'Barones Labs | Conectando pessoas. Construindo Negócios.',
+    imageAlt: 'Wesley Barones com óculos futurista e a frase em neon projetos do zero',
   },
   langName: 'Português',
   wa: {
@@ -37,6 +40,7 @@ const pt = {
   },
   hero: {
     status: 'Disponível para novos projetos',
+    kicker: 'Criação de landing pages em Niterói-RJ',
     title: 'Conectando pessoas. *Construindo Negócios.*',
     sub: 'Landing pages com visual de agência, prontas em até 48h. Domínio, hospedagem e WhatsApp inclusos, sem dor de cabeça técnica.',
     cta: 'Quero meu site',
@@ -121,6 +125,8 @@ const pt = {
     mobile: 'Celular',
     soon: 'Link em breve',
     preview: 'Preview',
+    shotDesktop: 'Print da landing page {name} no computador',
+    shotMobile: 'Print da landing page {name} no celular',
     segments: {
       lizano: 'Marca de semijoias',
       papeldeparederj: 'Papel de parede · Rio de Janeiro',
@@ -313,9 +319,12 @@ const pt = {
 const en = {
   meta: {
     htmlLang: 'en',
-    title: 'Barones Labs — Connecting people. Building businesses.',
+    ogLocale: 'en_US',
+    title: 'Landing Page Design in Niterói, Brazil | Barones Labs',
     description:
-      "Wesley Barones' landing page studio. Agency-grade design, live in as little as 48h, with domain, hosting and WhatsApp included.",
+      'Agency-grade landing pages made in Niterói, Brazil, live in as little as 48h with domain, hosting and WhatsApp included. Message me on WhatsApp for a quote.',
+    ogTitle: 'Barones Labs | Connecting people. Building businesses.',
+    imageAlt: 'Wesley Barones wearing futuristic glasses next to the neon words projects from scratch',
   },
   langName: 'English',
   wa: {
@@ -343,6 +352,7 @@ const en = {
   },
   hero: {
     status: 'Available for new projects',
+    kicker: 'Landing page design in Niterói, Brazil',
     title: 'Connecting people. *Building businesses.*',
     sub: 'Agency-grade landing pages, live in as little as 48 hours. Domain, hosting and WhatsApp included — zero technical headaches.',
     cta: 'I want my website',
@@ -427,6 +437,8 @@ const en = {
     mobile: 'Mobile',
     soon: 'Link coming soon',
     preview: 'Preview',
+    shotDesktop: 'Screenshot of the {name} landing page on desktop',
+    shotMobile: 'Screenshot of the {name} landing page on mobile',
     segments: {
       lizano: 'Fine jewelry brand',
       papeldeparederj: 'Wallpaper · Rio de Janeiro',
@@ -618,9 +630,12 @@ const en = {
 const es = {
   meta: {
     htmlLang: 'es',
-    title: 'Barones Labs — Conectando personas. Construyendo negocios.',
+    ogLocale: 'es_ES',
+    title: 'Creación de Landing Pages en Niterói, Brasil | Barones Labs',
     description:
-      'Estudio de landing pages de Wesley Barones. Diseño de agencia, listo en hasta 48h, con dominio, hosting y WhatsApp incluidos.',
+      'Landing pages con diseño de agencia desde Niterói, Brasil, en línea en hasta 48h, con dominio, hosting y WhatsApp incluidos. Pide tu presupuesto por WhatsApp.',
+    ogTitle: 'Barones Labs | Conectando personas. Construyendo negocios.',
+    imageAlt: 'Wesley Barones con lentes futuristas junto a la frase en neón proyectos desde cero',
   },
   langName: 'Español',
   wa: {
@@ -648,6 +663,7 @@ const es = {
   },
   hero: {
     status: 'Disponible para nuevos proyectos',
+    kicker: 'Creación de landing pages en Niterói, Brasil',
     title: 'Conectando personas. *Construyendo negocios.*',
     sub: 'Landing pages con diseño de agencia, listas en hasta 48 horas. Dominio, hosting y WhatsApp incluidos, sin complicaciones técnicas.',
     cta: 'Quiero mi sitio',
@@ -732,6 +748,8 @@ const es = {
     mobile: 'Móvil',
     soon: 'Enlace próximamente',
     preview: 'Preview',
+    shotDesktop: 'Captura de la landing page {name} en computadora',
+    shotMobile: 'Captura de la landing page {name} en celular',
     segments: {
       lizano: 'Marca de joyería',
       papeldeparederj: 'Papel tapiz · Río de Janeiro',

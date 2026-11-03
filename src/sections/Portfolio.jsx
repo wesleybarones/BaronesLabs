@@ -1,5 +1,5 @@
-import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from 'motion/react'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { motion, useScroll, useSpring, useTransform } from 'motion/react'
+import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { useIsDesktop, useReducedMotion } from '../lib/hooks'
 import { PROJECTS, waLink } from '../config'
@@ -11,7 +11,10 @@ import HudCorners from '../components/ui/HudCorners'
 import { Laptop, Phone } from '../components/Mockups'
 import { IconArrowUpRight, IconArrow } from '../components/Icons'
 import { LogoSymbol } from '../components/Logo'
-import LiveSiteModal, { canEmbed } from '../components/LiveSiteModal'
+import { canEmbed } from '../lib/embed'
+
+// the live-site viewer is only downloaded when someone opens it
+const LiveSiteModal = lazy(() => import('../components/LiveSiteModal'))
 
 function ProjectSlide({ p, index, total, onExplore }) {
   const { t } = useLang()
@@ -32,9 +35,9 @@ function ProjectSlide({ p, index, total, onExplore }) {
       >
         <div aria-hidden className="absolute inset-[8%] -z-10 rounded-full blur-3xl" style={{ background: `radial-gradient(circle, ${p.accent}26, transparent 65%)` }} />
         <div className="relative pb-[6%] pr-[12%] transition-transform duration-700 ease-out-expo group-hover:-translate-y-1.5">
-          <Laptop accent={p.accent} name={p.name} label={t.portfolio.preview} src={p.desktop} alt={`${p.name} — desktop`} />
+          <Laptop accent={p.accent} name={p.name} label={t.portfolio.preview} src={p.desktop} alt={t.portfolio.shotDesktop.replace('{name}', p.name)} />
           <div className="absolute bottom-0 right-0 w-[22%] transition-transform duration-700 ease-out-expo group-hover:-translate-y-3">
-            <Phone accent={p.accent} name={p.name} label={t.portfolio.preview} src={p.mobile} alt={`${p.name} — mobile`} />
+            <Phone accent={p.accent} name={p.name} label={t.portfolio.preview} src={p.mobile} alt={t.portfolio.shotMobile.replace('{name}', p.name)} />
           </div>
         </div>
       </Wrap>
@@ -54,7 +57,7 @@ function ProjectSlide({ p, index, total, onExplore }) {
                 href={p.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-u inline-flex min-h-10 items-center gap-2 font-mono text-[12px] uppercase tracking-[0.18em] text-ink-2 hover:text-cyan"
+                className="link-u link-u-tall inline-flex min-h-12 items-center gap-2 font-mono text-[12px] uppercase tracking-[0.18em] text-ink-2 hover:text-cyan"
               >
                 {t.portfolio.view} <IconArrowUpRight className="h-4 w-4" />
               </a>
@@ -101,8 +104,13 @@ export default function Portfolio() {
   const pinned = desktop && !reduce
   const total = PROJECTS.length
   const [live, setLive] = useState(null)
-  const slides = [...PROJECTS.map((p, i) => <ProjectSlide key={p.id} p={p} index={i} total={total} onExplore={setLive} />), <NextSlot key="next" />]
-  const modal = <LiveSiteModal project={live} onClose={() => setLive(null)} />
+  const [viewerUsed, setViewerUsed] = useState(false)
+  const slides = [...PROJECTS.map((p, i) => <ProjectSlide key={p.id} p={p} index={i} total={total} onExplore={(proj) => { setViewerUsed(true); setLive(proj) }} />), <NextSlot key="next" />]
+  const modal = viewerUsed && (
+    <Suspense fallback={null}>
+      <LiveSiteModal project={live} onClose={() => setLive(null)} />
+    </Suspense>
+  )
 
   const sectionRef = useRef(null)
   const trackRef = useRef(null)

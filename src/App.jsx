@@ -3,6 +3,7 @@ import Lenis from 'lenis'
 import { useCallback, useEffect, useState } from 'react'
 import { AppProvider, useLockScroll } from './lib/AppContext'
 import { useLang } from './i18n/LangContext'
+import Seo from './components/Seo'
 import Background from './components/Background'
 import Boot from './components/Boot'
 import Header from './components/Header'
@@ -28,7 +29,11 @@ import Footer from './sections/Footer'
 
 const BOOT_KEY = 'bl-booted'
 
+// search engine / social preview robots get the content straight away (no intro)
+const BOT = /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegram|linkedin|embedly|preview/i
+
 function shouldBoot() {
+  if (BOT.test(navigator.userAgent)) return false
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
   try {
     return !sessionStorage.getItem(BOOT_KEY)
@@ -78,6 +83,7 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <AppProvider ready={ready} lenis={lenis}>
+        <Seo />
         <a
           href="#content"
           className="fixed left-4 top-4 z-[300] -translate-y-24 bg-cyan px-4 py-3 font-display font-semibold text-bg transition-transform focus:translate-y-0"

@@ -53,7 +53,7 @@ export function Laptop({ src, alt = '', accent, name, label, className = '' }) {
         <span className="absolute left-1/2 top-[0.9%] h-[4px] w-[4px] -translate-x-1/2 rounded-full bg-white/20" />
         <div className="relative aspect-[16/10] overflow-hidden rounded-[3px] ring-1 ring-cyan/15">
           {src ? (
-            <img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover object-top" />
+            <img src={src} alt={alt} width={1440} height={900} loading="lazy" decoding="async" className="h-full w-full object-cover object-top" />
           ) : (
             <ScreenPlaceholder accent={accent} name={name} label={label} />
           )}
@@ -74,7 +74,7 @@ export function Phone({ src, alt = '', accent, name, label, className = '' }) {
     >
       <div className="relative aspect-[9/19.5] overflow-hidden rounded-[14%/6.5%] ring-1 ring-cyan/15">
         {src ? (
-          <img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover object-top" />
+          <img src={src} alt={alt} width={520} height={1127} loading="lazy" decoding="async" className="h-full w-full object-cover object-top" />
         ) : (
           <ScreenPlaceholder accent={accent} name={name} label={label} mobile />
         )}

@@ -43,7 +43,7 @@ export default function Flags({ size = 'md', showCode = false, className = '' })
   const { lang, setLang, t } = useLang()
   const dim = size === 'lg' ? 'h-12 w-12' : 'h-7 w-7'
   return (
-    <div role="group" aria-label={t.a11y.langSwitch} className={`flex items-center gap-2.5 ${className}`}>
+    <div role="group" aria-label={t.a11y.langSwitch} className={`flex items-center ${size === 'lg' ? 'gap-4' : 'gap-1'} ${className}`}>
       {LANGS.map((l) => {
         const F = FLAGS[l]
         const active = l === lang
@@ -56,7 +56,7 @@ export default function Flags({ size = 'md', showCode = false, className = '' })
             aria-pressed={active}
             aria-label={NAMES[l]}
             data-cursor
-            className={`group flex items-center gap-2 rounded-full ${size === 'lg' ? 'min-h-12' : 'min-h-9 md:min-h-0'}`}
+            className={`group flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-full ${size === 'lg' ? '' : '-mx-1.5'}`}
           >
             <span
               className={`${dim} relative block overflow-hidden rounded-full transition-all duration-300 ${

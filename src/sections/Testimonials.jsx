@@ -36,7 +36,7 @@ function Card({ item, t, active }) {
           <span className="absolute inset-0 translate-x-[-2px] translate-y-[1px] rounded-full border border-magenta/60" />
           <span className="absolute inset-0 overflow-hidden rounded-full border border-cyan bg-surface-2 shadow-[0_0_12px_rgba(0,240,255,0.35)]">
             {item.photo ? (
-              <img src={item.photo} alt="" loading="lazy" className="h-full w-full object-cover" />
+              <img src={item.photo} alt="" width={96} height={96} loading="lazy" className="h-full w-full object-cover" />
             ) : (
               <span className="flex h-full w-full items-center justify-center font-mono text-[10px] text-ink-3">LOGO</span>
             )}
@@ -148,7 +148,7 @@ export default function Testimonials() {
             aria-selected={i === active}
             aria-label={`${i + 1} / ${n}`}
             onClick={() => setActive(i)}
-            className="flex h-8 items-center px-1"
+            className="flex h-12 min-w-12 items-center justify-center"
           >
             <span className={`block h-[2px] transition-all duration-500 ${i === active ? 'w-10 bg-cyan shadow-[0_0_8px_#00F0FF]' : 'w-5 bg-cyan/20'}`} />
           </button>

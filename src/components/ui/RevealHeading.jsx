@@ -57,6 +57,8 @@ export default function RevealHeading({
   animate,
   stagger = 0.06,
   id,
+  kicker, // optional visible lead-in inside the heading (e.g. the page's keyword for SEO)
+  kickerClassName = '',
 }) {
   const M = motion[as]
   const words = parseWords(text)
@@ -71,8 +73,17 @@ export default function RevealHeading({
       {...ctl}
       variants={{ hidden: {}, show: { transition: { staggerChildren: stagger, delayChildren: delay } } }}
     >
-      <span className="sr-only">{text.replaceAll('*', '')}</span>
-      <span aria-hidden="true">
+      {/* one single copy of the text (no sr-only duplicate), so search engines read the heading once */}
+      {kicker && (
+        <motion.span
+          className={`block ${kickerClassName}`}
+          variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } } }}
+        >
+          {kicker}
+          <span className="sr-only">: </span>
+        </motion.span>
+      )}
+      <span>
         {words.map((p, i) => (
           <Fragment key={i}>
             <span className="-mb-[0.14em] -ml-[0.06em] inline-block overflow-hidden pb-[0.14em] pl-[0.06em] align-bottom">

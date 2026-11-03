@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
 import { translations, LANGS } from './translations'
 
 const LangContext = createContext(null)
@@ -21,12 +21,7 @@ export function LangProvider({ children }) {
   const busy = useRef(false)
   const t = translations[lang]
 
-  useEffect(() => {
-    document.documentElement.lang = t.meta.htmlLang
-    document.title = t.meta.title
-    const desc = document.querySelector('meta[name="description"]')
-    if (desc) desc.setAttribute('content', t.meta.description)
-  }, [t])
+  // <html lang>, title, description and social tags are set per language by <Seo /> (react-helmet-async)
 
   const setLang = useCallback(
     (next) => {

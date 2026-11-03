@@ -8,9 +8,9 @@ import { IconInstagram } from '../components/Icons'
 import { LogoSymbol } from '../components/Logo'
 
 function Photo({ alt, placeholder }) {
-  const img = (cls = '') =>
+  const img = (cls = '', decorative = false) =>
     ABOUT_PHOTO ? (
-      <img src={ABOUT_PHOTO} alt={alt} loading="lazy" className={`h-full w-full object-cover object-[50%_20%] grayscale contrast-110 ${cls}`} />
+      <img src={ABOUT_PHOTO} alt={decorative ? '' : alt} width={768} height={1024} loading="lazy" decoding="async" className={`h-full w-full object-cover object-[50%_20%] grayscale contrast-110 ${cls}`} />
     ) : (
       <div role="img" aria-label={alt} className={`relative flex h-full w-full items-end justify-center overflow-hidden bg-[linear-gradient(170deg,#121a28,#07080D)] ${cls}`}>
         {/* abstract silhouette placeholder */}
@@ -32,7 +32,7 @@ function Photo({ alt, placeholder }) {
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-bg/70 via-transparent to-transparent" />
         {/* glitch layer (hover) */}
         <div aria-hidden className="photo-layer-m absolute inset-0 opacity-0 mix-blend-screen" style={{ filter: 'hue-rotate(270deg) saturate(3)' }}>
-          {img()}
+          {img('', true)}
         </div>
         <div aria-hidden className="bg-scanlines pointer-events-none absolute inset-0 opacity-80" />
         <span className="hud absolute bottom-4 left-4 text-[10px] text-cyan/80">ID · W.BARONES</span>
