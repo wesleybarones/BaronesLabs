@@ -8,7 +8,7 @@ import { motion } from 'motion/react'
 import { IconBriefcase, IconDish, IconRocket, IconScissors } from '../components/Icons'
 import { useReducedMotion } from '../lib/hooks'
 
-const ICONS = [IconScissors, IconBriefcase, IconRocket, IconDish]
+const ICONS = [IconBriefcase, IconScissors, IconRocket, IconDish]
 const LAYOUT = [
   'sm:col-span-2 lg:col-span-3 lg:row-span-2',
   'lg:col-span-3',

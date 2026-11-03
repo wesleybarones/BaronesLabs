@@ -103,8 +103,8 @@ const pt = {
     title: 'Feito para quem vende pelo *WhatsApp* e Instagram.',
     sub: 'Para quem já tem site e quer um melhor, e para quem nunca teve um.',
     tiles: [
-      { name: 'Barbearias & salões', text: 'Agenda cheia com o cliente chegando direto no seu WhatsApp.' },
       { name: 'Profissionais liberais', text: 'Autoridade instantânea para quem pesquisa seu nome.' },
+      { name: 'Barbearias & salões', text: 'Agenda cheia com o cliente chegando direto no seu WhatsApp.' },
       { name: 'Empreendedores digitais', text: 'Página de vendas rápida, bonita e feita para converter.' },
       { name: 'Restaurantes', text: 'Cardápio, localização e pedido a um toque de distância.' },
     ],
@@ -415,8 +415,8 @@ const en = {
     title: 'Built for businesses that sell on *WhatsApp* and Instagram.',
     sub: "For those who already have a website and want a better one — and for those who've never had one.",
     tiles: [
-      { name: 'Barbershops & salons', text: 'A fuller schedule, with clients landing straight in your WhatsApp.' },
       { name: 'Independent professionals', text: 'Instant credibility for anyone who looks you up.' },
+      { name: 'Barbershops & salons', text: 'A fuller schedule, with clients landing straight in your WhatsApp.' },
       { name: 'Digital entrepreneurs', text: 'A sales page that is fast, beautiful and built to convert.' },
       { name: 'Restaurants', text: 'Menu, location and ordering, one tap away.' },
     ],
@@ -726,8 +726,8 @@ const es = {
     title: 'Hecho para quien vende por *WhatsApp* e Instagram.',
     sub: 'Para quien ya tiene sitio y quiere uno mejor, y para quien nunca tuvo uno.',
     tiles: [
-      { name: 'Barberías y salones', text: 'Agenda llena, con clientes llegando directo a tu WhatsApp.' },
       { name: 'Profesionales independientes', text: 'Autoridad inmediata para quien busca tu nombre.' },
+      { name: 'Barberías y salones', text: 'Agenda llena, con clientes llegando directo a tu WhatsApp.' },
       { name: 'Emprendedores digitales', text: 'Una página de ventas rápida, bonita y hecha para convertir.' },
       { name: 'Restaurantes', text: 'Menú, ubicación y pedidos a un toque de distancia.' },
     ],
