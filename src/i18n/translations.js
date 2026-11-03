@@ -1,13 +1,13 @@
 /*
   Traduções da Barones Labs.
   Convenção: palavras entre *asteriscos* nos títulos recebem o destaque
-  ciano com duplo magenta (ex.: "dizerem *uau*.").
+  ciano com duplo magenta (ex.: "Conectando pessoas. *Construindo Negócios.*").
 */
 
 const pt = {
   meta: {
     htmlLang: 'pt-BR',
-    title: 'Barones Labs — Landing pages que fazem seus clientes dizerem uau',
+    title: 'Barones Labs — Conectando pessoas. Construindo Negócios.',
     description:
       'Estúdio de landing pages de Wesley Barones. Visual de agência, pronto em até 48h, com domínio, hospedagem e WhatsApp inclusos.',
   },
@@ -37,7 +37,7 @@ const pt = {
   },
   hero: {
     status: 'Disponível para novos projetos',
-    title: 'Sites que fazem seus clientes dizerem *uau*.',
+    title: 'Conectando pessoas. *Construindo Negócios.*',
     sub: 'Landing pages com visual de agência, prontas em até 48h. Domínio, hospedagem e WhatsApp inclusos, sem dor de cabeça técnica.',
     cta: 'Quero meu site',
     secondary: 'Ver projetos',
@@ -81,7 +81,7 @@ const pt = {
       },
       {
         tag: 'Visual premium',
-        title: 'Cara de agência grande, preço de profissional autônomo.',
+        title: 'Cara de agência, preço de profissional autônomo.',
         text: 'Design sob medida, animações modernas e cada detalhe pensado para passar confiança no primeiro segundo.',
       },
       {
@@ -100,7 +100,6 @@ const pt = {
     sub: 'Para quem já tem site e quer um melhor, e para quem nunca teve um.',
     tiles: [
       { name: 'Barbearias & salões', text: 'Agenda cheia com o cliente chegando direto no seu WhatsApp.' },
-      { name: 'Lojas e marcas', text: 'Uma vitrine à altura do que você vende, aberta 24h.' },
       { name: 'Profissionais liberais', text: 'Autoridade instantânea para quem pesquisa seu nome.' },
       { name: 'Empreendedores digitais', text: 'Página de vendas rápida, bonita e feita para converter.' },
       { name: 'Restaurantes', text: 'Cardápio, localização e pedido a um toque de distância.' },
@@ -135,7 +134,7 @@ const pt = {
   },
   process: {
     label: '// 05_PROCESSO',
-    title: 'Do primeiro oi ao *site no ar*.',
+    title: 'Do primeiro contato ao *site no ar*',
     steps: [
       { title: 'Conversa no WhatsApp', text: 'Você me conta sobre o seu negócio, seus clientes e o que quer alcançar.' },
       { title: 'Proposta e pagamento', text: 'Você escolhe o pacote e a forma de pagar que fica melhor para você.' },
@@ -225,6 +224,7 @@ const pt = {
     },
     intl: null,
   },
+  guaranteeBonus: { label: '// GARANTIA + BÔNUS', title: 'Risco zero. E ainda tem *bônus*.' },
   bonus: {
     label: '// BÔNUS',
     title: 'E-book *“Como divulgar seu site”*.',
@@ -252,7 +252,7 @@ const pt = {
     title: 'Prazer, *Wesley Barones*.',
     paragraphs: [
       'Eu crio sites que fazem negócios crescerem. Cada projeto da Barones Labs nasce de uma conversa direta comigo, sem intermediários, sem atendimento robótico.',
-      'Meu foco é simples: entregar rápido, com acabamento de agência, e um site que traga resultado de verdade para quem vende pelo WhatsApp e pelo Instagram.',
+      'Meu foco é simples: entrega rápida, com acabamento de agência, e um site que traz resultado de verdade para quem vende pelo WhatsApp e pelo Instagram.',
     ],
     stats: [
       { k: 'Atendimento', v: 'Direto comigo' },
@@ -294,7 +294,7 @@ const pt = {
     ],
   },
   final: {
-    title: 'Seu próximo cliente vai dizer *uau*.',
+    title: 'Conectando pessoas. *Construindo Negócios.*',
     sub: 'Chama no WhatsApp e tenha seu site no ar em até 48h.',
     cta: 'Quero meu site agora',
   },
@@ -313,7 +313,7 @@ const pt = {
 const en = {
   meta: {
     htmlLang: 'en',
-    title: 'Barones Labs — Landing pages that make your customers say wow',
+    title: 'Barones Labs — Connecting people. Building businesses.',
     description:
       "Wesley Barones' landing page studio. Agency-grade design, live in as little as 48h, with domain, hosting and WhatsApp included.",
   },
@@ -343,7 +343,7 @@ const en = {
   },
   hero: {
     status: 'Available for new projects',
-    title: 'Websites that make your customers say *wow*.',
+    title: 'Connecting people. *Building businesses.*',
     sub: 'Agency-grade landing pages, live in as little as 48 hours. Domain, hosting and WhatsApp included — zero technical headaches.',
     cta: 'I want my website',
     secondary: 'See projects',
@@ -387,7 +387,7 @@ const en = {
       },
       {
         tag: 'Premium design',
-        title: 'Big-agency look, freelancer price.',
+        title: 'Agency look, freelancer price.',
         text: 'Tailor-made design, modern animation and every detail crafted to build trust in the very first second.',
       },
       {
@@ -406,7 +406,6 @@ const en = {
     sub: "For those who already have a website and want a better one — and for those who've never had one.",
     tiles: [
       { name: 'Barbershops & salons', text: 'A fuller schedule, with clients landing straight in your WhatsApp.' },
-      { name: 'Stores & brands', text: "A storefront that lives up to what you sell, open 24/7." },
       { name: 'Independent professionals', text: 'Instant credibility for anyone who looks you up.' },
       { name: 'Digital entrepreneurs', text: 'A sales page that is fast, beautiful and built to convert.' },
       { name: 'Restaurants', text: 'Menu, location and ordering, one tap away.' },
@@ -441,7 +440,7 @@ const en = {
   },
   process: {
     label: '// 05_PROCESS',
-    title: 'From the first hello to *launch day*.',
+    title: 'From first contact to *launch day*',
     steps: [
       { title: 'A chat on WhatsApp', text: 'Tell me about your business, your customers and what you want to achieve.' },
       { title: 'Proposal & payment', text: 'Pick the package and the payment option that works best for you.' },
@@ -530,6 +529,7 @@ const en = {
       cta: 'Get my quote',
     },
   },
+  guaranteeBonus: { label: '// GUARANTEE + BONUS', title: 'Zero risk. Plus a *bonus*.' },
   bonus: {
     label: '// BONUS',
     title: 'E-book *“How to promote your website”*.',
@@ -557,7 +557,7 @@ const en = {
     title: "Hi, I'm *Wesley Barones*.",
     paragraphs: [
       'I build websites that help businesses grow. Every Barones Labs project starts with a direct conversation with me — no middlemen, no robotic support.',
-      'My focus is simple: deliver fast, with agency-level polish, and a website that brings real results to people who sell through WhatsApp and Instagram.',
+      'My focus is simple: fast delivery, agency-level polish, and a website that brings real results to people who sell through WhatsApp and Instagram.',
     ],
     stats: [
       { k: 'Support', v: 'Straight to me' },
@@ -599,7 +599,7 @@ const en = {
     ],
   },
   final: {
-    title: 'Your next customer is going to say *wow*.',
+    title: 'Connecting people. *Building businesses.*',
     sub: 'Message me on WhatsApp and get your website live in as little as 48h.',
     cta: 'I want my website now',
   },
@@ -618,7 +618,7 @@ const en = {
 const es = {
   meta: {
     htmlLang: 'es',
-    title: 'Barones Labs — Landing pages que hacen que tus clientes digan guau',
+    title: 'Barones Labs — Conectando personas. Construyendo negocios.',
     description:
       'Estudio de landing pages de Wesley Barones. Diseño de agencia, listo en hasta 48h, con dominio, hosting y WhatsApp incluidos.',
   },
@@ -648,7 +648,7 @@ const es = {
   },
   hero: {
     status: 'Disponible para nuevos proyectos',
-    title: 'Sitios que hacen que tus clientes digan *guau*.',
+    title: 'Conectando personas. *Construyendo negocios.*',
     sub: 'Landing pages con diseño de agencia, listas en hasta 48 horas. Dominio, hosting y WhatsApp incluidos, sin complicaciones técnicas.',
     cta: 'Quiero mi sitio',
     secondary: 'Ver proyectos',
@@ -692,7 +692,7 @@ const es = {
       },
       {
         tag: 'Diseño premium',
-        title: 'Imagen de gran agencia, precio de profesional independiente.',
+        title: 'Imagen de agencia, precio de profesional independiente.',
         text: 'Diseño a medida, animaciones modernas y cada detalle pensado para transmitir confianza desde el primer segundo.',
       },
       {
@@ -711,7 +711,6 @@ const es = {
     sub: 'Para quien ya tiene sitio y quiere uno mejor, y para quien nunca tuvo uno.',
     tiles: [
       { name: 'Barberías y salones', text: 'Agenda llena, con clientes llegando directo a tu WhatsApp.' },
-      { name: 'Tiendas y marcas', text: 'Una vitrina a la altura de lo que vendes, abierta 24/7.' },
       { name: 'Profesionales independientes', text: 'Autoridad inmediata para quien busca tu nombre.' },
       { name: 'Emprendedores digitales', text: 'Una página de ventas rápida, bonita y hecha para convertir.' },
       { name: 'Restaurantes', text: 'Menú, ubicación y pedidos a un toque de distancia.' },
@@ -746,7 +745,7 @@ const es = {
   },
   process: {
     label: '// 05_PROCESO',
-    title: 'Del primer hola al *sitio en línea*.',
+    title: 'Del primer contacto al *sitio en línea*',
     steps: [
       { title: 'Charla por WhatsApp', text: 'Me cuentas sobre tu negocio, tus clientes y lo que quieres lograr.' },
       { title: 'Propuesta y pago', text: 'Eliges el paquete y la forma de pago que mejor te funcione.' },
@@ -835,6 +834,7 @@ const es = {
       cta: 'Pedir presupuesto',
     },
   },
+  guaranteeBonus: { label: '// GARANTÍA + BONO', title: 'Riesgo cero. Y además, un *bono*.' },
   bonus: {
     label: '// BONO',
     title: 'E-book *“Cómo promocionar tu sitio”*.',
@@ -862,7 +862,7 @@ const es = {
     title: 'Mucho gusto, *Wesley Barones*.',
     paragraphs: [
       'Creo sitios que hacen crecer negocios. Cada proyecto de Barones Labs nace de una conversación directa conmigo, sin intermediarios ni atención robotizada.',
-      'Mi enfoque es simple: entregar rápido, con acabado de agencia, y un sitio que traiga resultados reales a quien vende por WhatsApp e Instagram.',
+      'Mi enfoque es simple: entrega rápida, acabado de agencia y un sitio que trae resultados reales a quien vende por WhatsApp e Instagram.',
     ],
     stats: [
       { k: 'Atención', v: 'Directo conmigo' },
@@ -904,7 +904,7 @@ const es = {
     ],
   },
   final: {
-    title: 'Tu próximo cliente va a decir *guau*.',
+    title: 'Conectando personas. *Construyendo negocios.*',
     sub: 'Escríbeme por WhatsApp y ten tu sitio en línea en hasta 48h.',
     cta: 'Quiero mi sitio ahora',
   },

@@ -25,14 +25,16 @@ export function LogoSymbol({ className = '', title, style }) {
   )
 }
 
-export function LogoHorizontal({ className = '' }) {
+export function LogoHorizontal({ className = '', bold = false }) {
   return (
     <img
       src={logoSrc}
       alt="Barones Labs"
       draggable={false}
       decoding="async"
-      className={`h-12 w-auto select-none object-contain md:h-14 ${className}`}
+      className={`h-12 w-auto select-none object-contain md:h-14 ${
+        bold ? '[filter:drop-shadow(0_0_5px_rgba(0,240,255,0.55))]' : ''
+      } ${className}`}
     />
   )
 }

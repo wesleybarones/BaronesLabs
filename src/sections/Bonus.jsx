@@ -47,6 +47,7 @@ function Book({ cover }) {
   )
 }
 
+/** Bonus card (used inside the combined Guarantee + Bonus section). */
 export default function Bonus() {
   const { t } = useLang()
   const b = t.bonus
@@ -64,7 +65,7 @@ export default function Bonus() {
   const floatY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [40, -40])
 
   return (
-    <section
+    <div
       ref={ref}
       onPointerMove={(e) => {
         if (!fine || reduce) return
@@ -76,10 +77,10 @@ export default function Bonus() {
         mx.set(0)
         my.set(0)
       }}
-      className="relative py-20 md:py-28"
+      className="relative h-full"
     >
-      <div className="mx-auto max-w-[1240px] px-4 md:px-8">
-        <div className="relative grid grid-cols-1 items-center gap-12 overflow-hidden border border-line bg-surface/50 p-8 md:grid-cols-12 md:p-14">
+      <div className="h-full">
+        <div className="relative grid h-full grid-cols-1 items-center gap-10 overflow-hidden border border-line bg-surface/50 p-8 md:grid-cols-12 md:p-12">
           <div aria-hidden className="pointer-events-none absolute -left-20 top-1/2 h-[120%] w-[60%] -translate-y-1/2 bg-[radial-gradient(circle,rgba(0,240,255,0.10),transparent_60%)]" />
           <div className="relative flex justify-center md:col-span-5" style={{ perspective: 1200 }}>
             <motion.div
@@ -92,7 +93,7 @@ export default function Bonus() {
           </div>
           <div className="relative md:col-span-7">
             <SectionLabel>{b.label}</SectionLabel>
-            <RevealHeading text={b.title} className="font-display text-[32px] font-bold leading-[1.08] text-ink md:text-[44px]" />
+            <RevealHeading as="h3" text={b.title} className="font-display text-[30px] font-bold leading-[1.08] text-ink md:text-[38px]" />
             <Reveal delay={0.15} className="lead mt-5 max-w-[480px]">
               {b.text}
             </Reveal>
@@ -105,6 +106,6 @@ export default function Bonus() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }

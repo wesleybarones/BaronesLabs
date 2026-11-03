@@ -19,8 +19,7 @@ import Portfolio from './sections/Portfolio'
 import Process from './sections/Process'
 import MoneyRain from './sections/MoneyRain'
 import Pricing from './sections/Pricing'
-import Bonus from './sections/Bonus'
-import Guarantee from './sections/Guarantee'
+import GuaranteeBonus from './sections/GuaranteeBonus'
 import Testimonials from './sections/Testimonials'
 import About from './sections/About'
 import FAQ from './sections/FAQ'
@@ -41,6 +40,9 @@ function shouldBoot() {
 export default function App() {
   const { t } = useLang()
   const [booting, setBooting] = useState(shouldBoot)
+  // while the intro plays, the heavy site mounts only after the LED explosion (see Boot)
+  const [siteMounted, setSiteMounted] = useState(() => !booting)
+  const [ready, setReady] = useState(() => !booting)
   const [lenis, setLenis] = useState(null)
 
   // smooth scroll (Lenis) — drives native window scroll, so Motion's useScroll stays in sync
@@ -66,18 +68,24 @@ export default function App() {
     try {
       sessionStorage.setItem(BOOT_KEY, '1')
     } catch {}
+    setSiteMounted(true)
+    setReady(true)
     setBooting(false)
   }, [])
+  const mountSite = useCallback(() => setSiteMounted(true), [])
+  const reveal = useCallback(() => setReady(true), [])
 
   return (
     <MotionConfig reducedMotion="user">
-      <AppProvider ready={!booting} lenis={lenis}>
+      <AppProvider ready={ready} lenis={lenis}>
         <a
           href="#content"
           className="fixed left-4 top-4 z-[300] -translate-y-24 bg-cyan px-4 py-3 font-display font-semibold text-bg transition-transform focus:translate-y-0"
         >
           {t.a11y.skip}
         </a>
+        {siteMounted && (
+          <>
         <Background />
         <ScrollProgress />
         <Header />
@@ -92,8 +100,7 @@ export default function App() {
           <Process />
           <MoneyRain />
           <Pricing />
-          <Bonus />
-          <Guarantee />
+          <GuaranteeBonus />
           <Testimonials />
           <About />
           <FAQ />
@@ -101,8 +108,10 @@ export default function App() {
           <Footer />
         </main>
         <WhatsAppFloat />
+          </>
+        )}
         <Cursor />
-        <AnimatePresence>{booting && <Boot onDone={endBoot} />}</AnimatePresence>
+        <AnimatePresence>{booting && <Boot onDone={endBoot} onMountSite={mountSite} onReveal={reveal} />}</AnimatePresence>
       </AppProvider>
     </MotionConfig>
   )

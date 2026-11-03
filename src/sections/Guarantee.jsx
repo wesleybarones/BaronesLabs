@@ -8,12 +8,13 @@ export default function Guarantee() {
   const { t } = useLang()
   const g = t.guarantee
   return (
-    <section id="guarantee" className="relative py-24 md:py-36">
-      <div className="mx-auto flex max-w-[760px] flex-col items-center px-4 text-center md:px-8">
-        <Reveal once distance={14} className="hud mb-10">
+    <div className="relative flex h-full flex-col items-center justify-center border border-cyan/30 bg-surface/60 p-8 text-center md:p-12">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_30%,rgba(0,240,255,0.08),transparent)]" />
+      <div className="relative flex flex-col items-center">
+        <Reveal once distance={14} className="hud mb-8">
           {g.label}
         </Reveal>
-        <div className="relative h-[220px] w-[220px] md:h-[260px] md:w-[260px]">
+        <div className="relative h-[190px] w-[190px] md:h-[220px] md:w-[220px]">
           <div aria-hidden className="absolute inset-[15%] rounded-full bg-cyan/15 blur-3xl" />
           <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
             <motion.path
@@ -58,17 +59,17 @@ export default function Guarantee() {
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.9 }}
           >
-            <span className="font-display text-[34px] font-bold leading-none text-ink md:text-[40px]">{g.seal}</span>
+            <span className="font-display text-[30px] font-bold leading-none text-ink md:text-[34px]">{g.seal}</span>
             <span className="mt-2 font-mono text-[11px] uppercase tracking-[0.3em] text-cyan">{g.sealSub}</span>
           </motion.div>
         </div>
-        <Reveal once delay={0.2} className="mt-12">
-          <h2 className="h2 text-ink">{g.title}</h2>
+        <Reveal once delay={0.2} className="mt-10">
+          <h3 className="font-display text-[30px] font-bold leading-[1.08] text-ink md:text-[38px]">{g.title}</h3>
         </Reveal>
         <Reveal once delay={0.3} className="mt-6">
-          <p className="mx-auto max-w-[560px] text-[18px] leading-[1.7] text-ink-2 md:text-[20px]">{g.text}</p>
+          <p className="mx-auto max-w-[460px] text-[17px] leading-[1.7] text-ink-2 md:text-[18px]">{g.text}</p>
         </Reveal>
       </div>
-    </section>
+    </div>
   )
 }

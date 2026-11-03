@@ -1,7 +1,7 @@
 import { useLang } from '../i18n/LangContext'
 import { scrollToId, useApp } from '../lib/AppContext'
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL, WHATSAPP_DISPLAY, waLink } from '../config'
-import { LogoHorizontal } from '../components/Logo'
+import FooterLogo from '../components/FooterLogo'
 import Flags from '../components/Flags'
 import { IconInstagram, IconWhatsApp } from '../components/Icons'
 
@@ -22,7 +22,7 @@ export default function Footer() {
     <footer className="relative border-t border-line bg-surface/40">
       <div className="mx-auto grid max-w-[1360px] grid-cols-1 gap-12 px-4 py-16 md:grid-cols-12 md:px-8 md:py-20">
         <div className="md:col-span-5">
-          <LogoHorizontal className="!h-16 md:!h-20" />
+          <FooterLogo />
           <p className="mt-5 max-w-[340px] text-[15px] leading-relaxed text-ink-2">{t.footer.tagline}</p>
         </div>
         <nav className="md:col-span-2" aria-label={t.footer.links}>

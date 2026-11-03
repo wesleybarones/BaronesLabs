@@ -90,7 +90,7 @@ export default function Hero() {
       {/* HUD frame (desktop) */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-x-6 bottom-6 top-[96px] hidden min-[1400px]:block"
+        className="pointer-events-none absolute inset-x-6 bottom-6 top-[96px] hidden xl:block"
         initial={{ opacity: 0 }}
         animate={{ opacity: show ? 1 : 0 }}
         transition={{ duration: 1, delay: 0.9 }}
@@ -101,7 +101,7 @@ export default function Hero() {
         <span className="hud absolute bottom-0 left-8 text-[11px] text-ink-3">00 · HOME</span>
       </motion.div>
 
-      <div className="mx-auto grid w-full max-w-[1360px] flex-1 grid-cols-1 items-center gap-12 px-4 pb-16 pt-10 md:px-8 lg:grid-cols-12 lg:gap-8 lg:pb-24 lg:pt-6">
+      <div className="mx-auto grid w-full max-w-[1360px] flex-1 grid-cols-1 items-center gap-12 px-4 pb-16 pt-10 md:px-8 lg:grid-cols-12 lg:gap-8 lg:pb-24 lg:pt-6 xl:pt-20">
         {/* TEXT */}
         <motion.div className="relative z-10 lg:col-span-7" style={{ y: textY, opacity: textO }}>
           <motion.p
@@ -114,7 +114,7 @@ export default function Hero() {
             {t.hero.status}
           </motion.p>
 
-          <RevealHeading as="h1" text={t.hero.title} className="h1 max-w-[13ch] text-ink" glitch animate={show} delay={0.1} />
+          <RevealHeading as="h1" text={t.hero.title} className="h1 max-w-[14ch] text-ink !text-[clamp(40px,4.9vw,82px)]" glitch animate={show} delay={0.1} />
 
           <motion.p
             className="lead mt-7 max-w-[540px]"

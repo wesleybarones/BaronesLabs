@@ -72,7 +72,7 @@ export default function Header() {
         >
           <nav className="mx-auto flex h-[72px] max-w-[1360px] items-center justify-between gap-6 px-4 md:px-8">
             <a href="#top" onClick={go('top')} aria-label={t.a11y.home} className="shrink-0" data-cursor>
-              <LogoHorizontal />
+              <LogoHorizontal bold className="!h-[52px] md:!h-[62px]" />
             </a>
 
             <ul className="hidden items-center gap-9 lg:flex">

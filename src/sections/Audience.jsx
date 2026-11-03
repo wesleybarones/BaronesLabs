@@ -4,19 +4,21 @@ import SectionLabel from '../components/ui/SectionLabel'
 import { Stagger, StaggerItem } from '../components/ui/Reveal'
 import TiltCard from '../components/ui/TiltCard'
 import HudCorners from '../components/ui/HudCorners'
-import { IconBag, IconBriefcase, IconDish, IconRocket, IconScissors } from '../components/Icons'
+import { motion } from 'motion/react'
+import { IconBriefcase, IconDish, IconRocket, IconScissors } from '../components/Icons'
+import { useReducedMotion } from '../lib/hooks'
 
-const ICONS = [IconScissors, IconBag, IconBriefcase, IconRocket, IconDish]
+const ICONS = [IconScissors, IconBriefcase, IconRocket, IconDish]
 const LAYOUT = [
   'sm:col-span-2 lg:col-span-3 lg:row-span-2',
   'lg:col-span-3',
   'lg:col-span-3',
-  'lg:col-span-2',
-  'lg:col-span-2',
+  'sm:col-span-2 lg:col-span-3',
 ]
 
 export default function Audience() {
   const { t } = useLang()
+  const reduce = useReducedMotion()
   const a = t.audience
   return (
     <section id="audience" className="relative py-24 md:py-36">
@@ -63,14 +65,46 @@ export default function Audience() {
               </StaggerItem>
             )
           })}
-          <StaggerItem className="sm:col-span-2 lg:col-span-2">
-            <div className="relative flex h-full flex-col justify-end overflow-hidden border border-cyan/30 bg-[linear-gradient(160deg,rgba(0,240,255,0.10),rgba(224,64,216,0.05)_70%)] p-6 md:p-8">
-              <span aria-hidden className="absolute -right-6 -top-6 font-display text-[140px] font-bold leading-none text-cyan/[0.07]">
+          <StaggerItem className="sm:col-span-2 lg:col-span-3">
+            {/* highlight tile with a breathing neon glow (Motion) */}
+            <motion.div
+              className="relative flex h-full flex-col justify-end overflow-hidden border bg-[linear-gradient(160deg,rgba(0,240,255,0.10),rgba(224,64,216,0.05)_70%)] p-6 md:p-8"
+              initial={{ borderColor: 'rgba(0,240,255,0.3)', boxShadow: '0 0 0px rgba(0,240,255,0)' }}
+              animate={
+                reduce
+                  ? { borderColor: 'rgba(0,240,255,0.7)', boxShadow: '0 0 24px rgba(0,240,255,0.3)' }
+                  : {
+                      borderColor: ['rgba(0,240,255,0.45)', 'rgba(0,240,255,1)', 'rgba(0,240,255,0.45)'],
+                      boxShadow: [
+                        '0 0 10px rgba(0,240,255,0.15), inset 0 0 10px rgba(0,240,255,0.05)',
+                        '0 0 34px rgba(0,240,255,0.55), 0 0 2px #00F0FF, inset 0 0 22px rgba(0,240,255,0.18)',
+                        '0 0 10px rgba(0,240,255,0.15), inset 0 0 10px rgba(0,240,255,0.05)',
+                      ],
+                    }
+              }
+              transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              {/* light sweeping along the top edge */}
+              {!reduce && (
+                <motion.span
+                  aria-hidden
+                  className="absolute top-0 h-[2px] w-1/3 bg-gradient-to-r from-transparent via-cyan to-transparent shadow-[0_0_12px_#00F0FF]"
+                  animate={{ left: ['-35%', '105%'] }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.2 }}
+                />
+              )}
+              <span aria-hidden className="absolute -right-6 -top-6 font-display text-[140px] font-bold leading-none text-cyan/[0.08]">
                 +
               </span>
               <span aria-hidden className="mb-4 block h-px w-10 bg-cyan shadow-[0_0_8px_#00F0FF]" />
-              <p className="relative font-display text-[22px] font-semibold leading-snug text-ink md:text-[24px]">{a.sub}</p>
-            </div>
+              <motion.p
+                className="relative font-display text-[22px] font-semibold leading-snug text-ink md:text-[26px]"
+                animate={reduce ? {} : { textShadow: ['0 0 0px rgba(0,240,255,0)', '0 0 14px rgba(0,240,255,0.6)', '0 0 0px rgba(0,240,255,0)'] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                {a.sub}
+              </motion.p>
+            </motion.div>
           </StaggerItem>
         </Stagger>
       </div>
