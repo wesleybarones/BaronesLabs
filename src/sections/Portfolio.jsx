@@ -11,15 +11,22 @@ import HudCorners from '../components/ui/HudCorners'
 import { Laptop, Phone } from '../components/Mockups'
 import { IconArrowUpRight, IconArrow } from '../components/Icons'
 import { LogoSymbol } from '../components/Logo'
+import LiveSiteModal, { canEmbed } from '../components/LiveSiteModal'
 
-function ProjectSlide({ p, index, total }) {
+function ProjectSlide({ p, index, total, onExplore }) {
   const { t } = useLang()
   const seg = t.portfolio.segments[p.id] ?? ''
   const Wrap = p.url ? 'a' : 'div'
+  // abre a navegação ao vivo; se a página não puder embutir outros sites, segue o link normal
+  const explore = (e) => {
+    if (!p.url || !canEmbed()) return
+    e.preventDefault()
+    onExplore(p)
+  }
   return (
     <article className="group relative grid h-full grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
       <Wrap
-        {...(p.url ? { href: p.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `${t.portfolio.view}: ${p.name}` } : {})}
+        {...(p.url ? { href: p.url, target: '_blank', rel: 'noopener noreferrer', onClick: explore, 'aria-label': `${t.portfolio.explore}: ${p.name}` } : {})}
         data-cursor="view"
         className="relative block lg:col-span-8"
       >
@@ -39,9 +46,19 @@ function ProjectSlide({ p, index, total }) {
         <span className="hud mt-4 inline-block border border-line px-2.5 py-1 text-[11px]">{seg}</span>
         <div className="mt-8">
           {p.url ? (
-            <Button href={p.url} variant="ghost" icon={<IconArrowUpRight className="h-4 w-4" />}>
-              {t.portfolio.view}
-            </Button>
+            <div className="flex flex-col items-start gap-4">
+              <Button href={p.url} onClick={explore} icon={<IconArrow className="h-4 w-4" />}>
+                {t.portfolio.explore}
+              </Button>
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-u inline-flex min-h-10 items-center gap-2 font-mono text-[12px] uppercase tracking-[0.18em] text-ink-2 hover:text-cyan"
+              >
+                {t.portfolio.view} <IconArrowUpRight className="h-4 w-4" />
+              </a>
+            </div>
           ) : (
             <span className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.18em] text-ink-3">
               {t.portfolio.view} <IconArrowUpRight className="h-4 w-4" /> <span className="text-ink-3/70">· {t.portfolio.soon}</span>
@@ -83,7 +100,9 @@ export default function Portfolio() {
   const reduce = useReducedMotion()
   const pinned = desktop && !reduce
   const total = PROJECTS.length
-  const slides = [...PROJECTS.map((p, i) => <ProjectSlide key={p.id} p={p} index={i} total={total} />), <NextSlot key="next" />]
+  const [live, setLive] = useState(null)
+  const slides = [...PROJECTS.map((p, i) => <ProjectSlide key={p.id} p={p} index={i} total={total} onExplore={setLive} />), <NextSlot key="next" />]
+  const modal = <LiveSiteModal project={live} onClose={() => setLive(null)} />
 
   const sectionRef = useRef(null)
   const trackRef = useRef(null)
@@ -147,6 +166,7 @@ export default function Portfolio() {
             </span>
           </div>
         </div>
+        {modal}
       </section>
     )
   }
@@ -176,6 +196,7 @@ export default function Portfolio() {
           <span key={i} className={`h-[2px] flex-1 transition-colors duration-300 ${i <= mIdx ? 'bg-cyan shadow-[0_0_8px_#00F0FF]' : 'bg-cyan/15'}`} />
         ))}
       </div>
+      {modal}
     </section>
   )
 }
