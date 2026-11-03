@@ -59,7 +59,7 @@ const pt = {
   ],
   problem: {
     label: '// 01_DIAGNÓSTICO',
-    title: 'Seu negócio é *melhor* do que parece na internet.',
+    title: 'Transforme audiência em *clientes*',
     sub: 'Se você se reconhece em algum destes pontos, o problema não é o seu produto. É a vitrine.',
     items: [
       'Depende só do Instagram para vender',
@@ -365,7 +365,7 @@ const en = {
   ],
   problem: {
     label: '// 01_DIAGNOSIS',
-    title: 'Your business is *better* than it looks online.',
+    title: 'Turn your audience into *customers*',
     sub: "If any of these sound familiar, your product isn't the problem. Your storefront is.",
     items: [
       'You rely on Instagram alone to sell',
@@ -670,7 +670,7 @@ const es = {
   ],
   problem: {
     label: '// 01_DIAGNÓSTICO',
-    title: 'Tu negocio es *mejor* de lo que parece en internet.',
+    title: 'Convierte tu audiencia en *clientes*',
     sub: 'Si te identificas con alguno de estos puntos, el problema no es tu producto. Es tu vitrina.',
     items: [
       'Dependes solo de Instagram para vender',
