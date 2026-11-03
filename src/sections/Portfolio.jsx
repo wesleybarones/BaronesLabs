@@ -80,7 +80,7 @@ function NextSlot() {
     <article className="relative grid h-full grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
       <div className="relative flex aspect-[16/10] items-center justify-center border border-dashed border-cyan/30 lg:col-span-8">
         <HudCorners inset={-1} size={22} />
-        <LogoSymbol className="h-[46%] w-auto opacity-25" />
+        <LogoSymbol className="h-[46%] w-auto opacity-25" sizes="300px" />
         <span className="hud absolute left-5 top-5 text-[11px]">{n.tag}</span>
       </div>
       <div className="lg:col-span-4">

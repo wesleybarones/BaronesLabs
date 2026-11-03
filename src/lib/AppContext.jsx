@@ -23,7 +23,12 @@ export function AppProvider({ ready, lenis, children }) {
 
 export const useApp = () => useContext(AppContext)
 
-export function scrollToId(id, lenis) {
+export async function scrollToId(id, lenis) {
+  // sections below the fold mount on demand (Deferred): build them all before measuring the target
+  if (id !== 'top' && window.__blLoadAll) {
+    await window.__blLoadAll()
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(r, 60))))
+  }
   const el = document.getElementById(id)
   if (!el) return
   if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.2 })

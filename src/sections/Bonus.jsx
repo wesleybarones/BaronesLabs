@@ -22,7 +22,7 @@ function Book({ cover }) {
       <div className="absolute inset-0 overflow-hidden border border-cyan/30 bg-[linear-gradient(160deg,#0F1522,#07080D_65%)] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)]">
         <div className="bg-grid-global absolute inset-0 [mask-image:none] opacity-80" />
         <div className="absolute -right-[30%] -top-[10%] h-[70%] w-[90%] opacity-20">
-          <LogoSymbol className="h-full w-full" />
+          <LogoSymbol className="h-full w-full" sizes="230px" />
         </div>
         <div className="absolute inset-y-0 left-0 w-[7%] bg-gradient-to-r from-black/60 to-transparent" />
         <div className="relative flex h-full flex-col justify-between p-[10%]">
@@ -37,7 +37,7 @@ function Book({ cover }) {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <LogoSymbol className="h-6 w-6" />
+            <LogoSymbol className="h-6 w-6" sizes="24px" />
             <span className="font-display text-[11px] font-bold tracking-[0.18em] text-ink">BARONES LABS</span>
           </div>
         </div>

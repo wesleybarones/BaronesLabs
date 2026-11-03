@@ -1,33 +1,32 @@
 /*
   Global fixed background: subtle grid, circuit traces (almost imperceptible), scanlines and grain.
-  The circuit pattern is a tiny tiled SVG; a few traces carry a rare, slow pulse of light.
+  The circuit pattern is a tiny tiled SVG (360px tile anchored at the top-left of the screen);
+  a few dots of light slide along straight traces of that tile (transform/opacity → compositor only).
 */
+const T = 360 // tile size
 const PULSES = [
-  { d: 'M-20 180H300l60 60h300l40-40h220', dur: '13s', delay: '0s' },
-  { d: 'M1460 620H1120l-50-50H820l-40 40H560', dur: '15s', delay: '4s' },
-  { d: 'M240 920V700l50-50V480l40-40h180', dur: '12s', delay: '8s' },
-  { d: 'M1180 -20v160l-40 40v180l60 60h260', dur: '14s', delay: '2.5s' },
+  { x: T, y: 60, tx: 90, ty: 0, d: '13s', delay: '0s' }, // horizontal trace y=60
+  { x: 0, y: T + 60, tx: 90, ty: 0, d: '15s', delay: '6s' },
+  { x: 2 * T + 180, y: 300, tx: 0, ty: 100, d: '12s', delay: '3s' }, // vertical trace x=180, across the tile edge
+  { x: 2 * T + 330, y: T + 210, tx: 70, ty: 0, d: '14s', delay: '9s' }, // horizontal trace y=210, across the edge
+  { x: 60, y: T + 280, tx: 0, ty: 106, d: '16s', delay: '1.5s' }, // vertical trace x=60
+  { x: 3 * T + 60, y: 280, tx: 0, ty: 106, d: '13s', delay: '7.5s' },
 ]
 
 export default function Background() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       <div className="bg-grid-global absolute inset-0" />
       <div className="bg-circuits absolute inset-0" />
-      <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+      <div className="absolute inset-0 opacity-50">
         {PULSES.map((p, i) => (
-          <path
+          <span
             key={i}
-            d={p.d}
-            pathLength="1000"
             className="circuit-pulse"
-            stroke="#00F0FF"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            style={{ '--d': p.dur, '--delay': p.delay, filter: 'drop-shadow(0 0 3px #00F0FF)' }}
+            style={{ left: p.x, top: p.y, '--tx': `${p.tx}px`, '--ty': `${p.ty}px`, '--d': p.d, '--delay': p.delay }}
           />
         ))}
-      </svg>
+      </div>
       <div className="bg-scanlines absolute inset-0" />
       <div className="bg-grain absolute inset-0" />
     </div>

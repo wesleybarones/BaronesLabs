@@ -16,11 +16,22 @@ export default function WhatsAppFloat() {
   useMotionValueEvent(scrollY, 'change', (v) => setPast(v > window.innerHeight * 0.75))
 
   useEffect(() => {
-    const el = document.getElementById('final')
-    if (!el) return
     const io = new IntersectionObserver(([e]) => setAtFinal(e.isIntersecting), { threshold: 0.25 })
-    io.observe(el)
-    return () => io.disconnect()
+    let watched = null
+    const observe = () => {
+      const el = document.getElementById('final')
+      if (el && el !== watched) {
+        watched = el
+        io.observe(el)
+      }
+    }
+    observe()
+    // the final section mounts on demand (Deferred)
+    window.addEventListener('bl:section-mounted', observe)
+    return () => {
+      io.disconnect()
+      window.removeEventListener('bl:section-mounted', observe)
+    }
   }, [])
 
   const show = past && !atFinal

@@ -3,18 +3,26 @@
   Os paths SVG abaixo reproduzem o símbolo em traço e são usados só onde ele precisa ser "desenhado"
   (animação de boot e selo de garantia).
 */
-import symbolSrc from '../assets/brand/symbol.webp'
-import logoSrc from '../assets/brand/logo.webp'
+import symbol480 from '../assets/brand/symbol-480.webp'
+import symbol900 from '../assets/brand/symbol-900.webp'
+import logo360 from '../assets/brand/logo-360.webp'
+import logo720 from '../assets/brand/logo-720.webp'
+
+// responsive sources: each screen downloads only the size it needs
+const SYMBOL_SRCSET = `${symbol480} 480w, ${symbol900} 900w`
+const LOGO_SRCSET = `${logo360} 360w, ${logo720} 720w`
 
 export const HEX_PATH = 'M50 11 85 30.5v39L50 89 15 69.5v-39Z'
 export const HEX_INNER = 'M50 17 79.8 34v33L50 83 20.2 67V34Z'
 export const LB_PATH = 'M32 32v34h37M38.5 33H54a8 8 0 0 1 0 16H38.5ZM38.5 49H56a10 5.75 0 0 1 0 11.5H38.5Z'
 export const DOT = { cx: 84, cy: 30.5 }
 
-export function LogoSymbol({ className = '', title, style, loading = 'lazy' }) {
+export function LogoSymbol({ className = '', title, style, loading = 'lazy', sizes = '240px' }) {
   return (
     <img
-      src={symbolSrc}
+      src={symbol480}
+      srcSet={SYMBOL_SRCSET}
+      sizes={sizes}
       width={900}
       height={990}
       loading={loading}
@@ -28,10 +36,12 @@ export function LogoSymbol({ className = '', title, style, loading = 'lazy' }) {
   )
 }
 
-export function LogoHorizontal({ className = '', bold = false, loading = 'eager' }) {
+export function LogoHorizontal({ className = '', bold = false, loading = 'eager', sizes = '160px' }) {
   return (
     <img
-      src={logoSrc}
+      src={logo360}
+      srcSet={LOGO_SRCSET}
+      sizes={sizes}
       width={720}
       height={296}
       loading={loading}

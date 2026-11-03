@@ -162,7 +162,7 @@ export default function Boot({ onDone, onMountSite, onReveal }) {
                 scale: { duration: 1.2, delay: T.logo, ease: EASE },
               }}
             >
-              <LogoHorizontal className="!h-24 sm:!h-32 md:!h-44" />
+              <LogoHorizontal className="!h-24 sm:!h-32 md:!h-44" sizes="(min-width: 768px) 430px, 240px" />
             </motion.div>
           </div>
           <motion.span

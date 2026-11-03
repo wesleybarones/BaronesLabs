@@ -1,5 +1,7 @@
 import { AnimatePresence, MotionConfig } from 'motion/react'
-import Lenis from 'lenis'
+import { lazy } from 'react'
+import Deferred, { mountAllSections } from './components/Deferred'
+import { BOT } from './lib/bot'
 import { useCallback, useEffect, useState } from 'react'
 import { AppProvider, useLockScroll } from './lib/AppContext'
 import { useLang } from './i18n/LangContext'
@@ -8,29 +10,37 @@ import Background from './components/Background'
 import Boot from './components/Boot'
 import Header from './components/Header'
 import ScrollProgress from './components/ScrollProgress'
-import Cursor from './components/Cursor'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import Hero from './sections/Hero'
 import Marquee from './sections/Marquee'
-import Problem from './sections/Problem'
-import ScanTransition from './sections/ScanTransition'
-import Solution from './sections/Solution'
-import Audience from './sections/Audience'
-import Portfolio from './sections/Portfolio'
-import Process from './sections/Process'
-import MoneyRain from './sections/MoneyRain'
-import Pricing from './sections/Pricing'
-import GuaranteeBonus from './sections/GuaranteeBonus'
-import Testimonials from './sections/Testimonials'
-import About from './sections/About'
-import FAQ from './sections/FAQ'
-import FinalCTA from './sections/FinalCTA'
-import Footer from './sections/Footer'
+
+
+// below-the-fold sections: separate chunks, mounted on demand (see components/Deferred.jsx)
+const LOADERS = {
+  Problem: () => import('./sections/Problem'),
+  ScanTransition: () => import('./sections/ScanTransition'),
+  Solution: () => import('./sections/Solution'),
+  Audience: () => import('./sections/Audience'),
+  Portfolio: () => import('./sections/Portfolio'),
+  Process: () => import('./sections/Process'),
+  MoneyRain: () => import('./sections/MoneyRain'),
+  Pricing: () => import('./sections/Pricing'),
+  GuaranteeBonus: () => import('./sections/GuaranteeBonus'),
+  Testimonials: () => import('./sections/Testimonials'),
+  About: () => import('./sections/About'),
+  FAQ: () => import('./sections/FAQ'),
+  FinalCTA: () => import('./sections/FinalCTA'),
+  Footer: () => import('./sections/Footer'),
+}
+const S = Object.fromEntries(Object.entries(LOADERS).map(([k, f]) => [k, lazy(f)]))
+if (typeof window !== 'undefined') {
+  window.__blLoadAll = () => {
+    mountAllSections()
+    return Promise.all(Object.values(LOADERS).map((f) => f()))
+  }
+}
 
 const BOOT_KEY = 'bl-booted'
-
-// search engine / social preview robots get the content straight away (no intro)
-const BOT = /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegram|linkedin|embedly|preview/i
 
 function shouldBoot() {
   if (BOT.test(navigator.userAgent)) return false
@@ -51,20 +61,37 @@ export default function App() {
   const [lenis, setLenis] = useState(null)
 
   // smooth scroll (Lenis) — drives native window scroll, so Motion's useScroll stays in sync
+  // (loaded right after the first paint, so it doesn't compete with the hero for the main thread)
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const l = new Lenis({ duration: 1.1, easing: (x) => 1 - Math.pow(1 - x, 4), smoothWheel: true })
+    let l
     let raf
-    const loop = (time) => {
-      l.raf(time)
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-    setLenis(l)
+    let cancelled = false
+    const start = () =>
+      import('lenis').then(({ default: Lenis }) => {
+        if (cancelled) return
+        l = new Lenis({ duration: 1.1, easing: (x) => 1 - Math.pow(1 - x, 4), smoothWheel: true })
+        const loop = (time) => {
+          l.raf(time)
+          raf = requestAnimationFrame(loop)
+        }
+        raf = requestAnimationFrame(loop)
+        setLenis(l)
+      })
+    const idle = window.requestIdleCallback ? requestIdleCallback(start, { timeout: 2500 }) : setTimeout(start, 1200)
     return () => {
+      cancelled = true
+      window.cancelIdleCallback ? cancelIdleCallback(idle) : clearTimeout(idle)
       cancelAnimationFrame(raf)
-      l.destroy()
+      l?.destroy()
     }
+  }, [])
+
+  // custom cursor only exists on desktops with a mouse: load its code only there
+  const [Cursor, setCursor] = useState(null)
+  useEffect(() => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+    import('./components/Cursor').then((m) => setCursor(() => m.default))
   }, [])
 
   useLockScroll(booting, lenis)
@@ -98,25 +125,53 @@ export default function App() {
         <main id="content" tabIndex={-1} className="relative outline-none">
           <Hero />
           <Marquee />
-          <Problem />
-          <ScanTransition />
-          <Solution />
-          <Audience />
-          <Portfolio />
-          <Process />
-          <MoneyRain />
-          <Pricing />
-          <GuaranteeBonus />
-          <Testimonials />
-          <About />
-          <FAQ />
-          <FinalCTA />
-          <Footer />
+<Deferred>
+            <S.Problem />
+          </Deferred>
+          <Deferred>
+            <S.ScanTransition />
+          </Deferred>
+          <Deferred>
+            <S.Solution />
+          </Deferred>
+          <Deferred>
+            <S.Audience />
+          </Deferred>
+          <Deferred>
+            <S.Portfolio />
+          </Deferred>
+          <Deferred>
+            <S.Process />
+          </Deferred>
+          <Deferred>
+            <S.MoneyRain />
+          </Deferred>
+          <Deferred>
+            <S.Pricing />
+          </Deferred>
+          <Deferred>
+            <S.GuaranteeBonus />
+          </Deferred>
+          <Deferred>
+            <S.Testimonials />
+          </Deferred>
+          <Deferred>
+            <S.About />
+          </Deferred>
+          <Deferred>
+            <S.FAQ />
+          </Deferred>
+          <Deferred>
+            <S.FinalCTA />
+          </Deferred>
+          <Deferred>
+            <S.Footer />
+          </Deferred>
         </main>
         <WhatsAppFloat />
           </>
         )}
-        <Cursor />
+        {Cursor && <Cursor />}
         <AnimatePresence>{booting && <Boot onDone={endBoot} onMountSite={mountSite} onReveal={reveal} />}</AnimatePresence>
       </AppProvider>
     </MotionConfig>

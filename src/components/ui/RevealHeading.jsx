@@ -89,9 +89,10 @@ export default function RevealHeading({
             <span className="-mb-[0.14em] -ml-[0.06em] inline-block overflow-hidden pb-[0.14em] pl-[0.06em] align-bottom">
               <motion.span
                 className="inline-block will-change-transform"
+                // the mask (overflow-hidden parent) hides the word; no opacity fade, so headings count as painted early (LCP)
                 variants={{
-                  hidden: { y: '115%', opacity: 0 },
-                  show: { y: '0%', opacity: 1, transition: { duration: 0.8, ease: EASE } },
+                  hidden: { y: '115%' },
+                  show: { y: '0%', transition: { duration: 0.8, ease: EASE } },
                 }}
               >
                 {p.hl ? (

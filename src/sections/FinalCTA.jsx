@@ -34,7 +34,7 @@ export default function FinalCTA() {
             }}
             transition={hot ? { duration: 0.4 } : { duration: 4, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <LogoSymbol className="h-full w-full" />
+            <LogoSymbol className="h-full w-full" sizes="110vmin" />
           </motion.div>
         </motion.div>
       </motion.div>

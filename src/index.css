@@ -201,18 +201,26 @@ html.has-custom-cursor * {
 
 /* hero perspective floor grid (slides slowly) */
 .perspective-floor {
+  transform: perspective(520px) rotateX(62deg);
+  transform-origin: 50% 0%;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 60%, transparent 100%);
+}
+/* the grid slides by moving a layer (transform), not the background position */
+.perspective-floor::before {
+  content: "";
+  position: absolute;
+  inset: -72px 0 0 0;
   background-image:
     linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
   background-size: 72px 72px;
-  transform: perspective(520px) rotateX(62deg);
-  transform-origin: 50% 0%;
   animation: floor-slide 9s linear infinite;
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 60%, transparent 100%);
+  will-change: transform;
 }
 @keyframes floor-slide {
   to {
-    background-position: 0 72px;
+    transform: translateY(72px);
   }
 }
 
@@ -339,15 +347,22 @@ html.has-custom-cursor * {
   100% { transform: scale(2.2); opacity: 0; }
 }
 
-/* ── Rotating gradient border (featured plan) ─ */
-@property --angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
+/* ── Rotating gradient border (featured plan) ─
+   A rotating layer behind the content (transform → runs on the compositor, not the main thread). */
 .border-spin {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.border-spin::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 300%;
+  height: 300%;
   background: conic-gradient(
-    from var(--angle),
     rgba(0, 240, 255, 0.15) 0deg,
     #00f0ff 60deg,
     rgba(0, 240, 255, 0.15) 120deg,
@@ -355,11 +370,13 @@ html.has-custom-cursor * {
     rgba(0, 240, 255, 0.15) 260deg,
     rgba(0, 240, 255, 0.15) 360deg
   );
-  animation: spin-angle 7s linear infinite;
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: border-rotate 7s linear infinite;
+  will-change: transform;
 }
-@keyframes spin-angle {
+@keyframes border-rotate {
   to {
-    --angle: 360deg;
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -453,10 +470,8 @@ html.has-custom-cursor * {
   .glitch::after {
     display: none;
   }
-  .perspective-floor {
-    animation: none;
-  }
-  .border-spin {
+  .perspective-floor::before,
+  .border-spin::before {
     animation: none;
   }
 }
@@ -531,17 +546,24 @@ html.has-custom-cursor * {
   opacity: 0.05;
   mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, #000 35%, rgba(0, 0, 0, 0.35) 100%);
 }
-/* rare, slow pulses of light travelling along a few traces */
+/* rare, slow dots of light travelling along a few straight traces (transform + opacity only) */
 .circuit-pulse {
-  stroke-dasharray: 22 1000;
-  stroke-dashoffset: 22;
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  margin: -1px 0 0 -1px;
+  border-radius: 999px;
+  background: #aefcff;
+  box-shadow: 0 0 6px 2px rgba(0, 240, 255, 0.7);
+  opacity: 0;
   animation: circuit-pulse var(--d, 11s) linear var(--delay, 0s) infinite;
+  will-change: transform, opacity;
 }
 @keyframes circuit-pulse {
-  0% { stroke-dashoffset: 22; opacity: 0; }
-  6% { opacity: 1; }
-  60% { opacity: 1; }
-  70%, 100% { stroke-dashoffset: -1000; opacity: 0; }
+  0% { transform: translate(0, 0); opacity: 0; }
+  4% { opacity: 0.8; }
+  14% { opacity: 0.8; }
+  18%, 100% { transform: translate(var(--tx, 0px), var(--ty, 0px)); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .circuit-pulse { display: none; }

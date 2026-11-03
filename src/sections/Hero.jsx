@@ -8,11 +8,13 @@ import { waLink } from '../config'
 import RevealHeading from '../components/ui/RevealHeading'
 import Button from '../components/ui/Button'
 import { LogoSymbol } from '../components/Logo'
-import { ABOUT_PHOTO } from '../config'
 
-// Avatar do hero: usa src/assets/wesley-avatar.webp quando existir; senão, cai na foto padrão.
-const avatarFiles = import.meta.glob('../assets/wesley-avatar.webp', { eager: true, import: 'default' })
-const AVATAR = Object.values(avatarFiles)[0] ?? ABOUT_PHOTO
+// Avatar do hero (LCP): três larguras; o navegador escolhe pela tela. Pré-carregado no <head> (vite.config.js).
+import avatar520 from '../assets/wesley-avatar-520.webp'
+import avatar780 from '../assets/wesley-avatar-780.webp'
+import avatar1040 from '../assets/wesley-avatar-1040.webp'
+export const AVATAR_SRCSET = `${avatar520} 520w, ${avatar780} 780w, ${avatar1040} 1040w`
+export const AVATAR_SIZES = '(min-width: 1280px) 560px, (min-width: 1024px) 40vw, 88vw'
 import { IconArrow, IconArrowDown } from '../components/Icons'
 import HudCorners from '../components/ui/HudCorners'
 import NeonSign from '../components/NeonSign'
@@ -127,8 +129,9 @@ export default function Hero() {
 
           <motion.p
             className="lead mt-7 max-w-[540px]"
-            initial={{ opacity: 0, y: 16 }}
-            animate={show ? { opacity: 1, y: 0 } : {}}
+            // no fade: painted from the first frame (it is the LCP element on phones), only slides in
+            initial={{ y: 16 }}
+            animate={show ? { y: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.3 }}
           >
             {t.hero.sub}
@@ -177,9 +180,10 @@ export default function Hero() {
         <motion.div
           className="relative mx-auto w-full max-w-[420px] px-4 sm:max-w-[480px] lg:col-span-5 lg:max-w-none lg:px-6"
           style={{ y: mockY }}
-          initial={{ opacity: 0, scale: 0.94, filter: 'blur(14px)' }}
-          animate={show ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 0.8, ease: EASE, delay: 0.15 }}
+          // visible from the first frame (it holds the LCP image); only a gentle zoom-in
+          initial={{ scale: 0.96 }}
+          animate={show ? { scale: 1 } : {}}
+          transition={{ duration: 0.9, ease: EASE }}
         >
           <div className="relative mx-auto aspect-[4/5] w-full max-w-[560px]">
             {/* hex watermark (depth 1) */}
@@ -188,7 +192,7 @@ export default function Hero() {
               className="absolute inset-[-14%] opacity-[0.16]"
               style={{ x: d1x, y: d1y, rotate: hexRot }}
             >
-              <LogoSymbol className="h-full w-full" loading="eager" />
+              <LogoSymbol className="h-full w-full" loading="eager" sizes="(min-width: 1024px) 46vw, 100vw" />
             </motion.div>
             <div aria-hidden className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.20),transparent_65%)] blur-2xl" />
 
@@ -197,7 +201,9 @@ export default function Hero() {
               <div aria-hidden className="absolute inset-0 translate-x-[-6px] translate-y-[4px] border border-magenta/50" />
               <div className="relative h-full w-full overflow-hidden border border-cyan/70 shadow-[0_0_40px_rgba(0,240,255,0.22)]">
                 <img
-                  src={AVATAR}
+                  src={avatar780}
+                  srcSet={AVATAR_SRCSET}
+                  sizes={AVATAR_SIZES}
                   width={1040}
                   height={1291}
                   loading="eager"
