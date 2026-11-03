@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360" viewBox="0 0 360 360" fill="none" stroke="#00F0FF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M0 60H90l30 30h84"/><circle cx="208" cy="90" r="3"/>
+  <path d="M360 60h-60l-30-30V0"/><path d="M270 360v-26"/><circle cx="270" cy="330" r="3"/>
+  <path d="M60 360v-80l30-30v-76"/><circle cx="90" cy="170" r="3"/><path d="M60 0v26"/><circle cx="60" cy="30" r="3"/>
+  <path d="M180 360v-60l30-30h90l30-30v-30h30"/><path d="M180 0v40l-20 20h-20"/><circle cx="136" cy="60" r="3"/>
+  <path d="M0 210h40l30 30h76"/><circle cx="150" cy="240" r="3"/><path d="M360 210h-30"/>
+  <rect x="232" y="128" width="44" height="34" rx="2"/>
+  <path d="M240 128v-10M252 128v-10M264 128v-10M240 162v10M252 162v10M264 162v10"/>
+  <path d="M276 145h24l20-20V90"/><circle cx="320" cy="86" r="3"/>
+  <path d="M232 145h-40l-20 20v22"/><circle cx="172" cy="191" r="3"/>
+  <circle cx="120" cy="310" r="2"/><circle cx="320" cy="300" r="2"/><circle cx="30" cy="120" r="2"/>
+</svg>

@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'motion/react'
+import { useInView } from 'motion/react'
 import { useMemo, useRef } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { useIsDesktop, useReducedMotion } from '../lib/hooks'
@@ -48,37 +48,36 @@ function Note({ magenta }) {
   )
 }
 
-function FallingNote({ n, progress, still }) {
-  // each note loops top → bottom a few times over the section, so it rains the whole way down
-  const fall = (v) => (still ? n.offset : (v * n.cycles + n.offset) % 1)
-  const y = useTransform(progress, (v) => `${-22 + 140 * fall(v)}vh`)
-  const x = useTransform(progress, (v) => (still ? 0 : Math.sin(v * n.sway * Math.PI * 2 + n.phase) * n.amp))
-  const rotate = useTransform(progress, (v) => n.r0 + (n.r1 - n.r0) * (still ? 0.5 : v * n.cycles))
-  const rotateX = useTransform(progress, (v) => (still ? 0 : Math.sin(v * n.flutter * Math.PI * 2 + n.phase) * 55))
+/** One falling note: a CSS loop (runs on the compositor, independent of scroll). */
+function FallingNote({ n }) {
   return (
-    <motion.div
-      className="absolute top-0 will-change-transform"
+    <div
+      className="note-fall absolute top-0"
       style={{
         left: `${n.left}%`,
         width: n.w,
         marginLeft: -n.w / 2,
-        y,
-        x,
-        rotate,
-        rotateX,
         opacity: n.op,
         filter: n.blur ? `blur(${n.blur}px)` : undefined,
         zIndex: n.front ? 20 : 1,
+        '--dur': `${n.dur}s`,
+        '--delay': `${-n.offset * n.dur}s`, // negative delay: every note starts mid-fall, no empty first seconds
+        '--dx': `${n.drift}px`,
+        '--r0': `${n.r0}deg`,
+        '--r1': `${n.r1}deg`,
+        '--still-y': `${n.offset * 100 - 10}vh`,
       }}
     >
-      <Note magenta={n.magenta} />
-    </motion.div>
+      <div className="note-flutter" style={{ '--fl': `${n.fl}s`, '--fl-delay': `${-n.offset * n.fl}s` }}>
+        <Note magenta={n.magenta} />
+      </div>
+    </div>
   )
 }
 
 /**
- * "Meu objetivo é colocar dinheiro no seu bolso": a pinned section where neon banknotes
- * fall as you scroll down and rise back up as you scroll up.
+ * "Meu objetivo é colocar dinheiro no seu bolso": neon banknotes keep falling on their own
+ * (not tied to scroll). The loop pauses while the section is off screen.
  */
 export default function MoneyRain() {
   const { t } = useLang()
@@ -86,7 +85,7 @@ export default function MoneyRain() {
   const ref = useRef(null)
   const desktop = useIsDesktop()
   const reduce = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 70%', 'end end'] })
+  const inView = useInView(ref, { margin: '200px 0px' })
 
   const notes = useMemo(() => {
     const r = rng(48)
@@ -99,13 +98,11 @@ export default function MoneyRain() {
         left: front ? side : r() * 96 + 2,
         w: Math.round((desktop ? 70 : 54) + depth * (desktop ? 90 : 60) + (front ? 40 : 0)),
         offset: r(),
-        cycles: 1.4 + r() * 1.6,
+        dur: 7 + r() * 6 - depth * 2, // nearer notes fall a bit faster
+        drift: r() * 120 - 60,
         r0: r() * 80 - 40,
         r1: r() * 360 - 180,
-        sway: 0.6 + r() * 1.4,
-        amp: 20 + r() * 50,
-        flutter: 1 + r() * 2.5,
-        phase: r() * Math.PI * 2,
+        fl: 0.9 + r() * 1.4,
         op: front ? 0.95 : 0.35 + depth * 0.55,
         blur: front ? 0 : depth < 0.3 ? 2.5 : 0,
         magenta: r() < 0.22,
@@ -114,22 +111,19 @@ export default function MoneyRain() {
     })
   }, [desktop])
 
-  const glow = useTransform(scrollYProgress, [0, 0.5, 1], [0.4, 1, 0.6])
-
   return (
-    <section id="goal" ref={ref} className="relative h-[200vh] lg:h-[260vh]">
-      <div className="sticky top-0 flex h-[100svh] items-center justify-center overflow-hidden" style={{ perspective: 900 }}>
+    <section id="goal" ref={ref} className={`relative ${inView && !reduce ? '' : 'money-paused'} ${reduce ? 'money-still' : ''}`}>
+      <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden py-24" style={{ perspective: 900 }}>
         {/* floor glow where the notes land */}
-        <motion.div
+        <div
           aria-hidden
-          style={{ opacity: glow }}
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] bg-[radial-gradient(60%_80%_at_50%_100%,rgba(0,240,255,0.14),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] opacity-80 bg-[radial-gradient(60%_80%_at_50%_100%,rgba(0,240,255,0.14),transparent_70%)]"
         />
         <div aria-hidden className="pointer-events-none absolute inset-x-[10%] bottom-[6%] h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent" />
 
         <div aria-hidden className="pointer-events-none absolute inset-0">
           {notes.map((n, i) => (
-            <FallingNote key={i} n={n} progress={scrollYProgress} still={reduce} />
+            <FallingNote key={i} n={n} />
           ))}
         </div>
 

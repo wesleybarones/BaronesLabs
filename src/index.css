@@ -57,7 +57,8 @@ html.lenis body {
 }
 
 body {
-  background: var(--bg);
+  /* transparent so the fixed background layer (grid, circuits) shows; the page colour lives on <html> */
+  background: transparent;
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 17px;
@@ -491,4 +492,57 @@ html.has-custom-cursor * {
     0 0 22px rgba(0, 240, 255, 0.75),
     0 0 40px rgba(0, 240, 255, 0.45),
     -2px 0 10px rgba(224, 64, 216, 0.5);
+}
+
+/* ── Money rain: notes fall on their own (CSS loop, not scroll-driven) ── */
+.note-fall {
+  will-change: transform;
+  perspective: 600px;
+  animation: note-fall var(--dur) linear var(--delay) infinite;
+}
+.note-flutter {
+  animation: note-flutter var(--fl) ease-in-out var(--fl-delay) infinite alternate;
+}
+@keyframes note-fall {
+  from { transform: translate3d(0, -25vh, 0) rotate(var(--r0)); }
+  to { transform: translate3d(var(--dx), 125vh, 0) rotate(var(--r1)); }
+}
+@keyframes note-flutter {
+  from { transform: rotateX(-50deg) translateX(-14px); }
+  to { transform: rotateX(50deg) translateX(14px); }
+}
+.money-paused .note-fall,
+.money-paused .note-flutter {
+  animation-play-state: paused;
+}
+/* reduced motion: notes stay still, scattered over the section */
+.money-still .note-fall,
+.money-still .note-flutter {
+  animation: none !important;
+}
+.money-still .note-fall {
+  transform: translate3d(0, var(--still-y), 0) rotate(var(--r0));
+}
+
+/* ── Circuit traces in the global background: very faint, almost imperceptible ── */
+.bg-circuits {
+  background-image: url("./assets/circuit-tile.svg");
+  background-size: 360px 360px;
+  opacity: 0.05;
+  mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, #000 35%, rgba(0, 0, 0, 0.35) 100%);
+}
+/* rare, slow pulses of light travelling along a few traces */
+.circuit-pulse {
+  stroke-dasharray: 22 1000;
+  stroke-dashoffset: 22;
+  animation: circuit-pulse var(--d, 11s) linear var(--delay, 0s) infinite;
+}
+@keyframes circuit-pulse {
+  0% { stroke-dashoffset: 22; opacity: 0; }
+  6% { opacity: 1; }
+  60% { opacity: 1; }
+  70%, 100% { stroke-dashoffset: -1000; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .circuit-pulse { display: none; }
 }
