@@ -235,7 +235,7 @@ const pt = {
   bonus: {
     label: '// BÔNUS',
     title: 'E-books *bônus* para vender mais.',
-    text: 'Uma série de guias práticos da Barones Labs, com a mesma cara do seu site.',
+    text: 'Guias práticos da Barones Labs para o seu site começar a trazer clientes desde o primeiro dia.',
     books: [
       { vol: 'VOL.01', title: 'Como divulgar seu site', desc: 'Do link na bio ao Google: 30 dias para levar clientes até o seu site.', badge: 'Todos os pacotes', short: 'Bônus', premium: false },
       { vol: 'VOL.02', title: 'Feche vendas pelo WhatsApp', desc: 'Roteiros prontos para transformar conversa em venda, no WhatsApp e no telefone.', badge: 'Exclusivo Premium', short: 'Premium', premium: true },
@@ -549,7 +549,7 @@ const en = {
   bonus: {
     label: '// BONUS',
     title: 'Bonus *e-books* to sell more.',
-    text: 'A series of practical Barones Labs guides, with the same look as your website.',
+    text: 'Practical Barones Labs guides to get your website bringing in clients from day one.',
     books: [
       { vol: 'VOL.01', title: 'How to promote your website', desc: 'From your bio link to Google: 30 days to bring customers to your site.', badge: 'Every package', short: 'Bonus', premium: false },
       { vol: 'VOL.02', title: 'Close sales on WhatsApp', desc: 'Ready-made scripts to turn conversations into sales, on WhatsApp and on the phone.', badge: 'Premium only', short: 'Premium', premium: true },
@@ -863,7 +863,7 @@ const es = {
   bonus: {
     label: '// BONO',
     title: 'E-books *de regalo* para vender más.',
-    text: 'Una serie de guías prácticas de Barones Labs, con la misma estética de tu sitio.',
+    text: 'Guías prácticas de Barones Labs para que tu sitio empiece a traer clientes desde el primer día.',
     books: [
       { vol: 'VOL.01', title: 'Cómo promocionar tu sitio', desc: 'Del link en la bio a Google: 30 días para llevar clientes a tu sitio.', badge: 'Todos los paquetes', short: 'Bono', premium: false },
       { vol: 'VOL.02', title: 'Cierra ventas por WhatsApp', desc: 'Guiones listos para convertir conversaciones en ventas, por WhatsApp y por teléfono.', badge: 'Exclusivo Premium', short: 'Premium', premium: true },
