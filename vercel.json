@@ -12,6 +12,12 @@
       ],
       "dest": "/og.html"
     },
-    { "handle": "filesystem" }
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^/portfolio/?$",
+      "dest": "/index.html"
+    }
   ]
 }

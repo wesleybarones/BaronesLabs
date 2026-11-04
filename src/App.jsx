@@ -42,8 +42,17 @@ if (typeof window !== 'undefined') {
 
 const BOOT_KEY = 'bl-booted'
 
+// direct link to a section (baroneslabs.com.br/portfolio or /#portfolio): skip the intro and land on it
+const DEEP_LINKS = { '/portfolio': 'portfolio' }
+const deepTarget = () =>
+  typeof window === 'undefined'
+    ? null
+    : DEEP_LINKS[window.location.pathname.replace(/\/+$/, '')] ||
+      (window.location.hash === '#portfolio' ? 'portfolio' : null)
+
 function shouldBoot() {
   if (BOT.test(navigator.userAgent)) return false
+  if (deepTarget()) return false
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
   try {
     return !sessionStorage.getItem(BOOT_KEY)
@@ -95,6 +104,27 @@ export default function App() {
   }, [])
 
   useLockScroll(booting, lenis)
+
+  // deep link: mount every section, then scroll to the target (re-aligned while late content settles)
+  useEffect(() => {
+    const id = deepTarget()
+    if (!id) return
+    let userMoved = false
+    const stop = () => (userMoved = true)
+    window.addEventListener('wheel', stop, { passive: true, once: true })
+    window.addEventListener('touchstart', stop, { passive: true, once: true })
+    const go = () => {
+      const el = document.getElementById(id)
+      if (el && !userMoved) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: 'instant' })
+    }
+    const timers = []
+    window.__blLoadAll().then(() => [60, 400, 1000, 1800].forEach((ms) => timers.push(setTimeout(go, ms))))
+    return () => {
+      timers.forEach(clearTimeout)
+      window.removeEventListener('wheel', stop)
+      window.removeEventListener('touchstart', stop)
+    }
+  }, [])
 
   const endBoot = useCallback(() => {
     try {
