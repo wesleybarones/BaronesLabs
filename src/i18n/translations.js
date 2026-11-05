@@ -253,10 +253,9 @@ const pt = {
   testimonials: {
     label: '// 07_DEPOIMENTOS',
     title: 'Quem já tem um site *Barones Labs*.',
-    placeholder: '[DEPOIMENTO REAL DO CLIENTE]',
-    name: '[Nome do cliente]',
-    business: '[Negócio · Cidade]',
-    drag: 'Arraste',
+    source: 'Avaliação no Google',
+    reviews: 'avaliações no Google',
+    seeAll: 'Ver todas no Google',
   },
   about: {
     label: '// QUEM ESTÁ POR TRÁS',
@@ -568,10 +567,10 @@ const en = {
   testimonials: {
     label: '// 07_TESTIMONIALS',
     title: 'People who already have a *Barones Labs* site.',
-    placeholder: '[REAL CLIENT TESTIMONIAL]',
-    name: '[Client name]',
-    business: '[Business · City]',
-    drag: 'Drag',
+    source: 'Google review',
+    reviews: 'reviews on Google',
+    seeAll: 'See all on Google',
+    original: 'Original review in Portuguese',
   },
   about: {
     label: "// WHO'S BEHIND IT",
@@ -883,10 +882,10 @@ const es = {
   testimonials: {
     label: '// 07_TESTIMONIOS',
     title: 'Quienes ya tienen un sitio *Barones Labs*.',
-    placeholder: '[TESTIMONIO REAL DEL CLIENTE]',
-    name: '[Nombre del cliente]',
-    business: '[Negocio · Ciudad]',
-    drag: 'Arrastra',
+    source: 'Reseña en Google',
+    reviews: 'reseñas en Google',
+    seeAll: 'Ver todas en Google',
+    original: 'Reseña original en portugués',
   },
   about: {
     label: '// QUIÉN ESTÁ DETRÁS',

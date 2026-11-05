@@ -1,50 +1,60 @@
-import { motion } from 'motion/react'
-import { useEffect, useState } from 'react'
 import { useLang } from '../i18n/LangContext'
-import { useReducedMotion } from '../lib/hooks'
-import { EASE } from '../lib/motion'
 import RevealHeading from '../components/ui/RevealHeading'
 import SectionLabel from '../components/ui/SectionLabel'
 import HudCorners from '../components/ui/HudCorners'
-import { IconArrow } from '../components/Icons'
+import { Stagger, StaggerItem } from '../components/ui/Reveal'
+import { GOOGLE_RATING, GOOGLE_REVIEWS_URL, REVIEWS } from '../config'
 
 /*
-  IMPORTANTE: não inventamos depoimentos.
-  Preencha TESTIMONIALS com falas reais (quote/name/business/photo) — enquanto vazios,
-  os cards mostram os placeholders marcados das traduções.
+  Real reviews from the Google Business Profile (src/config.js → REVIEWS).
+  Never invent testimonials: only text copied from Google, unedited.
 */
-const TESTIMONIALS = [
-  { quote: '', name: '', business: '', photo: '' },
-  { quote: '', name: '', business: '', photo: '' },
-  { quote: '', name: '', business: '', photo: '' },
-  { quote: '', name: '', business: '', photo: '' },
-  { quote: '', name: '', business: '', photo: '' },
-]
 
-function Card({ item, t, active }) {
+function Stars({ n = 5, className = '' }) {
   return (
-    <figure className={`relative flex h-full flex-col justify-between border bg-surface p-7 transition-colors duration-500 md:p-10 ${active ? 'border-cyan/35' : 'border-line'}`}>
+    <span className={`flex items-center gap-0.5 ${className}`} aria-label={`${n}/5`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <svg key={i} viewBox="0 0 20 20" className={`h-4 w-4 ${i < n ? 'text-yellow drop-shadow-[0_0_4px_rgba(255,230,0,0.55)]' : 'text-ink-3/40'}`} aria-hidden>
+          <path fill="currentColor" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z" />
+        </svg>
+      ))}
+    </span>
+  )
+}
+
+const initials = (name) =>
+  name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+
+function ReviewCard({ r, tt, lang }) {
+  return (
+    <figure className="group relative flex h-full flex-col border border-line bg-surface/70 p-7 transition-colors duration-500 hover:border-cyan/40 md:p-9">
       <HudCorners inset={-1} size={16} />
-      <span aria-hidden className="font-display text-[64px] leading-none text-cyan/30 [text-shadow:-2px_0_rgba(224,64,216,0.4)]">
+      <div className="flex items-center justify-between gap-4">
+        <Stars n={r.stars} />
+        <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-3">{r.when}</span>
+      </div>
+      <span aria-hidden className="mt-5 font-display text-[56px] leading-none text-cyan/30 [text-shadow:-2px_0_rgba(224,64,216,0.4)]">
         “
       </span>
-      <blockquote className="-mt-4 font-display text-[21px] font-medium leading-[1.4] text-ink md:text-[26px]">
-        {item.quote || <span className="text-ink-2">{t.placeholder}</span>}
+      <blockquote lang="pt-BR" className="-mt-5 flex-1 font-display text-[20px] font-medium leading-[1.45] text-ink md:text-[23px]">
+        {r.text}
       </blockquote>
+      {lang !== 'pt' && tt.original && <p className="mt-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-3">{tt.original}</p>}
       <figcaption className="mt-8 flex items-center gap-4">
-        <span className="relative h-12 w-12 shrink-0">
+        <span className="relative h-11 w-11 shrink-0">
           <span className="absolute inset-0 translate-x-[-2px] translate-y-[1px] rounded-full border border-magenta/60" />
-          <span className="absolute inset-0 overflow-hidden rounded-full border border-cyan bg-surface-2 shadow-[0_0_12px_rgba(0,240,255,0.35)]">
-            {item.photo ? (
-              <img src={item.photo} alt="" width={96} height={96} loading="lazy" className="h-full w-full object-cover" />
-            ) : (
-              <span className="flex h-full w-full items-center justify-center font-mono text-[10px] text-ink-3">LOGO</span>
-            )}
+          <span className="absolute inset-0 flex items-center justify-center rounded-full border border-cyan bg-surface-2 font-display text-[14px] font-semibold text-cyan shadow-[0_0_12px_rgba(0,240,255,0.3)]">
+            {initials(r.name)}
           </span>
         </span>
         <span className="flex flex-col">
-          <span className="font-display text-[17px] font-semibold text-ink">{item.name || t.name}</span>
-          <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-3">{item.business || t.business}</span>
+          <span className="font-display text-[16px] font-semibold text-ink">{r.name}</span>
+          <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-3">{tt.source}</span>
         </span>
       </figcaption>
     </figure>
@@ -52,107 +62,48 @@ function Card({ item, t, active }) {
 }
 
 export default function Testimonials() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const tt = t.testimonials
-  const reduce = useReducedMotion()
-  const n = TESTIMONIALS.length
-  const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
-
-  const go = (d) => setActive((a) => (a + d + n) % n)
-
-  useEffect(() => {
-    if (paused || reduce) return
-    const id = setInterval(() => go(1), 6000)
-    return () => clearInterval(id)
-  }, [paused, reduce]) // eslint-disable-line
-
-  const rel = (i) => {
-    let d = i - active
-    if (d > n / 2) d -= n
-    if (d < -n / 2) d += n
-    return d
-  }
-
   return (
-    <section id="testimonials" className="relative overflow-hidden py-24 md:py-36">
-      <div className="mx-auto max-w-[1360px] px-4 md:px-8">
-        <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <section id="testimonials" className="relative py-24 md:py-36">
+      <div className="mx-auto max-w-[1180px] px-4 md:px-8">
+        <div className="mb-12 flex flex-col gap-8 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div>
             <SectionLabel>{tt.label}</SectionLabel>
             <RevealHeading text={tt.title} className="h2 max-w-[16ch] text-ink" />
           </div>
-          <div className="flex items-center gap-3">
-            <button type="button" onClick={() => go(-1)} aria-label={t.a11y.prev} className="flex h-12 w-12 items-center justify-center border border-line text-cyan transition-colors hover:border-cyan hover:bg-cyan/10">
-              <IconArrow className="h-5 w-5 rotate-180" />
-            </button>
-            <button type="button" onClick={() => go(1)} aria-label={t.a11y.next} className="flex h-12 w-12 items-center justify-center border border-line text-cyan transition-colors hover:border-cyan hover:bg-cyan/10">
-              <IconArrow className="h-5 w-5" />
-            </button>
+          {/* aggregate rating + subtle link to the Google profile */}
+          <div className="flex flex-col items-start gap-3 md:items-end">
+            <div className="flex items-center gap-3">
+              <span className="font-display text-[40px] font-bold leading-none text-ink">{GOOGLE_RATING.score}</span>
+              <span className="flex flex-col gap-1">
+                <Stars n={5} />
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-2">
+                  {GOOGLE_RATING.count} {tt.reviews}
+                </span>
+              </span>
+            </div>
+            <a
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-u inline-flex items-center gap-2 font-mono text-[11.5px] uppercase tracking-[0.16em] text-cyan/80 transition-colors hover:text-cyan"
+            >
+              {tt.seeAll}
+              <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+                <path d="M5 11L11 5M6 5h5v5" />
+              </svg>
+            </a>
           </div>
         </div>
-      </div>
 
-      <div
-        className="relative h-[400px] md:h-[420px]"
-        onPointerEnter={() => setPaused(true)}
-        onPointerLeave={() => setPaused(false)}
-        onFocus={() => setPaused(true)}
-        onBlur={() => setPaused(false)}
-        aria-roledescription="carousel"
-      >
-        <motion.div
-          className="absolute inset-0 cursor-grab touch-pan-y active:cursor-grabbing"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.18}
-          onDragEnd={(_, info) => {
-            if (info.offset.x < -60 || info.velocity.x < -400) go(1)
-            else if (info.offset.x > 60 || info.velocity.x > 400) go(-1)
-          }}
-        >
-          {TESTIMONIALS.map((item, i) => {
-            const d = rel(i)
-            const isActive = d === 0
-            const hidden = Math.abs(d) > 1
-            return (
-              <motion.div
-                key={i}
-                aria-hidden={!isActive}
-                className="absolute left-1/2 top-0 h-full w-[min(620px,84vw)]"
-                style={{ marginLeft: 'calc(min(620px, 84vw) / -2)' }}
-                initial={false}
-                animate={{
-                  x: `${d * 104}%`,
-                  scale: isActive ? 1 : 0.88,
-                  opacity: hidden ? 0 : isActive ? 1 : 0.4,
-                  filter: isActive ? 'blur(0px)' : 'blur(3px)',
-                  zIndex: isActive ? 2 : 1,
-                }}
-                transition={{ duration: 0.7, ease: EASE }}
-                onClick={() => !isActive && go(d)}
-              >
-                <Card item={item} t={tt} active={isActive} />
-              </motion.div>
-            )
-          })}
-        </motion.div>
-      </div>
-
-      <div className="mt-8 flex justify-center gap-2" role="tablist">
-        {TESTIMONIALS.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            role="tab"
-            aria-selected={i === active}
-            aria-label={`${i + 1} / ${n}`}
-            onClick={() => setActive(i)}
-            className="flex h-12 min-w-12 items-center justify-center"
-          >
-            <span className={`block h-[2px] transition-all duration-500 ${i === active ? 'w-10 bg-cyan shadow-[0_0_8px_#00F0FF]' : 'w-5 bg-cyan/20'}`} />
-          </button>
-        ))}
+        <Stagger className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6" stagger={0.1}>
+          {REVIEWS.map((r) => (
+            <StaggerItem key={r.name}>
+              <ReviewCard r={r} tt={tt} lang={lang} />
+            </StaggerItem>
+          ))}
+        </Stagger>
       </div>
     </section>
   )
