@@ -74,6 +74,7 @@ const pt = {
     code: 'ERR',
   },
   scan: { fixing: 'Recalibrando a vitrine', ok: 'Sistema OK' },
+  tunnel: { label: 'Conectando você ao seu cliente' },
   solution: {
     label: '// 02_SOLUÇÃO',
     title: 'A Barones Labs resolve isso em *3 frentes*.',
@@ -390,6 +391,7 @@ const en = {
     code: 'ERR',
   },
   scan: { fixing: 'Recalibrating your storefront', ok: 'System OK' },
+  tunnel: { label: 'Connecting you to your customer' },
   solution: {
     label: '// 02_SOLUTION',
     title: 'Barones Labs fixes this on *3 fronts*.',
@@ -705,6 +707,7 @@ const es = {
     code: 'ERR',
   },
   scan: { fixing: 'Recalibrando tu vitrina', ok: 'Sistema OK' },
+  tunnel: { label: 'Conectándote con tu cliente' },
   solution: {
     label: '// 02_SOLUCIÓN',
     title: 'Barones Labs lo resuelve en *3 frentes*.',

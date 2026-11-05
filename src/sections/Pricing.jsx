@@ -1,4 +1,6 @@
-import { motion } from 'motion/react'
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
+import { useRef } from 'react'
+import { useFinePointer, useReducedMotion } from '../lib/hooks'
 import { useLang } from '../i18n/LangContext'
 import { waLink } from '../config'
 import { EASE } from '../lib/motion'
@@ -17,6 +19,37 @@ function PlanCard({ plan, i, showPrices }) {
   const p = t.pricing
   const featured = !!plan.featured
   const order = featured ? 'order-first md:order-none' : ''
+
+  // 3D holographic card: tilts towards the cursor, a light sheen follows it
+  const fine = useFinePointer()
+  const reduce = useReducedMotion()
+  const tilt = fine && !reduce
+  const cardRef = useRef(null)
+  const px = useMotionValue(0.5)
+  const py = useMotionValue(0.5)
+  const max = featured ? 7 : 9
+  const rotateX = useSpring(useTransform(py, [0, 1], [max, -max]), { stiffness: 150, damping: 18 })
+  const rotateY = useSpring(useTransform(px, [0, 1], [-max, max]), { stiffness: 150, damping: 18 })
+  const onMove = (e) => {
+    if (!tilt) return
+    const r = cardRef.current.getBoundingClientRect()
+    const nx = (e.clientX - r.left) / r.width
+    const ny = (e.clientY - r.top) / r.height
+    px.set(nx)
+    py.set(ny)
+    cardRef.current.style.setProperty('--hx', `${nx * 100}%`)
+    cardRef.current.style.setProperty('--hy', `${ny * 100}%`)
+  }
+  const onLeave = () => {
+    px.set(0.5)
+    py.set(0.5)
+  }
+  const holo = (
+    <>
+      {tilt && <span aria-hidden className="holo-sheen pointer-events-none absolute inset-0 z-20" />}
+      {featured && !reduce && <span aria-hidden className="holo-sweep pointer-events-none absolute inset-y-0 left-0 z-20 w-1/2" />}
+    </>
+  )
 
   const body = (
     <div className={`relative flex h-full flex-col ${featured ? 'bg-surface-2 p-7 md:p-9' : 'bg-surface p-7 md:p-8'}`}>
@@ -89,6 +122,10 @@ function PlanCard({ plan, i, showPrices }) {
       transition={{ duration: 0.7, ease: EASE, delay: i * 0.08 }}
     >
       <motion.div
+        ref={cardRef}
+        onPointerMove={onMove}
+        onPointerLeave={onLeave}
+        style={tilt ? { rotateX, rotateY, transformPerspective: 1000 } : undefined}
         whileHover={{ y: -6 }}
         transition={{ type: 'spring', stiffness: 180, damping: 20 }}
         className={`h-full transition-[filter] duration-500 ${
@@ -99,14 +136,16 @@ function PlanCard({ plan, i, showPrices }) {
       >
         {featured ? (
           <div className="chamfer chamfer-lg border-spin h-full p-[1.5px]">
-            <div className="chamfer chamfer-lg h-full overflow-hidden" style={{ '--chamfer': '21px' }}>
+            <div className="chamfer chamfer-lg relative h-full overflow-hidden" style={{ '--chamfer': '21px' }}>
               {body}
+              {holo}
             </div>
           </div>
         ) : (
           <div className="chamfer h-full bg-line p-px transition-colors duration-500 group-hover:bg-cyan/40">
-            <div className="chamfer h-full overflow-hidden" style={{ '--chamfer': '13.5px' }}>
+            <div className="chamfer relative h-full overflow-hidden" style={{ '--chamfer': '13.5px' }}>
               {body}
+              {holo}
             </div>
           </div>
         )}

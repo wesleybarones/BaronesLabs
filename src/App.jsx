@@ -20,6 +20,7 @@ const LOADERS = {
   Problem: () => import('./sections/Problem'),
   ScanTransition: () => import('./sections/ScanTransition'),
   Solution: () => import('./sections/Solution'),
+  TunnelTransition: () => import('./sections/TunnelTransition'),
   Audience: () => import('./sections/Audience'),
   Portfolio: () => import('./sections/Portfolio'),
   Process: () => import('./sections/Process'),
@@ -163,6 +164,9 @@ export default function App() {
           </Deferred>
           <Deferred>
             <S.Solution />
+          </Deferred>
+          <Deferred>
+            <S.TunnelTransition />
           </Deferred>
           <Deferred>
             <S.Audience />

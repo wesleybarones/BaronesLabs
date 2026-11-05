@@ -663,3 +663,31 @@ html.has-custom-cursor * {
 @media (prefers-reduced-motion: reduce) {
   .interfere.is-on, .interfere.is-on::before, .interfere.is-on::after, .icon-intf { animation: none !important; }
 }
+
+/* ---- 3D hex in the hero: slow swing (compositor only) ---- */
+.hex3d-swing { animation: hex3d-swing 8s ease-in-out infinite alternate; }
+@keyframes hex3d-swing {
+  from { transform: rotateY(-24deg) rotateX(7deg); }
+  to { transform: rotateY(24deg) rotateX(-7deg); }
+}
+
+/* ---- holographic pricing cards ---- */
+.holo-sheen {
+  opacity: 0;
+  transition: opacity 0.4s;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(380px circle at var(--hx, 50%) var(--hy, 50%), rgba(0, 240, 255, 0.14), transparent 55%),
+    linear-gradient(115deg, transparent 20%, rgba(0, 240, 255, 0.08) 40%, rgba(224, 64, 216, 0.08) 50%, transparent 70%);
+}
+.group:hover .holo-sheen { opacity: 1; }
+.holo-sweep {
+  mix-blend-mode: screen;
+  background: linear-gradient(100deg, transparent 20%, rgba(0, 240, 255, 0.10) 45%, rgba(255, 255, 255, 0.10) 50%, rgba(224, 64, 216, 0.08) 55%, transparent 80%);
+  transform: translateX(-120%) skewX(-12deg);
+  animation: holo-sweep 5s ease-in-out 1.5s infinite;
+}
+@keyframes holo-sweep {
+  0% { transform: translateX(-120%) skewX(-12deg); }
+  35%, 100% { transform: translateX(260%) skewX(-12deg); }
+}

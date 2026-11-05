@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'motion/react'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { scrollToId, useApp } from '../lib/AppContext'
 import { useFinePointer, useIsDesktop, useReducedMotion } from '../lib/hooks'
@@ -13,6 +13,8 @@ import { LogoSymbol } from '../components/Logo'
 import avatar520 from '../assets/wesley-avatar-520.webp'
 import avatar780 from '../assets/wesley-avatar-780.webp'
 import avatar1040 from '../assets/wesley-avatar-1040.webp'
+// [translateZ px, opacity] back → front; the back layers are tinted towards magenta
+const HEX_LAYERS = [[-42, 0.18], [-28, 0.28], [-14, 0.42], [0, 1]]
 export const AVATAR_SRCSET = `${avatar520} 520w, ${avatar780} 780w, ${avatar1040} 1040w`
 export const AVATAR_SIZES = '(min-width: 1280px) 560px, (min-width: 1024px) 40vw, 88vw'
 import { IconArrow, IconArrowDown } from '../components/Icons'
@@ -51,6 +53,21 @@ export default function Hero() {
   const d2y = useTransform(sy, (v) => v * -8)
   const d3x = useTransform(sx, (v) => v * 12)
   const d3y = useTransform(sy, (v) => v * 12)
+
+  // 3D hex: tilts with the cursor (desktop) or with the phone (Android gyroscope)
+  const hexTiltX = useTransform(sy, (v) => v * -14)
+  const hexTiltY = useTransform(sx, (v) => v * 18)
+  useEffect(() => {
+    if (fine || reduce || typeof DeviceOrientationEvent === 'undefined') return
+    const clamp = (v) => Math.max(-1, Math.min(1, v))
+    const onTilt = (e) => {
+      if (e.gamma == null) return
+      mx.set(clamp(e.gamma / 30))
+      my.set(clamp((e.beta - 45) / 30))
+    }
+    window.addEventListener('deviceorientation', onTilt, { passive: true })
+    return () => window.removeEventListener('deviceorientation', onTilt)
+  }, [fine, reduce]) // eslint-disable-line
 
   const onMove = (e) => {
     if (!parallax) return
@@ -187,12 +204,26 @@ export default function Hero() {
         >
           <div className="relative mx-auto aspect-[4/5] w-full max-w-[560px]">
             {/* hex watermark (depth 1) */}
+            {/* holographic 3D hex: stacked layers of the symbol give it depth; it swings slowly and
+                follows the cursor/phone tilt. Pure CSS 3D transforms (GPU compositor). */}
             <motion.div
               aria-hidden
-              className="absolute inset-[-14%] opacity-[0.16]"
+              className="absolute inset-[-14%] opacity-[0.4] [perspective:1100px]"
               style={{ x: d1x, y: d1y, rotate: hexRot }}
             >
-              <LogoSymbol className="h-full w-full" loading="eager" sizes="(min-width: 1024px) 46vw, 100vw" />
+              <motion.div className="h-full w-full [transform-style:preserve-3d]" style={{ rotateX: hexTiltX, rotateY: hexTiltY }}>
+                <div className={`relative h-full w-full [transform-style:preserve-3d] ${reduce ? '' : 'hex3d-swing'}`}>
+                  {HEX_LAYERS.map(([z, o], k) => (
+                    <LogoSymbol
+                      key={z}
+                      className="absolute inset-0 h-full w-full"
+                      loading="eager"
+                      sizes="(min-width: 1024px) 46vw, 100vw"
+                      style={{ transform: `translateZ(${z}px)`, opacity: o, ...(k < HEX_LAYERS.length - 1 ? { filter: 'hue-rotate(95deg) saturate(1.3)' } : null) }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
             </motion.div>
             <div aria-hidden className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.20),transparent_65%)] blur-2xl" />
 
