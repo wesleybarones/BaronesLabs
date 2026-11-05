@@ -247,7 +247,7 @@ const pt = {
     label: '// GARANTIA',
     seal: '7 DIAS',
     sealSub: 'Garantia',
-    fine: 'seu dinheiro de volta em até 90 dias',
+    fine: 'pedido em até 7 dias · reembolso em até 90 dias',
     title: 'Satisfação ou seu dinheiro de volta.',
     text: 'Se em até 7 dias após a entrega você não estiver satisfeito, devolvo 100% do valor. Simples assim.',
   },
@@ -300,7 +300,7 @@ const pt = {
       },
       {
         q: 'E se eu não gostar do resultado?',
-        a: 'Você tem garantia de 7 dias após a entrega. Se não estiver satisfeito, devolvo 100% do valor.',
+        a: 'Você tem garantia de 7 dias após a entrega. Se não estiver satisfeito, devolvo 100% do valor, com reembolso em até 90 dias.',
       },
     ],
   },
@@ -561,7 +561,7 @@ const en = {
   guarantee: {
     label: '// GUARANTEE',
     seal: '7 DAYS',
-    fine: 'money back within 90 days',
+    fine: 'request within 7 days · refund within 90 days',
     sealSub: 'Guarantee',
     title: 'Love it, or your money back.',
     text: "If you're not satisfied within 7 days of delivery, I'll refund 100% of what you paid. Simple as that.",
@@ -616,7 +616,7 @@ const en = {
       },
       {
         q: "What if I don't like the result?",
-        a: "You're covered by a 7-day guarantee after delivery. If you're not satisfied, I refund 100%.",
+        a: "You're covered by a 7-day guarantee after delivery. If you're not satisfied, I refund 100%, paid back within 90 days.",
       },
     ],
   },
@@ -877,7 +877,7 @@ const es = {
   guarantee: {
     label: '// GARANTÍA',
     seal: '7 DÍAS',
-    fine: 'tu dinero de vuelta en hasta 90 días',
+    fine: 'solicitud en hasta 7 días · reembolso en hasta 90 días',
     sealSub: 'Garantía',
     title: 'Satisfacción o te devuelvo tu dinero.',
     text: 'Si en los 7 días posteriores a la entrega no estás satisfecho, te devuelvo el 100% del valor. Así de simple.',
@@ -932,7 +932,7 @@ const es = {
       },
       {
         q: '¿Y si no me gusta el resultado?',
-        a: 'Tienes una garantía de 7 días después de la entrega. Si no estás satisfecho, te devuelvo el 100%.',
+        a: 'Tienes una garantía de 7 días después de la entrega. Si no estás satisfecho, te devuelvo el 100%, con reembolso en hasta 90 días.',
       },
     ],
   },
