@@ -568,3 +568,98 @@ html.has-custom-cursor * {
 @media (prefers-reduced-motion: reduce) {
   .circuit-pulse { display: none; }
 }
+
+/* ---- compositor-only loops (transform/opacity): no main-thread work per frame ---- */
+.marquee-track {
+  animation: marquee-x 22.727s linear infinite; /* 50% of the track at 2.2%/s */
+  will-change: transform;
+}
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+/* scan line sweeping the glasses: 2.4s sweep + 4.5s pause, first one 2s after load */
+.lens-scan {
+  opacity: 0;
+  animation: lens-scan 6.9s 2s infinite;
+}
+@keyframes lens-scan {
+  0% { transform: translateY(8%); opacity: 0; animation-timing-function: ease-in-out; }
+  11.594% { opacity: 0.9; animation-timing-function: ease-in-out; }
+  23.188% { opacity: 0.9; animation-timing-function: ease-in-out; }
+  34.783% { transform: translateY(92%); opacity: 0; }
+  100% { transform: translateY(92%); opacity: 0; }
+}
+.neon-float { animation: neon-float 4.5s ease-in-out infinite; }
+@keyframes neon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.neon-dip { animation: neon-dip 7s linear infinite; }
+@keyframes neon-dip {
+  0%, 1.429% { opacity: 1; }
+  2.5% { opacity: 0.45; }
+  3.571% { opacity: 1; }
+  5% { opacity: 0.7; }
+  7.143%, 100% { opacity: 1; }
+}
+
+/* ---- signal interference (Problem phrases): one RGB-split burst, retriggered from JS ---- */
+.interfere { position: relative; }
+.interfere::before,
+.interfere::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.interfere::before { color: var(--magenta); }
+.interfere::after { color: var(--cyan); }
+.interfere.is-on { animation: intf-skew 0.6s steps(1) 1; }
+.interfere.is-on::before { animation: intf-a 0.6s steps(1) 1; }
+.interfere.is-on::after { animation: intf-b 0.6s steps(1) 1; }
+@keyframes intf-a {
+  0% { opacity: 1; transform: translate(-6px, 1px); clip-path: inset(8% 0 62% 0); }
+  15% { opacity: 1; transform: translate(5px, -1px); clip-path: inset(58% 0 12% 0); }
+  30% { opacity: 1; transform: translate(-3px, 0); clip-path: inset(30% 0 42% 0); }
+  45% { opacity: 1; transform: translate(4px, 1px); clip-path: inset(75% 0 4% 0); }
+  60% { opacity: 0.6; transform: translate(-2px, 0); clip-path: inset(15% 0 70% 0); }
+  75%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+}
+@keyframes intf-b {
+  0% { opacity: 1; transform: translate(6px, -1px); clip-path: inset(66% 0 6% 0); }
+  15% { opacity: 1; transform: translate(-5px, 1px); clip-path: inset(4% 0 72% 0); }
+  30% { opacity: 1; transform: translate(3px, 0); clip-path: inset(45% 0 30% 0); }
+  45% { opacity: 0.7; transform: translate(-4px, -1px); clip-path: inset(20% 0 55% 0); }
+  60%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+}
+@keyframes intf-skew {
+  0% { transform: skewX(-8deg); opacity: 0.85; }
+  15% { transform: skewX(5deg) translateX(2px); opacity: 1; }
+  30% { transform: skewX(-3deg); opacity: 0.7; }
+  45% { transform: skewX(2deg) translateX(-1px); opacity: 1; }
+  60%, 100% { transform: none; opacity: 1; }
+}
+
+/* ---- signal interference (Audience icons): magenta + yellow, a short burst every ~5.2s ---- */
+.icon-intf { opacity: 0; pointer-events: none; mix-blend-mode: screen; }
+.icon-intf-a { animation: icon-intf-a 5.2s steps(1) infinite; }
+.icon-intf-b { animation: icon-intf-b 5.2s steps(1) infinite; }
+@keyframes icon-intf-a {
+  0%, 88%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+  89% { opacity: 0.9; transform: translate(-5px, 1px); clip-path: inset(10% 0 55% 0); }
+  91% { opacity: 0.9; transform: translate(4px, -1px); clip-path: inset(55% 0 10% 0); }
+  93% { opacity: 0.8; transform: translate(-3px, 0); clip-path: inset(30% 0 35% 0); }
+  95% { opacity: 0; }
+}
+@keyframes icon-intf-b {
+  0%, 89%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+  90% { opacity: 0.85; transform: translate(5px, -1px); clip-path: inset(60% 0 8% 0); }
+  92% { opacity: 0.85; transform: translate(-4px, 1px); clip-path: inset(5% 0 65% 0); }
+  94% { opacity: 0.7; transform: translate(2px, 0); clip-path: inset(40% 0 30% 0); }
+  96% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .interfere.is-on, .interfere.is-on::before, .interfere.is-on::after, .icon-intf { animation: none !important; }
+}

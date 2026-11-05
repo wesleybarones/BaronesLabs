@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'motion/react'
+import { motion, useMotionValueEvent, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { useReducedMotion } from '../lib/hooks'
@@ -15,6 +15,20 @@ function Pain({ text, index, code }) {
   const opacity = useTransform(scrollYProgress, [0, 0.38, 0.5, 0.62, 1], [0.15, 0.4, 1, 0.4, 0.22])
   const x = useTransform(scrollYProgress, [0, 0.45, 1], reduce ? [0, 0, 0] : [40, 0, 0])
   const glow = useTransform(scrollYProgress, [0.35, 0.5, 0.65], [0, 1, 0])
+
+  // signal interference: a short RGB-split burst each time the phrase enters or leaves the centre
+  const textRef = useRef(null)
+  const inCentre = useRef(false)
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const now = v > 0.4 && v < 0.6
+    if (now === inCentre.current) return
+    inCentre.current = now
+    const el = textRef.current
+    if (reduce || !el) return
+    el.classList.remove('is-on')
+    void el.offsetWidth // restart the animation
+    el.classList.add('is-on')
+  })
   return (
     <motion.li ref={ref} style={{ opacity, x }} className="relative flex items-start gap-5 py-10 md:gap-7 md:py-14">
       <motion.span
@@ -30,7 +44,14 @@ function Pain({ text, index, code }) {
         <span className="mb-2 block font-mono text-[11px] tracking-[0.2em] text-magenta/80">
           {code}_0{index + 1}
         </span>
-        <p className="font-display text-[24px] font-semibold leading-[1.2] text-ink md:text-[32px]">{text}</p>
+        <p
+          ref={textRef}
+          data-text={text}
+          onAnimationEnd={(e) => e.currentTarget.classList.remove('is-on')}
+          className="interfere font-display text-[24px] font-semibold leading-[1.2] text-ink md:text-[32px]"
+        >
+          {text}
+        </p>
       </div>
     </motion.li>
   )

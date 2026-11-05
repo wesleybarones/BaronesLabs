@@ -66,7 +66,7 @@ const pt = {
     title: 'Transforme audiência em *clientes*',
     sub: 'Se você se reconhece em algum destes pontos, o problema não é o seu produto. É a vitrine.',
     items: [
-      'Depende só do Instagram para vender',
+      'Já esperou mais de 1 mês por um site',
       'Já pagou por um site e o profissional sumiu',
       'Acha que site é caro, demorado e complicado',
       'O concorrente parece mais profissional que você',
@@ -100,7 +100,7 @@ const pt = {
   },
   audience: {
     label: '// 03_PARA_QUEM',
-    title: 'Feito para quem vende pelo *WhatsApp* e Instagram.',
+    title: 'Feito para quem vende pelo *WhatsApp* e Instagram. E para quem quer existir além das redes sociais.',
     sub: 'Para quem já tem site e quer um melhor, e para quem nunca teve um.',
     tiles: [
       { name: 'Profissionais liberais', text: 'Autoridade instantânea para quem pesquisa seu nome.' },
@@ -167,7 +167,7 @@ const pt = {
     plans: [
       {
         id: 'essential',
-        name: 'Essencial',
+        name: 'Fast',
         price: 497,
         cashPrice: 472,
         tagline: 'Para quem precisa estar online rápido.',
@@ -181,16 +181,15 @@ const pt = {
           'WhatsApp, formulário e mapa',
           '3 alterações grátis',
         ],
-        cta: 'Quero o Essencial',
+        cta: 'Quero o Fast',
       },
       {
         id: 'pro',
         name: 'Profissional',
-        price: 897,
-        cashPrice: 852,
+        price: 1397,
+        cashPrice: 1327,
         tagline: 'Para negócios que querem vender pelo site.',
         delivery: 'em 3 a 5 dias',
-        featured: true,
         features: [
           'Landing completa com mais seções',
           'Animações modernas',
@@ -204,9 +203,11 @@ const pt = {
       },
       {
         id: 'premium',
+        featured: true,
         name: 'Premium',
         price: 1497,
         cashPrice: 1422,
+        nudge: 'Só R$ 100 a mais que o Profissional',
         tagline: 'Para marcas que querem impressionar.',
         delivery: 'em até 7 dias',
         features: [
@@ -225,7 +226,7 @@ const pt = {
     payments: ['5% de desconto à vista', 'Parcelado no cartão', 'ou 50% na entrada e 50% na entrega'],
     maintenance: {
       tag: 'Manutenção mensal',
-      price: 'R$ 69/mês',
+      price: 'R$ 87/mês',
       text: 'Atualizações de fotos, preços e textos, e suporte direto comigo.',
       cta: 'Saber mais',
     },
@@ -245,6 +246,7 @@ const pt = {
     label: '// GARANTIA',
     seal: '7 DIAS',
     sealSub: 'Garantia',
+    fine: 'seu dinheiro de volta em até 90 dias',
     title: 'Satisfação ou seu dinheiro de volta.',
     text: 'Se em até 7 dias após a entrega você não estiver satisfeito, devolvo 100% do valor. Simples assim.',
   },
@@ -286,7 +288,7 @@ const pt = {
       },
       {
         q: 'E se eu quiser mudar algo depois?',
-        a: 'Você tem 3 alterações grátis após a entrega. Depois disso, pode contratar a manutenção mensal de R$ 69.',
+        a: 'Você tem 3 alterações grátis após a entrega. Depois disso, pode contratar a manutenção mensal de R$ 87.',
       },
       {
         q: 'Como funciona o pagamento?',
@@ -294,7 +296,7 @@ const pt = {
       },
       {
         q: 'Em quanto tempo meu site fica pronto?',
-        a: 'Depende do pacote: Essencial em 48h, Profissional em 3 a 5 dias e Premium em até 7 dias, contando a partir do envio das informações.',
+        a: 'Depende do pacote: Fast em 48h, Profissional em 3 a 5 dias e Premium em até 7 dias, contando a partir do envio das informações.',
       },
       {
         q: 'E se eu não gostar do resultado?',
@@ -381,7 +383,7 @@ const en = {
     title: 'Turn your audience into *customers*',
     sub: "If any of these sound familiar, your product isn't the problem. Your storefront is.",
     items: [
-      'You rely on Instagram alone to sell',
+      'You waited over a month for a website',
       'You paid for a website once and the developer disappeared',
       'You think a website is expensive, slow and complicated',
       'Your competitor looks more professional than you',
@@ -415,7 +417,7 @@ const en = {
   },
   audience: {
     label: '// 03_WHO_ITS_FOR',
-    title: 'Built for businesses that sell on *WhatsApp* and Instagram.',
+    title: 'Built for businesses that sell on *WhatsApp* and Instagram. And for those who want a presence beyond social media.',
     sub: "For those who already have a website and want a better one — and for those who've never had one.",
     tiles: [
       { name: 'Independent professionals', text: 'Instant credibility for anyone who looks you up.' },
@@ -482,7 +484,7 @@ const en = {
     plans: [
       {
         id: 'essential',
-        name: 'Essential',
+        name: 'Fast',
         tagline: 'For when you need to be online fast.',
         delivery: 'in 48h',
         features: [
@@ -494,14 +496,13 @@ const en = {
           'WhatsApp, contact form & map',
           '3 free revisions',
         ],
-        cta: 'I want Essential',
+        cta: 'I want Fast',
       },
       {
         id: 'pro',
         name: 'Professional',
         tagline: 'For businesses that want to sell through their site.',
         delivery: 'in 3–5 days',
-        featured: true,
         features: [
           'Full landing page with more sections',
           'Modern animations',
@@ -515,6 +516,7 @@ const en = {
       },
       {
         id: 'premium',
+        featured: true,
         name: 'Premium',
         tagline: 'For brands that want to impress.',
         delivery: 'in up to 7 days',
@@ -558,6 +560,7 @@ const en = {
   guarantee: {
     label: '// GUARANTEE',
     seal: '7 DAYS',
+    fine: 'money back within 90 days',
     sealSub: 'Guarantee',
     title: 'Love it, or your money back.',
     text: "If you're not satisfied within 7 days of delivery, I'll refund 100% of what you paid. Simple as that.",
@@ -608,7 +611,7 @@ const en = {
       },
       {
         q: 'How long until my website is ready?',
-        a: 'It depends on the package: Essential in 48h, Professional in 3–5 days and Premium in up to 7 days, counted from when I receive your information.',
+        a: 'It depends on the package: Fast in 48h, Professional in 3–5 days and Premium in up to 7 days, counted from when I receive your information.',
       },
       {
         q: "What if I don't like the result?",
@@ -695,7 +698,7 @@ const es = {
     title: 'Convierte tu audiencia en *clientes*',
     sub: 'Si te identificas con alguno de estos puntos, el problema no es tu producto. Es tu vitrina.',
     items: [
-      'Dependes solo de Instagram para vender',
+      'Ya esperaste más de 1 mes por un sitio',
       'Ya pagaste por un sitio y el profesional desapareció',
       'Crees que un sitio es caro, lento y complicado',
       'Tu competencia parece más profesional que tú',
@@ -729,7 +732,7 @@ const es = {
   },
   audience: {
     label: '// 03_PARA_QUIÉN',
-    title: 'Hecho para quien vende por *WhatsApp* e Instagram.',
+    title: 'Hecho para quien vende por *WhatsApp* e Instagram. Y para quien quiere existir más allá de las redes sociales.',
     sub: 'Para quien ya tiene sitio y quiere uno mejor, y para quien nunca tuvo uno.',
     tiles: [
       { name: 'Profesionales independientes', text: 'Autoridad inmediata para quien busca tu nombre.' },
@@ -796,7 +799,7 @@ const es = {
     plans: [
       {
         id: 'essential',
-        name: 'Esencial',
+        name: 'Fast',
         tagline: 'Para quien necesita estar en línea rápido.',
         delivery: 'en 48h',
         features: [
@@ -808,14 +811,13 @@ const es = {
           'WhatsApp, formulario y mapa',
           '3 cambios gratis',
         ],
-        cta: 'Quiero el Esencial',
+        cta: 'Quiero el Fast',
       },
       {
         id: 'pro',
         name: 'Profesional',
         tagline: 'Para negocios que quieren vender desde su sitio.',
         delivery: 'en 3 a 5 días',
-        featured: true,
         features: [
           'Landing completa con más secciones',
           'Animaciones modernas',
@@ -829,6 +831,7 @@ const es = {
       },
       {
         id: 'premium',
+        featured: true,
         name: 'Premium',
         tagline: 'Para marcas que quieren impresionar.',
         delivery: 'en hasta 7 días',
@@ -872,6 +875,7 @@ const es = {
   guarantee: {
     label: '// GARANTÍA',
     seal: '7 DÍAS',
+    fine: 'tu dinero de vuelta en hasta 90 días',
     sealSub: 'Garantía',
     title: 'Satisfacción o te devuelvo tu dinero.',
     text: 'Si en los 7 días posteriores a la entrega no estás satisfecho, te devuelvo el 100% del valor. Así de simple.',
@@ -922,7 +926,7 @@ const es = {
       },
       {
         q: '¿En cuánto tiempo está listo mi sitio?',
-        a: 'Depende del paquete: Esencial en 48h, Profesional en 3 a 5 días y Premium en hasta 7 días, desde que recibo tu información.',
+        a: 'Depende del paquete: Fast en 48h, Profesional en 3 a 5 días y Premium en hasta 7 días, desde que recibo tu información.',
       },
       {
         q: '¿Y si no me gusta el resultado?',

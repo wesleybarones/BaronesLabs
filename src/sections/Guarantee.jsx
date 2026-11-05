@@ -8,7 +8,7 @@ export default function Guarantee() {
   const { t } = useLang()
   const g = t.guarantee
   return (
-    <div className="relative flex h-full flex-col items-center justify-center border border-cyan/30 bg-surface/60 p-8 text-center md:p-12">
+    <div className="relative flex h-full flex-col items-center justify-center border border-cyan/30 bg-surface/60 p-8 pb-12 text-center md:p-12 md:pb-14">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_30%,rgba(0,240,255,0.08),transparent)]" />
       <div className="relative flex flex-col items-center">
         <Reveal once distance={14} className="hud mb-8">
@@ -70,6 +70,11 @@ export default function Guarantee() {
           <p className="mx-auto max-w-[460px] text-[17px] leading-[1.7] text-ink-2 md:text-[18px]">{g.text}</p>
         </Reveal>
       </div>
+      {g.fine && (
+        <p className="absolute bottom-3 right-4 font-mono text-[10px] lowercase tracking-[0.08em] text-ink-3 md:bottom-4 md:right-5 md:text-[11px]">
+          {g.fine}
+        </p>
+      )}
     </div>
   )
 }

@@ -26,7 +26,7 @@ export default function Audience() {
         <div className="mb-14 grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
             <SectionLabel>{a.label}</SectionLabel>
-            <RevealHeading text={a.title} className="h2 max-w-[16ch] text-ink" />
+            <RevealHeading text={a.title} className="h2 max-w-[24ch] text-ink" />
           </div>
         </div>
 
@@ -51,6 +51,23 @@ export default function Audience() {
                           strokeWidth={big ? 1.1 : 1.4}
                           style={{ zIndex: -1 }}
                         />
+                        {/* signal interference: magenta + yellow copies jump out of register for a split second */}
+                        {!reduce && (
+                          <>
+                            <Icon
+                              aria-hidden
+                              className={`icon-intf icon-intf-a absolute left-0 top-0 text-magenta ${big ? 'h-20 w-20 md:h-24 md:w-24' : 'h-11 w-11'}`}
+                              strokeWidth={big ? 1.1 : 1.4}
+                              style={{ animationDelay: `${i * 1.3}s` }}
+                            />
+                            <Icon
+                              aria-hidden
+                              className={`icon-intf icon-intf-b absolute left-0 top-0 text-yellow ${big ? 'h-20 w-20 md:h-24 md:w-24' : 'h-11 w-11'}`}
+                              strokeWidth={big ? 1.1 : 1.4}
+                              style={{ animationDelay: `${i * 1.3}s` }}
+                            />
+                          </>
+                        )}
                       </span>
                       <span className="font-mono text-[11px] tracking-[0.2em] text-ink-3">0{i + 1}</span>
                     </div>

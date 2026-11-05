@@ -214,13 +214,9 @@ export default function Hero() {
                 />
                 {/* lens scan: a thin cyan line sweeps the glasses every few seconds */}
                 {!reduce && (
-                  <motion.span
-                    aria-hidden
-                    className="absolute inset-x-0 h-[2px] bg-cyan/70 shadow-[0_0_14px_#00F0FF] mix-blend-screen"
-                    initial={{ top: '0%', opacity: 0 }}
-                    animate={{ top: ['8%', '92%'], opacity: [0, 0.9, 0.9, 0] }}
-                    transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 4.5, ease: 'easeInOut', delay: 2 }}
-                  />
+                  <span aria-hidden className="lens-scan pointer-events-none absolute inset-0 mix-blend-screen">
+                    <span className="absolute inset-x-0 top-0 h-[2px] bg-cyan/70 shadow-[0_0_14px_#00F0FF]" />
+                  </span>
                 )}
                 <div aria-hidden className="bg-scanlines pointer-events-none absolute inset-0 opacity-40" />
                 <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg via-bg/50 to-transparent" />

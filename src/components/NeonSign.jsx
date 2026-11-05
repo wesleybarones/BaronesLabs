@@ -46,19 +46,16 @@ export default function NeonSign({ lines, show, arrow = 'right', className = '' 
   const head = arrow === 'right' ? 'M84 6 L97 9.5 L90 21' : 'M41 15 L50 4 L59 15'
 
   return (
-    <motion.div
+    // slow breathing float + a brief power dip every ~7s: CSS animations (compositor only)
+    <div
       aria-label={`${a} ${b}`}
       role="img"
-      className={`pointer-events-none select-none ${className}`}
-      initial={{ y: 0 }}
-      animate={show && !reduce ? { y: [0, -5, 0] } : {}}
-      transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: arrowDelay + 1 }}
+      className={`pointer-events-none select-none ${show && !reduce ? 'neon-float' : ''} ${className}`}
+      style={{ animationDelay: `${arrowDelay + 1}s` }}
     >
-      <motion.div
-        className={`flex ${arrow === 'right' ? 'items-center gap-1' : 'flex-col items-center gap-2'}`}
-        // brief random-looking power dip every ~7s once it's lit
-        animate={show && !reduce ? { opacity: [1, 1, 0.45, 1, 0.7, 1] } : {}}
-        transition={{ duration: 0.5, times: [0, 0.2, 0.35, 0.5, 0.7, 1], repeat: Infinity, repeatDelay: 6.5, delay: arrowDelay + 2 }}
+      <div
+        className={`flex ${arrow === 'right' ? 'items-center gap-1' : 'flex-col items-center gap-2'} ${show && !reduce ? 'neon-dip' : ''}`}
+        style={{ animationDelay: `${arrowDelay + 2}s` }}
       >
         {arrow === 'up' && <Arrow path={path} head={head} delay={arrowDelay} show={show} reduce={reduce} up />}
         <p aria-hidden className="neon-text -rotate-[5deg] whitespace-nowrap text-center text-[26px] leading-[0.95] lg:text-[clamp(24px,2.1vw,32px)]">
@@ -67,8 +64,8 @@ export default function NeonSign({ lines, show, arrow = 'right', className = '' 
           <Letters text={b} start={0.2 + a.length * 0.055} show={show} reduce={reduce} />
         </p>
         {arrow === 'right' && <Arrow path={path} head={head} delay={arrowDelay} show={show} reduce={reduce} />}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   )
 }
 

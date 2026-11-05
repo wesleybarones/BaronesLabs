@@ -42,6 +42,12 @@ function PlanCard({ plan, i, showPrices }) {
           <p className="mt-2 text-[15px] text-ink-2">
             {p.or} <strong className="font-semibold text-ink">R$ {brl(plan.cashPrice)}</strong> {p.cash}
           </p>
+          {plan.nudge && (
+            <p className="mt-3 inline-flex items-center gap-2 border border-yellow/40 bg-yellow/[0.06] px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-yellow">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-yellow shadow-[0_0_8px_#FFE600]" />
+              {plan.nudge}
+            </p>
+          )}
         </div>
       )}
       {!showPrices && <div className="mt-6 border-t border-line" />}
