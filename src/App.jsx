@@ -13,6 +13,7 @@ import ScrollProgress from './components/ScrollProgress'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import Hero from './sections/Hero'
 import Marquee from './sections/Marquee'
+import { Analytics } from '@vercel/analytics/react'
 
 
 // below-the-fold sections: separate chunks, mounted on demand (see components/Deferred.jsx)
@@ -203,6 +204,7 @@ export default function App() {
         )}
         {Cursor && <Cursor />}
         <AnimatePresence>{booting && <Boot onDone={endBoot} onMountSite={mountSite} onReveal={reveal} />}</AnimatePresence>
+        <Analytics />
       </AppProvider>
     </MotionConfig>
   )
