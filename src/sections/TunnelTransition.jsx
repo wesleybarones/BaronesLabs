@@ -1,18 +1,17 @@
-import { useMotionValueEvent, useScroll } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { useReducedMotion } from '../lib/hooks'
 
 /*
-  Solution → Audience: the camera flies through a 3D tunnel of hexagonal circuit rings.
-  Scroll drives the camera; the canvas is redrawn only when the scroll position changes
-  (no animation loop while idle). Canvas 2D with a manual perspective projection — no 3D library.
+  Solution → Audience: a gentle, continuous flight through a 3D tunnel of hexagonal circuit rings.
+  Time-driven (not scroll-driven); the loop runs only while the tunnel is on screen and the tab is
+  visible. Canvas 2D with a manual perspective projection — no 3D library.
 */
 
 const RINGS = 28 // rings along the tunnel
 const SPACING = 1 // world distance between rings
 const FOCAL = 1.15
-const TRAVEL = 20 // how far the camera flies over the whole section
+const SPEED = 0.9 // world units per second
 
 const CYAN = [0, 240, 255]
 const MAGENTA = [224, 64, 216]
@@ -22,9 +21,7 @@ export default function TunnelTransition() {
   const reduce = useReducedMotion()
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
-  const labelRef = useRef(null)
-  const state = useRef({ p: 0, w: 0, h: 0, dpr: 1, raf: 0 })
-  const { scrollYProgress } = useScroll({ target: wrapRef, offset: ['start end', 'end start'] })
+  const state = useRef({ time: 0, w: 0, h: 0, dpr: 1, raf: 0 })
 
   const draw = () => {
     const st = state.current
@@ -33,14 +30,14 @@ export default function TunnelTransition() {
     if (!c) return
     const ctx = c.getContext('2d')
     const { w, h, dpr } = st
-    const p = st.p
+    const time = st.time
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     ctx.clearRect(0, 0, w, h)
     const cx = w / 2
     const cy = h / 2
     const unit = Math.min(w, h) * 0.55
-    const cam = p * TRAVEL
-    const twist = p * 1.6
+    const cam = time * SPEED
+    const twist = time * 0.07
 
     // project the 6 vertices of every ring in front of the camera
     const rings = []
@@ -116,20 +113,57 @@ export default function TunnelTransition() {
     }
     // light at the end of the tunnel
     const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, unit * 0.5)
-    g.addColorStop(0, `rgba(0,240,255,${0.18 + p * 0.25})`)
+    g.addColorStop(0, `rgba(0,240,255,${0.26 + Math.sin(time * 0.8) * 0.06})`)
     g.addColorStop(1, 'rgba(0,240,255,0)')
     ctx.fillStyle = g
     ctx.fillRect(0, 0, w, h)
 
-    if (labelRef.current) {
-      const o = Math.max(0, Math.min(1, (p - 0.35) / 0.2)) * Math.max(0, Math.min(1, (0.85 - p) / 0.15))
-      labelRef.current.style.opacity = String(o)
-    }
   }
 
   const schedule = () => {
     if (!state.current.raf) state.current.raf = requestAnimationFrame(draw)
   }
+
+  // continuous flight while visible (one static frame for reduced motion)
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    let visible = false
+    let loop = 0
+    let last = 0
+    const tick = (now) => {
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0
+      last = now
+      state.current.time += dt
+      draw()
+      loop = requestAnimationFrame(tick)
+    }
+    const start = () => {
+      if (loop || reduce || document.hidden || !visible) return
+      last = 0
+      loop = requestAnimationFrame(tick)
+    }
+    const stop = () => {
+      cancelAnimationFrame(loop)
+      loop = 0
+    }
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting
+      visible ? start() : stop()
+    })
+    io.observe(el)
+    const onVis = () => (document.hidden ? stop() : start())
+    document.addEventListener('visibilitychange', onVis)
+    if (reduce) {
+      state.current.time = 4
+      schedule()
+    }
+    return () => {
+      io.disconnect()
+      stop()
+      document.removeEventListener('visibilitychange', onVis)
+    }
+  }, [reduce]) // eslint-disable-line
 
   useEffect(() => {
     const c = canvasRef.current
@@ -151,23 +185,22 @@ export default function TunnelTransition() {
     }
   }, []) // eslint-disable-line
 
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    state.current.p = reduce ? 0.5 : v
-    schedule()
-  })
-
   return (
-    <div ref={wrapRef} aria-hidden className="relative h-[150vh] md:h-[170vh]">
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-        {/* soft fade into the sections above and below */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[22vh] bg-gradient-to-b from-bg to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22vh] bg-gradient-to-t from-bg to-transparent" />
-        <div ref={labelRef} className="absolute inset-0 flex items-center justify-center opacity-0">
-          <span className="glass border border-cyan/40 px-4 py-2 font-mono text-[12px] uppercase tracking-[0.24em] text-cyan">
-            {t.tunnel.label}
-          </span>
-        </div>
+    <div
+      ref={wrapRef}
+      aria-hidden
+      className="relative -my-[6vh] h-[72vh] overflow-hidden md:h-[86vh]"
+      // edges dissolve into the page background, so the sections above and below blend into the tunnel
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent 0%, #000 28%, #000 72%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, #000 28%, #000 72%, transparent 100%)',
+      }}
+    >
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="glass border border-cyan/40 px-4 py-2 font-mono text-[12px] uppercase tracking-[0.24em] text-cyan">
+          {t.tunnel.label}
+        </span>
       </div>
     </div>
   )
