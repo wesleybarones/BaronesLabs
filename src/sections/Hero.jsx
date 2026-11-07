@@ -220,6 +220,7 @@ export default function Hero() {
                       className="absolute inset-0 h-full w-full"
                       loading="eager"
                       sizes="(min-width: 1024px) 46vw, 100vw"
+                      shine={k === HEX_LAYERS.length - 1}
                       style={{ transform: `translateZ(${z}px)`, opacity: o, ...(k < HEX_LAYERS.length - 1 ? { filter: 'hue-rotate(95deg) saturate(1.3)' } : null) }}
                     />
                   ))}

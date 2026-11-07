@@ -36,7 +36,7 @@ function Photo({ alt, placeholder }) {
         </div>
         <div aria-hidden className="bg-scanlines pointer-events-none absolute inset-0 opacity-80" />
         <span className="hud absolute bottom-4 left-4 text-[10px] text-cyan/80">ID · W.BARONES</span>
-        <LogoSymbol className="absolute right-4 top-4 h-8 w-8 opacity-80" sizes="32px" />
+        <LogoSymbol className="absolute right-4 top-4 h-8 w-8 opacity-80" sizes="32px" shine={false} />
       </div>
       <HudCorners inset={-12} size={20} />
     </div>
