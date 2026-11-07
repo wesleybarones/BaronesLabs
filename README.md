@@ -51,6 +51,23 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
   Premium R$ 1.497 em destaque). Se os preços mudarem, refaça o reflexo e regere as camadas.
 - Cursor: seta SVG nativa (`src/assets/cursor-arrow*.svg`), sem atraso.
 
+## Montagem do hero ("o site que se constrói sozinho")
+
+- `src/hero-assembly/assembly.js` (chunk separado, carregado só quando vai rodar) + estilos `ha-*` em `src/index.css`.
+- Roda na **primeira visita**, logo depois da explosão de LEDs, e no botão **↻ Rever montagem** (abaixo das provas).
+  Robôs, PageSpeed/Lighthouse e quem usa "reduzir movimento" veem o hero normal.
+- Quatro cursores: **W.BARONES** (seleciona "Entrega 48h–7 dias", Ctrl+C e arrasta a cópia para a foto, com guias
+  magenta e encaixe), **UI.BOT** (desenha o contorno neon da foto e solta os chips), **COPY.BOT** (digita o título
+  letra por letra, traz texto, botões e provas) e **DEPLOY.BOT** (clica em "Quero meu site": "AGUARDANDO DEPLOY_"
+  vira ONLINE e a barra enche). Desktop ≈ 6s; celular ≈ 3,7s com 2 cursores, sem arraste e com painel DEPLOY.
+- "Pular animação →" ou Esc encerram; mudar o tamanho da janela ou o idioma também.
+- O estado final é o próprio HTML da página: a montagem só esconde/revela (visibility, opacity, transform) e devolve
+  tudo no fim. Ela procura os IDs `hero-status`, `hero-kicker`, `hero-title`, `hero-sub`, `hero-ctas`, `hero-proofs`,
+  `proof-48h`, `slot-proof`, `hero-frame`, `btn-deploy`, `deploy-status`, `deploy-progress` e os chips `data-ha-chip`;
+  se algum faltar, aquele passo é pulado.
+- Ritmo e ordem: funções `copyTrack`, `uiTrack`, `wesleyTrack` e `deployTrack` dentro de `play()`.
+  Nomes e cores dos cursores: `CURSORS` no topo do arquivo. Textos (PT/EN/ES): `hero.assembly` em `translations.js`.
+
 ## Primeira tela estática (desempenho no celular)
 
 - `src/hero-shell.html` é o HTML do cabeçalho + hero já renderizado, colocado dentro de `#root` no build

@@ -59,6 +59,7 @@ export default function RevealHeading({
   id,
   kicker, // optional visible lead-in inside the heading (e.g. the page's keyword for SEO)
   kickerClassName = '',
+  kickerId,
 }) {
   const M = motion[as]
   const words = parseWords(text)
@@ -76,6 +77,7 @@ export default function RevealHeading({
       {/* one single copy of the text (no sr-only duplicate), so search engines read the heading once */}
       {kicker && (
         <motion.span
+          id={kickerId}
           className={`block ${kickerClassName}`}
           variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } } }}
         >

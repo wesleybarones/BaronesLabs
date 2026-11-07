@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'motion/react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { scrollToId, useApp } from '../lib/AppContext'
 import { useFinePointer, useIsDesktop, useReducedMotion } from '../lib/hooks'
@@ -22,9 +22,10 @@ import HudCorners from '../components/ui/HudCorners'
 import NeonSign from '../components/NeonSign'
 import LivePortrait from '../components/LivePortrait'
 
-function Chip({ children, className = '', style }) {
+function Chip({ children, className = '', style, ...rest }) {
   return (
     <motion.span
+      {...rest}
       style={style}
       className={`glass absolute flex items-center gap-2 border border-line px-3 py-1.5 font-mono text-[10px] tracking-[0.2em] text-cyan shadow-[0_0_20px_rgba(0,240,255,0.12)] md:text-[11px] ${className}`}
     >
@@ -35,8 +36,8 @@ function Chip({ children, className = '', style }) {
 }
 
 export default function Hero() {
-  const { t } = useLang()
-  const { ready, lenis } = useApp()
+  const { t, lang } = useLang()
+  const { ready, lenis, assembly, setHeroBusy } = useApp()
   const ref = useRef(null)
   const fine = useFinePointer()
   const desktop = useIsDesktop()
@@ -84,7 +85,71 @@ export default function Hero() {
   const mockY = useTransform(scrollYProgress, [0, 1], [0, reduce || !desktop ? 0 : 140])
   const hexRot = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 40])
 
-  const show = ready
+  /*
+    Live assembly ("o site que se constrói sozinho", src/hero-assembly): on the first visit the hero's own
+    entrance runs hidden under the intro, the assembly hides what the cursors will build, and plays when the
+    intro opens. "↻ Rever montagem" replays it. Lazy chunk: never loaded for bots or returning visitors.
+  */
+  const layerRef = useRef(null)
+  const ctrl = useRef(null)
+  const [phase, setPhase] = useState(assembly ? 'planned' : 'idle') // planned | running | done | idle
+  const readyRef = useRef(ready)
+  readyRef.current = ready
+  const loadAssembly = () => import('../hero-assembly/assembly.js')
+  const build = (m) =>
+    m.createAssembly({ root: ref.current, layer: layerRef.current, mobile: window.innerWidth < 1024, labels: t.hero.assembly })
+  const run = () => {
+    const c = ctrl.current
+    if (!c) return setPhase('done')
+    setPhase('running')
+    c.play().then(() => {
+      if (ctrl.current === c) ctrl.current = null
+      setPhase('done')
+    })
+  }
+  useEffect(() => {
+    if (phase !== 'planned') return
+    let alive = true
+    loadAssembly()
+      .then((m) => {
+        if (!alive || readyRef.current) return // too late: the hero is already on screen
+        ctrl.current = build(m)
+        ctrl.current.prepare()
+      })
+      .catch(() => setPhase('done'))
+    return () => {
+      alive = false
+    }
+  }, []) // eslint-disable-line
+  useEffect(() => {
+    if (ready && phase === 'planned') run()
+  }, [ready, phase]) // eslint-disable-line
+  // skip: button, Esc, a real resize or a language switch
+  useEffect(() => {
+    if (phase !== 'running') return
+    const w0 = window.innerWidth
+    const key = (e) => e.key === 'Escape' && ctrl.current?.skip()
+    const rs = () => window.innerWidth !== w0 && ctrl.current?.skip()
+    window.addEventListener('keydown', key)
+    window.addEventListener('resize', rs)
+    return () => {
+      window.removeEventListener('keydown', key)
+      window.removeEventListener('resize', rs)
+    }
+  }, [phase])
+  useEffect(() => () => ctrl.current?.skip(), [lang])
+  useEffect(() => setHeroBusy(phase === 'running'), [phase]) // eslint-disable-line
+  const replay = async () => {
+    if (phase === 'running' || phase === 'planned') return
+    const m = await loadAssembly()
+    lenis ? lenis.scrollTo(0, { immediate: true }) : window.scrollTo(0, 0)
+    ctrl.current = build(m)
+    ctrl.current.prepare()
+    requestAnimationFrame(run)
+  }
+
+  const show = ready || assembly
+  const building = phase === 'planned' || phase === 'running'
 
   return (
     <section
@@ -125,6 +190,7 @@ export default function Hero() {
         {/* TEXT */}
         <motion.div className="relative z-10 lg:col-span-7" style={{ y: textY, opacity: textO }}>
           <motion.p
+            id="hero-status"
             className="hud mb-6 inline-flex items-center gap-3 border border-line bg-surface/50 px-3.5 py-2 backdrop-blur"
             initial={{ opacity: 0, y: 12 }}
             animate={show ? { opacity: 1, y: 0 } : {}}
@@ -136,6 +202,8 @@ export default function Hero() {
 
           <RevealHeading
             as="h1"
+            id="hero-title"
+            kickerId="hero-kicker"
             text={t.hero.title}
             kicker={t.hero.kicker}
             kickerClassName="mb-4 font-mono text-[12px] font-medium uppercase tracking-[0.2em] text-cyan/80 md:text-[13px]"
@@ -146,6 +214,7 @@ export default function Hero() {
           />
 
           <motion.p
+            id="hero-sub"
             className="lead mt-7 max-w-[540px]"
             // no fade: painted from the first frame (it is the LCP element on phones), only slides in
             initial={{ y: 16 }}
@@ -156,12 +225,13 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
+            id="hero-ctas"
             className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
             initial={{ opacity: 0, y: 16 }}
             animate={show ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
           >
-            <Button href={waLink(t.wa.default)} size="lg" magnetic icon={<IconArrow className="h-5 w-5" />} className="w-full sm:w-auto">
+            <Button id="btn-deploy" href={waLink(t.wa.default)} size="lg" magnetic icon={<IconArrow className="h-5 w-5" />} className="w-full sm:w-auto">
               {t.hero.cta}
             </Button>
             <Button
@@ -180,18 +250,32 @@ export default function Hero() {
           </motion.div>
 
           <motion.ul
+            id="hero-proofs"
             className="mt-8 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-2 md:text-[12px]"
             initial={{ opacity: 0 }}
             animate={show ? { opacity: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.55 }}
           >
             {t.hero.proof.map((p, i) => (
-              <li key={p} className="flex items-center gap-5">
+              <li key={p} id={i === 0 ? 'proof-48h' : undefined} className="flex items-center gap-5">
                 {i > 0 && <span aria-hidden className="hidden text-cyan/50 sm:inline">·</span>}
                 {p}
               </li>
             ))}
           </motion.ul>
+
+          {/* replay the live assembly */}
+          <div id="replay-slot" className="mt-5 h-6">
+            {!reduce && !building && (
+              <button
+                type="button"
+                onClick={replay}
+                className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-3 transition-colors hover:text-cyan"
+              >
+                {t.hero.assembly.replay}
+              </button>
+            )}
+          </div>
         </motion.div>
 
         {/* VISUAL */}
@@ -230,7 +314,7 @@ export default function Hero() {
             <div aria-hidden className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.20),transparent_65%)] blur-2xl" />
 
             {/* avatar (depth 2) */}
-            <motion.figure className="group absolute inset-0" style={{ x: d2x, y: d2y }}>
+            <motion.figure id="hero-frame" className="group absolute inset-0" style={{ x: d2x, y: d2y }}>
               <div aria-hidden className="absolute inset-0 translate-x-[-6px] translate-y-[4px] border border-magenta/50" />
               <div className="relative h-full w-full overflow-hidden border border-cyan/70 shadow-[0_0_40px_rgba(0,240,255,0.22)]">
                 <img
@@ -257,34 +341,41 @@ export default function Hero() {
                 <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg via-bg/50 to-transparent" />
                 <figcaption className="hud absolute bottom-4 left-4 right-4 flex items-center justify-between text-[10px] text-cyan/80">
                   <span>ID · W.BARONES</span>
-                  <span className="flex items-center gap-2">
-                    <span className="live-dot scale-75" aria-hidden /> ONLINE
+                  <span id="deploy-status-wrap" className="flex items-center gap-2">
+                    <span className="live-dot scale-75" aria-hidden />
+                    <span id="deploy-status">ONLINE</span>
                   </span>
                 </figcaption>
+                {/* deploy progress (filled; the live assembly animates it from zero) */}
+                <span id="deploy-progress" aria-hidden className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-cyan/70 shadow-[0_0_8px_#00F0FF]" />
               </div>
               <HudCorners inset={-12} size={22} />
             </motion.figure>
 
             {/* floating HUD chips (depth 3) */}
-            <Chip className="-left-[6%] top-[12%]" style={{ x: d3x, y: d3y }}>
+            <Chip data-ha-chip className="-left-[6%] top-[12%]" style={{ x: d3x, y: d3y }}>
               {t.hero.chips[0]}
             </Chip>
-            <Chip className="-right-[5%] top-[34%]" style={{ x: d1x, y: d1y }}>
+            <Chip data-ha-chip className="-right-[5%] top-[34%]" style={{ x: d1x, y: d1y }}>
               {t.hero.chips[1]}
             </Chip>
-            <Chip className="-left-[5%] top-[48%]" style={{ x: d2x, y: d2y }}>
+            <Chip data-ha-chip className="-left-[5%] top-[48%]" style={{ x: d2x, y: d2y }}>
               {t.hero.chips[2]}
+            </Chip>
+            {/* where W.BARONES drops the copied proof during the live assembly */}
+            <Chip id="slot-proof" className="-right-[4%] top-[64%] uppercase" style={{ x: d3x, y: d3y }}>
+              {t.hero.proof[0]}
             </Chip>
           </div>
 
           {/* neon "projetos do zero": outside the photo — left of the frame on desktop, below it on mobile */}
           <NeonSign
             lines={t.hero.neon}
-            show={show}
+            show={show && !building}
             arrow="right"
             className="absolute bottom-[14%] right-full z-10 mr-6 hidden xl:block"
           />
-          <NeonSign lines={t.hero.neon} show={show} arrow="up" className="mt-10 flex justify-center xl:hidden" />
+          <NeonSign lines={t.hero.neon} show={show && !building} arrow="up" className="mt-10 flex justify-center xl:hidden" />
         </motion.div>
       </div>
 
@@ -304,6 +395,18 @@ export default function Hero() {
           />
         </span>
       </motion.div>
+
+      {/* live assembly: cursors and their tools are drawn here */}
+      <div ref={layerRef} aria-hidden className="ha-layer" />
+      {phase === 'running' && (
+        <button
+          type="button"
+          onClick={() => ctrl.current?.skip()}
+          className="hud fixed bottom-6 left-6 z-[120] border border-line bg-bg/70 px-3 py-2 text-ink-2 backdrop-blur transition-colors hover:border-cyan hover:text-cyan"
+        >
+          {t.hero.assembly.skip}
+        </button>
+      )}
     </section>
   )
 }

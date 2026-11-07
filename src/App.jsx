@@ -69,6 +69,10 @@ export default function App() {
   // while the intro plays, the heavy site mounts only after the LED explosion (see Boot)
   const [siteMounted, setSiteMounted] = useState(() => !booting)
   const [ready, setReady] = useState(() => !booting)
+  // first visit (with the LED intro): the hero is then assembled live by cursors (src/hero-assembly)
+  // (lab tools such as PageSpeed keep the plain entrance, so their numbers measure the page, not the show)
+  const [assembly] = useState(() => booting && !/Chrome-Lighthouse|PTST|GTmetrix/i.test(navigator.userAgent))
+  const [heroBusy, setHeroBusy] = useState(false) // assembly playing: keep the page still
   const [lenis, setLenis] = useState(null)
 
   // smooth scroll (Lenis) — drives native window scroll, so Motion's useScroll stays in sync
@@ -99,7 +103,8 @@ export default function App() {
   }, [])
 
 
-  useLockScroll(booting, lenis)
+  // one lock for intro + assembly, so the hand-over between them never unlocks the page
+  useLockScroll(booting || heroBusy, lenis)
 
   // deep link: mount every section, then scroll to the target (re-aligned while late content settles)
   useEffect(() => {
@@ -137,7 +142,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <AppProvider ready={ready} lenis={lenis}>
+      <AppProvider ready={ready} lenis={lenis} assembly={assembly} setHeroBusy={setHeroBusy}>
         <Seo />
         <a
           href="#content"

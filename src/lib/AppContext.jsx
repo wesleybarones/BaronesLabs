@@ -1,15 +1,16 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useMotionValueEvent, useScroll } from 'motion/react'
 
-const AppContext = createContext({ ready: true, dir: 1, lenis: null })
+const AppContext = createContext({ ready: true, dir: 1, lenis: null, assembly: false, setHeroBusy: () => {} })
 
 /**
  * Global app state:
  * - ready: boot sequence finished (hero entrance waits for it)
  * - dir: scroll direction (1 = down, -1 = up), drives directional reveals
  * - lenis: smooth scroll instance (for programmatic scrolling)
+ * - assembly: first visit → the hero is built live by cursors after the intro
  */
-export function AppProvider({ ready, lenis, children }) {
+export function AppProvider({ ready, lenis, assembly = false, setHeroBusy, children }) {
   const { scrollY } = useScroll()
   const [dir, setDir] = useState(1)
   useMotionValueEvent(scrollY, 'change', (v) => {
@@ -17,7 +18,7 @@ export function AppProvider({ ready, lenis, children }) {
     const d = v > prev ? 1 : v < prev ? -1 : 0
     if (d !== 0 && d !== dir) setDir(d)
   })
-  const value = useMemo(() => ({ ready, dir, lenis }), [ready, dir, lenis])
+  const value = useMemo(() => ({ ready, dir, lenis, assembly, setHeroBusy }), [ready, dir, lenis, assembly, setHeroBusy])
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
 
