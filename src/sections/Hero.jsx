@@ -2,7 +2,7 @@ import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'moti
 import { useEffect, useRef } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { scrollToId, useApp } from '../lib/AppContext'
-import { useFinePointer, useIsDesktop, useReducedMotion } from '../lib/hooks'
+import { useFinePointer, useIsDesktop, useMediaQuery, useReducedMotion } from '../lib/hooks'
 import { EASE } from '../lib/motion'
 import { waLink } from '../config'
 import RevealHeading from '../components/ui/RevealHeading'
@@ -20,6 +20,7 @@ export const AVATAR_SIZES = '(min-width: 1280px) 560px, (min-width: 1024px) 40vw
 import { IconArrow, IconArrowDown } from '../components/Icons'
 import HudCorners from '../components/ui/HudCorners'
 import NeonSign from '../components/NeonSign'
+import BlackHole from '../components/BlackHole'
 
 function Chip({ children, className = '', style }) {
   return (
@@ -39,6 +40,7 @@ export default function Hero() {
   const ref = useRef(null)
   const fine = useFinePointer()
   const desktop = useIsDesktop()
+  const xl = useMediaQuery('(min-width: 1280px)')
   const reduce = useReducedMotion()
   const parallax = fine && !reduce
 
@@ -193,15 +195,34 @@ export default function Hero() {
           </motion.ul>
         </motion.div>
 
+        {/* black hole between the text and the photo (mobile / tablet) */}
+        <motion.div
+          className="-my-4 mx-auto h-[220px] w-full max-w-[340px] lg:hidden"
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={show ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 1.1, ease: EASE, delay: 0.5 }}
+        >
+          <BlackHole className="h-full w-full" label={t.hero.blackHole} start={show && !desktop} />
+        </motion.div>
+
         {/* VISUAL */}
         <motion.div
-          className="relative mx-auto w-full max-w-[420px] px-4 sm:max-w-[480px] lg:col-span-5 lg:max-w-none lg:px-6"
+          className="relative z-20 mx-auto w-full max-w-[420px] px-4 sm:max-w-[480px] lg:col-span-5 lg:max-w-none lg:px-6"
           style={{ y: mockY }}
           // visible from the first frame (it holds the LCP image); only a gentle zoom-in
           initial={{ scale: 0.96 }}
           animate={show ? { scale: 1 } : {}}
           transition={{ duration: 0.9, ease: EASE }}
         >
+          {/* interactive black hole in the free space between the headline and the photo (xl+) */}
+          <motion.div
+            className="absolute left-[-188px] top-[24%] z-0 hidden h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 xl:block min-[1700px]:left-[-160px]"
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={show ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 1.2, ease: EASE, delay: 0.6 }}
+          >
+            <BlackHole className="h-full w-full" label={t.hero.blackHole} start={show && xl} />
+          </motion.div>
           <div className="relative mx-auto aspect-[4/5] w-full max-w-[560px]">
             {/* hex watermark (depth 1) */}
             {/* holographic 3D hex: stacked layers of the symbol give it depth; it swings slowly and
