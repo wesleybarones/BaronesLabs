@@ -126,11 +126,13 @@ export default function App() {
     try {
       sessionStorage.setItem(BOOT_KEY, '1')
     } catch {}
-    setSiteMounted(true)
     setReady(true)
     setBooting(false)
+    // the rest of the page mounts once the intro is gone, when the browser is idle
+    const mount = () => startTransition(() => setSiteMounted(true))
+    window.requestIdleCallback ? requestIdleCallback(mount, { timeout: 600 }) : setTimeout(mount, 200)
   }, [])
-  const mountSite = useCallback(() => startTransition(() => setSiteMounted(true)), [])
+  const mountSite = useCallback(() => {}, [])
   const reveal = useCallback(() => setReady(true), [])
 
   return (
