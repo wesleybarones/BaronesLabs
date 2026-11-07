@@ -15,7 +15,7 @@ function Stars({ n = 5, className = '' }) {
   return (
     <span className={`flex items-center gap-0.5 ${className}`} aria-label={`${n}/5`}>
       {Array.from({ length: 5 }, (_, i) => (
-        <svg key={i} viewBox="0 0 20 20" className={`h-4 w-4 ${i < n ? 'text-yellow drop-shadow-[0_0_4px_rgba(124,255,196,0.55)]' : 'text-ink-3/40'}`} aria-hidden>
+        <svg key={i} viewBox="0 0 20 20" className={`h-4 w-4 ${i < n ? 'text-yellow drop-shadow-[0_0_4px_rgba(212,255,36,0.55)]' : 'text-ink-3/40'}`} aria-hidden>
           <path fill="currentColor" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z" />
         </svg>
       ))}

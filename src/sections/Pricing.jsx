@@ -57,7 +57,7 @@ function PlanCard({ plan, i, showPrices }) {
     <div className={`relative flex h-full flex-col ${featured ? 'bg-surface-2 p-7 md:p-9' : 'bg-surface p-7 md:p-8'}`}>
       <HudCorners inset={8} size={12} />
       {featured && (
-        <span className="chamfer chamfer-sm mb-4 inline-flex w-fit items-center gap-2 whitespace-nowrap bg-yellow px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-bg shadow-[0_0_18px_rgba(124,255,196,0.35)]">
+        <span className="chamfer chamfer-sm mb-4 inline-flex w-fit items-center gap-2 whitespace-nowrap bg-yellow px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-bg shadow-[0_0_18px_rgba(212,255,36,0.35)]">
           ★ {p.popular}
         </span>
       )}
@@ -79,7 +79,7 @@ function PlanCard({ plan, i, showPrices }) {
           </p>
           {plan.nudge && (
             <p className="mt-3 inline-flex items-center gap-2 border border-yellow/40 bg-yellow/[0.06] px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-yellow">
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-yellow shadow-[0_0_8px_#7CFFC4]" />
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-yellow shadow-[0_0_8px_#D4FF24]" />
               {plan.nudge}
             </p>
           )}
