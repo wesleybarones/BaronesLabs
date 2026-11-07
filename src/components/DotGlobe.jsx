@@ -4,8 +4,9 @@ import LAND from '../assets/globe-land.json' // [lat*10, lon*10, …] land dots 
 
 /*
   Dotted globe (Canvas 2D, orthographic projection, no 3D library).
-  - auto-rotates slowly and turns/tilts towards the cursor wherever it moves on the page;
-  - drag (mouse or finger) to spin it, with inertia;
+  - auto-rotates slowly; drag (mouse or finger) to spin it, with inertia;
+  - "touch" effect: the land dots near the cursor are pushed away like sand and spring back
+    (each dot has its own offset + velocity); displaced dots light up and grow;
   - a pulsing "you are here" marker in Rio de Janeiro and light arcs travelling to the regions served
     in each language (PT / EN / ES) — these mark languages, not clients;
   - runs only while visible and the tab is active; reduced motion = still frame.
@@ -52,12 +53,20 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
 
     const dots = []
     for (let i = 0; i < LAND.length; i += 2) dots.push(toVec(LAND[i] / 10, LAND[i + 1] / 10))
+    // per-dot spring state for the cursor "touch" (screen-space offset + velocity)
+    const N = dots.length
+    const ox = new Float32Array(N)
+    const oy = new Float32Array(N)
+    const vx = new Float32Array(N)
+    const vy = new Float32Array(N)
+    const TOUCH_R = 90 // px
+    const TOUCH_F = 38
     const home = toVec(HOME.lat, HOME.lon)
     const arcs = targets.map((t, i) => ({ ...t, pts: arcPoints(HOME, t), end: toVec(t.lat, t.lon), phase: i / Math.max(1, targets.length) }))
 
     const S = { w: 0, h: 0, dpr: 1, r: 0, cx: 0, cy: 0 }
     // start facing Brazil
-    const st = { lon: HOME.lon * RAD, lat: -12 * RAD, vLon: 0, vLat: 0, drag: null, t: 0, auto: 1, offLon: 0, offLat: 0, tgtLon: 0, tgtLat: 0 }
+    const st = { lon: HOME.lon * RAD, lat: -12 * RAD, vLon: 0, vLat: 0, drag: null, t: 0, auto: 1, ptr: null }
 
     const resize = () => {
       const r = wrap.getBoundingClientRect()
@@ -73,8 +82,8 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
 
     // rotate a unit vector by the current view (yaw = -lon, pitch = lat) and project
     const project = (v) => {
-      const lon = st.lon + st.offLon
-      const lat = st.lat + st.offLat
+      const lon = st.lon
+      const lat = st.lat
       const cl = Math.cos(-lon)
       const sl = Math.sin(-lon)
       const x1 = v[0] * cl + v[2] * sl
@@ -110,15 +119,34 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
       ctx.lineWidth = 1
       ctx.stroke()
 
-      // land dots (front hemisphere bright, back faint)
+      // land dots (front hemisphere bright, back faint) + cursor touch physics
       const size = Math.max(0.9, r / 190)
-      for (const v of dots) {
-        const [x, y, z] = project(v)
+      const P = st.ptr
+      const R2 = TOUCH_R * TOUCH_R
+      for (let i = 0; i < N; i++) {
+        const [x, y, z] = project(dots[i])
+        // spring back towards rest, damped
+        vx[i] = (vx[i] - ox[i] * 0.08) * 0.78
+        vy[i] = (vy[i] - oy[i] * 0.08) * 0.78
+        if (P && z > 0) {
+          const dx = x + ox[i] - P.x
+          const dy = y + oy[i] - P.y
+          const d2 = dx * dx + dy * dy
+          if (d2 < R2 && d2 > 0.01) {
+            const d = Math.sqrt(d2)
+            const f = (1 - d / TOUCH_R) * TOUCH_F * 0.18
+            vx[i] += (dx / d) * f
+            vy[i] += (dy / d) * f
+          }
+        }
+        ox[i] += vx[i]
+        oy[i] += vy[i]
         if (z < -0.15) continue
+        const k = Math.min(1, Math.hypot(ox[i], oy[i]) / 30)
         const a = z > 0 ? 0.25 + z * 0.75 : 0.06
-        ctx.fillStyle = `rgba(${CYAN},${a.toFixed(3)})`
-        const s = size * (z > 0 ? 0.7 + z * 0.5 : 0.6)
-        ctx.fillRect(x - s / 2, y - s / 2, s, s)
+        const s = size * (z > 0 ? 0.7 + z * 0.5 : 0.6) * (1 + k * 0.9)
+        ctx.fillStyle = k > 0.15 ? `rgba(200,255,255,${Math.min(1, a + 0.2).toFixed(3)})` : `rgba(${CYAN},${a.toFixed(3)})`
+        ctx.fillRect(x + ox[i] - s / 2, y + oy[i] - s / 2, s, s)
       }
 
       // arcs with a travelling pulse
@@ -189,9 +217,6 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
 
     const step = (dt) => {
       st.t += dt
-      // follow the cursor (eased)
-      st.offLon += (st.tgtLon - st.offLon) * Math.min(1, dt * 3)
-      st.offLat += (st.tgtLat - st.offLat) * Math.min(1, dt * 3)
       if (!st.drag) {
         // inertia, then ease back to a slow auto-rotation
         st.vLon *= Math.pow(0.05, dt)
@@ -238,16 +263,19 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
     const onVis = () => (document.hidden ? stop() : run())
     document.addEventListener('visibilitychange', onVis)
 
-    // follow the cursor anywhere on the page: the globe turns towards it
-    const follow = (e) => {
-      if (e.pointerType === 'touch' || st.drag) return
+    // cursor / finger position inside the globe (drives the touch effect)
+    const local = (e) => {
       const r = wrap.getBoundingClientRect()
-      const nx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (window.innerWidth * 0.5)))
-      const ny = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (window.innerHeight * 0.5)))
-      st.tgtLon = -nx * 0.9
-      st.tgtLat = ny * 0.45
+      return { x: e.clientX - r.left, y: e.clientY - r.top }
     }
-    window.addEventListener('pointermove', follow, { passive: true })
+    const hover = (e) => {
+      st.ptr = local(e)
+    }
+    const leave = () => {
+      st.ptr = null
+    }
+    wrap.addEventListener('pointermove', hover, { passive: true })
+    wrap.addEventListener('pointerleave', leave)
 
     // drag to spin
     const down = (e) => {
@@ -282,7 +310,8 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
       ro.disconnect()
       io.disconnect()
       document.removeEventListener('visibilitychange', onVis)
-      window.removeEventListener('pointermove', follow)
+      wrap.removeEventListener('pointermove', hover)
+      wrap.removeEventListener('pointerleave', leave)
       wrap.removeEventListener('pointerdown', down)
       wrap.removeEventListener('pointermove', move)
       wrap.removeEventListener('pointerup', up)
