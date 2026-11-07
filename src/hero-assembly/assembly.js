@@ -32,7 +32,7 @@ const defer = () => {
   return p
 }
 
-export function createAssembly({ root, layer, mobile = false, labels = {} }) {
+export function createAssembly({ root, layer, mobile = false, labels = {}, video = null }) {
   const $ = (sel) => root.querySelector(sel)
   const $$ = (sel) => [...root.querySelectorAll(sel)]
   const L = {
@@ -322,7 +322,8 @@ export function createAssembly({ root, layer, mobile = false, labels = {} }) {
     const nearY = ty - gy + 6
     fin(animate(ghost, { x: nearX, y: nearY, rotate: [0, -4, -2] }, { duration: d, ease: EASE })).catch(() => {})
     await move(cur, [gx + nearX + offX, gy + nearY + offY], d)
-    // snap
+    // snap in sync with the photo's "catch" (video spark ≈ 3.4s)
+    if (video && !mobile) await video.at(3.3).then(guard)
     fin(animate(ghost, { x: tx - gx, y: ty - gy, rotate: 0, scale: s.w / g.w }, { type: 'spring', stiffness: 600, damping: 20 })).catch(() => {})
     move(cur, [tx + offX, ty + offY], 0.18).catch(() => {})
     await wait(0.16)
@@ -369,6 +370,8 @@ export function createAssembly({ root, layer, mobile = false, labels = {} }) {
   // deploy: button press → progress bar fills → status ONLINE → photo frame pulses lime
   async function deploy(cur) {
     const btn = $('#btn-deploy')
+    // the click lands with the photo's tap in the air (video ripple ≈ 4.0s)
+    if (video && !mobile) await video.at(3.95).then(guard)
     if (cur && btn) await click(cur, btn)
     const bar = $('#deploy-progress')
     const st = $('#deploy-status')?.firstChild
@@ -477,6 +480,8 @@ export function createAssembly({ root, layer, mobile = false, labels = {} }) {
         await enter(u, [W + 40, fb.y + 120], [fb.x + 30, fb.y + 30], 0.45)
         outline = await draw(u, frame, 0.95)
       }
+      // desktop: the photo comes alive as the frame appears (clip starts at 0.7s so its beats meet the cursors')
+      if (!mobile) video?.start(0.7)
       await reveal(frame, { d: 0.5, dy: 0, scale: 0.97 })
       if (outline) fin(animate(outline, { opacity: 0 }, { duration: 0.4 })).then(() => outline.remove(), () => {})
       const chips = $$('[data-ha-chip]')
@@ -536,6 +541,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {} }) {
   }
 
   // ── end / skip: everything back to the page's own HTML ─────
+  let skipped = false
   function finish() {
     if (finished) return
     finished = true
@@ -560,6 +566,9 @@ export function createAssembly({ root, layer, mobile = false, labels = {} }) {
     $('#deploy-status-wrap')?.classList.remove('ha-pending')
     $('#btn-deploy')?.classList.remove('ha-pressed')
     layer.replaceChildren()
+    // skipped: the clip stops too; phones play it when the photo scrolls into view
+    if (skipped) video?.stop()
+    else if (mobile) video?.playWhenVisible($('#hero-frame'))
     done.resolve()
   }
 
@@ -567,9 +576,11 @@ export function createAssembly({ root, layer, mobile = false, labels = {} }) {
     prepare,
     play,
     skip: () => {
+      skipped = true
       cancelled = true
       finish()
     },
     done,
   }
 }
+export { createHeroVideo } from './video.js'

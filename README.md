@@ -65,6 +65,11 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
   tudo no fim. Ela procura os IDs `hero-status`, `hero-kicker`, `hero-title`, `hero-sub`, `hero-ctas`, `hero-proofs`,
   `proof-48h`, `slot-proof`, `hero-frame`, `btn-deploy`, `deploy-status`, `deploy-progress` e os chips `data-ha-chip`;
   se algum faltar, aquele passo é pulado.
+- **Foto viva:** durante a montagem a foto vira vídeo (clipe do Google Flow/Veo, recortado em 4:5, sem som):
+  `src/assets/hero-video/` (WebM VP9 + MP4 H.264, 720×900 no desktop e 480×600 no celular) e `src/hero-assembly/video.js`.
+  No desktop o encaixe do card espera o "agarrar" do vídeo (3,4s) e o clique do DEPLOY espera o toque no ar (4,0s);
+  no celular o vídeo toca quando a foto aparece na tela. No fim ele se dissolve de volta na foto.
+  Para trocar o clipe: recorte 864×1080 do centro do 1920×1080 e gere os 4 arquivos com os mesmos nomes.
 - Ritmo e ordem: funções `copyTrack`, `uiTrack`, `wesleyTrack` e `deployTrack` dentro de `play()`.
   Nomes e cores dos cursores: `CURSORS` no topo do arquivo. Textos (PT/EN/ES): `hero.assembly` em `translations.js`.
 

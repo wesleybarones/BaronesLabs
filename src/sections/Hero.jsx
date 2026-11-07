@@ -91,13 +91,17 @@ export default function Hero() {
     intro opens. "↻ Rever montagem" replays it. Lazy chunk: never loaded for bots or returning visitors.
   */
   const layerRef = useRef(null)
+  const videoRef = useRef(null)
   const ctrl = useRef(null)
   const [phase, setPhase] = useState(assembly ? 'planned' : 'idle') // planned | running | done | idle
   const readyRef = useRef(ready)
   readyRef.current = ready
   const loadAssembly = () => import('../hero-assembly/assembly.js')
-  const build = (m) =>
-    m.createAssembly({ root: ref.current, layer: layerRef.current, mobile: window.innerWidth < 1024, labels: t.hero.assembly })
+  const build = (m) => {
+    const mobile = window.innerWidth < 1024
+    const video = m.createHeroVideo(videoRef.current, { mobile })
+    return m.createAssembly({ root: ref.current, layer: layerRef.current, mobile, labels: t.hero.assembly, video })
+  }
   const run = () => {
     const c = ctrl.current
     if (!c) return setPhase('done')
@@ -331,6 +335,16 @@ export default function Hero() {
                 />
                 {/* live portrait: depth layers + light + visor reflections (code, no video file) */}
                 <LivePortrait sx={sx} sy={sy} reduce={reduce} />
+                {/* the photo comes alive during the live assembly (src/hero-assembly/video.js); no src until then */}
+                <video
+                  ref={videoRef}
+                  aria-hidden
+                  muted
+                  playsInline
+                  preload="none"
+                  className="pointer-events-none absolute inset-0 h-full w-full object-cover object-[50%_30%]"
+                  style={{ opacity: 0 }}
+                />
                 {/* lens scan: a thin cyan line sweeps the glasses every few seconds */}
                 {!reduce && (
                   <span aria-hidden className="lens-scan pointer-events-none absolute inset-0 mix-blend-screen">
