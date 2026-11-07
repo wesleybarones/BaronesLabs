@@ -13,6 +13,7 @@ import LAND from '../assets/globe-land.json' // [lat*10, lon*10, …] land dots 
 */
 
 const RAD = Math.PI / 180
+const BLEED = 0.22 // canvas extends this fraction beyond the box on each side, so long arcs never get cut
 const HOME = { lat: -22.9, lon: -43.1 } // Rio de Janeiro (Niterói)
 const CYAN = '0,240,255'
 const MAGENTA = '224,64,216'
@@ -34,7 +35,7 @@ function arcPoints(a, b, steps = 48) {
     const t = i / steps
     const s1 = Math.sin((1 - t) * om) / Math.sin(om)
     const s2 = Math.sin(t * om) / Math.sin(om)
-    const lift = 1 + Math.sin(Math.PI * t) * (0.12 + om * 0.1)
+    const lift = 1 + Math.sin(Math.PI * t) * Math.min(0.32, 0.1 + om * 0.08)
     pts.push([(A[0] * s1 + B[0] * s2) * lift, (A[1] * s1 + B[1] * s2) * lift, (A[2] * s1 + B[2] * s2) * lift])
   }
   return pts
@@ -69,13 +70,13 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
     const st = { lon: HOME.lon * RAD, lat: -12 * RAD, vLon: 0, vLat: 0, drag: null, t: 0, auto: 1, ptr: null }
 
     const resize = () => {
-      const r = wrap.getBoundingClientRect()
+      const r = c.getBoundingClientRect() // canvas is larger than the box (room for the arcs)
       S.dpr = Math.min(window.devicePixelRatio || 1, 1.75)
       S.w = r.width
       S.h = r.height
       c.width = Math.round(r.width * S.dpr)
       c.height = Math.round(r.height * S.dpr)
-      S.r = Math.min(S.w, S.h) * 0.44
+      S.r = (Math.min(S.w, S.h) * 0.44) / (1 + 2 * BLEED)
       S.cx = S.w / 2
       S.cy = S.h / 2
     }
@@ -265,7 +266,7 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
 
     // cursor / finger position inside the globe (drives the touch effect)
     const local = (e) => {
-      const r = wrap.getBoundingClientRect()
+      const r = c.getBoundingClientRect()
       return { x: e.clientX - r.left, y: e.clientY - r.top }
     }
     const hover = (e) => {
@@ -321,7 +322,7 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
 
   return (
     <div ref={wrapRef} className={`relative touch-pan-y select-none ${className}`} data-cursor>
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden />
+      <canvas ref={canvasRef} className="pointer-events-none absolute -inset-[22%] h-[144%] w-[144%]" aria-hidden />
       {hint && (
         <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 text-center font-mono text-[10.5px] uppercase tracking-[0.24em] text-cyan/55">
           {hint}

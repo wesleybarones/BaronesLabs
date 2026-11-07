@@ -47,7 +47,7 @@ export default function Reach() {
   const r = t.reach
   const targets = useMemo(() => TARGETS, [])
   return (
-    <section id="reach" className="relative overflow-hidden py-24 md:py-32">
+    <section id="reach" className="relative overflow-x-clip py-24 md:py-32">
       <div className="mx-auto grid max-w-[1360px] grid-cols-1 items-center gap-10 px-4 md:px-8 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-5">
           <SectionLabel>{r.label}</SectionLabel>
@@ -72,7 +72,7 @@ export default function Reach() {
           </Reveal>
         </div>
         <Reveal delay={0.1} className="lg:col-span-7">
-          <DotGlobe targets={targets} hint={r.hint} className="mx-auto aspect-square w-full max-w-[640px]" />
+          <DotGlobe targets={targets} hint={r.hint} className="mx-auto aspect-square w-[70%] max-w-[640px] sm:w-[80%] lg:w-full" />
         </Reveal>
       </div>
     </section>
