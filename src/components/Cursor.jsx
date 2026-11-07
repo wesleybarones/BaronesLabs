@@ -1,14 +1,14 @@
-import { AnimatePresence, motion, useMotionValue, useSpring } from 'motion/react'
+import { AnimatePresence, motion, useMotionValue } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { useFinePointer, useReducedMotion } from '../lib/hooks'
 import { useLang } from '../i18n/LangContext'
 
 /*
-  Desktop-only cursor: a HUD hexagon reticle in the brand style.
+  Desktop-only cursor: a HUD hexagon reticle in the brand style. It sits exactly on the pointer
+  (no trailing/lag); only its size and state animate.
   - default: small cyan hexagon with a magenta offset (like the logo), slowly spinning, precise centre dot;
   - hover on links/buttons: grows and shows four "target lock" corners;
   - data-cursor="view": large, with a VIEW label;
-  - data-cursor="singularity" (the black hole): shrinks and spins fast, as if being pulled in;
   - click: the hexagon compresses and emits a hexagonal ripple.
 */
 
@@ -29,9 +29,7 @@ export default function Cursor() {
   const { lang } = useLang()
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
-  const rx = useSpring(x, { stiffness: 220, damping: 22, mass: 0.45 })
-  const ry = useSpring(y, { stiffness: 220, damping: 22, mass: 0.45 })
-  const [mode, setMode] = useState('default') // default | hover | view | singularity
+  const [mode, setMode] = useState('default') // default | hover | view
   const [visible, setVisible] = useState(false)
   const [pressed, setPressed] = useState(false)
   const [ripples, setRipples] = useState([])
@@ -46,7 +44,7 @@ export default function Cursor() {
       setVisible(true)
       const t = e.target.closest?.('[data-cursor], a, button, [role="button"], summary, input, textarea, label')
       const attr = t?.getAttribute('data-cursor')
-      const m = !t ? 'default' : attr === 'view' || attr === 'singularity' ? attr : 'hover'
+      const m = !t ? 'default' : attr === 'view' ? 'view' : 'hover'
       setMode((prev) => (prev === m ? prev : m))
     }
     const down = (e) => {
@@ -71,7 +69,7 @@ export default function Cursor() {
   }, [on]) // eslint-disable-line
 
   if (!on) return null
-  const size = { default: 30, hover: 50, view: 84, singularity: 16 }[mode]
+  const size = { default: 30, hover: 50, view: 84 }[mode]
   const lock = mode === 'hover' || mode === 'view'
   const label = lang === 'en' ? 'VIEW' : 'VER'
 
@@ -94,19 +92,19 @@ export default function Cursor() {
         ))}
       </AnimatePresence>
 
-      {/* lagging reticle */}
-      <motion.div className="absolute left-0 top-0" style={{ x: rx, y: ry }}>
+      {/* reticle: exactly on the pointer, no lag */}
+      <motion.div className="absolute left-0 top-0" style={{ x, y }}>
         <motion.div
           className="relative flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
           animate={{ width: size, height: size, scale: pressed ? 0.78 : 1 }}
           transition={{ type: 'spring', stiffness: 320, damping: 24 }}
         >
-          {/* hexagon (+ magenta offset); spins slowly, fast over the black hole, settles on targets */}
-          <div className={`absolute inset-0 ${mode === 'singularity' ? 'cursor-spin-fast' : lock ? '' : 'cursor-spin'}`}>
+          {/* hexagon (+ magenta offset); spins slowly, settles on targets */}
+          <div className={`absolute inset-0 ${lock ? '' : 'cursor-spin'}`}>
             <Hex className="absolute inset-0 h-full w-full -translate-x-[1.5px] translate-y-[1px] opacity-70" stroke="#E040D8" width={1.3} />
             <Hex
               className="absolute inset-0 h-full w-full drop-shadow-[0_0_5px_rgba(0,240,255,0.8)]"
-              stroke={mode === 'singularity' ? '#E040D8' : '#00F0FF'}
+              stroke="#00F0FF"
               width={1.5}
               style={{ fill: mode === 'view' ? 'rgba(0,240,255,0.12)' : 'transparent' }}
             />

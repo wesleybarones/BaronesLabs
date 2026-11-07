@@ -39,7 +39,6 @@ const pt = {
     quote: 'Orçamento',
   },
   hero: {
-    blackHole: 'toque no buraco negro',
     status: 'Disponível para novos projetos',
     kicker: 'Criação de landing pages em Niterói-RJ',
     title: 'Conectando pessoas. *Construindo Negócios.*',
@@ -357,7 +356,6 @@ const en = {
     quote: 'Get a quote',
   },
   hero: {
-    blackHole: 'touch the black hole',
     status: 'Available for new projects',
     kicker: 'Landing page design in Niterói, Brazil',
     title: 'Connecting people. *Building businesses.*',
@@ -674,7 +672,6 @@ const es = {
     quote: 'Presupuesto',
   },
   hero: {
-    blackHole: 'toca el agujero negro',
     status: 'Disponible para nuevos proyectos',
     kicker: 'Creación de landing pages en Niterói, Brasil',
     title: 'Conectando personas. *Construyendo negocios.*',

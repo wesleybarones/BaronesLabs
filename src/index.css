@@ -694,5 +694,4 @@ html.has-custom-cursor * {
 
 /* ---- custom cursor (hex reticle) ---- */
 .cursor-spin { animation: cursor-spin 9s linear infinite; }
-.cursor-spin-fast { animation: cursor-spin 0.7s linear infinite; }
 @keyframes cursor-spin { to { transform: rotate(360deg); } }
