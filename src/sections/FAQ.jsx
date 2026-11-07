@@ -56,7 +56,7 @@ export default function FAQ() {
   const f = t.faq
   const [open, setOpen] = useState(0)
   return (
-    <section id="faq" className="relative z-10 pb-16 pt-24 md:pb-20 md:pt-36">
+    <section id="faq" className="relative z-10 pb-24 pt-24 md:pb-32 md:pt-36">
       <div className="mx-auto grid max-w-[1240px] grid-cols-1 gap-12 px-4 md:px-8 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-32">
