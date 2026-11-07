@@ -1,7 +1,7 @@
 /*
   Traduções da Barones Labs.
   Convenção: palavras entre *asteriscos* nos títulos recebem o destaque
-  ciano com duplo magenta (ex.: "Conectando pessoas. *Construindo Negócios.*").
+  ciano com duplo magenta (ex.: "Seu site profissional no ar em *48h*.").
 */
 
 const pt = {
@@ -10,8 +10,8 @@ const pt = {
     ogLocale: 'pt_BR',
     title: 'Criação de Landing Pages em Niterói-RJ | Barones Labs',
     description:
-      'Landing pages com visual de agência em Niterói-RJ, no ar em até 48h, com domínio, hospedagem e WhatsApp inclusos. Peça seu orçamento agora pelo WhatsApp.',
-    ogTitle: 'Barones Labs | Conectando pessoas. Construindo Negócios.',
+      'Landing pages com visual de agência em Niterói-RJ, no ar a partir de 48h, com domínio, hospedagem e WhatsApp inclusos. Peça seu orçamento agora pelo WhatsApp.',
+    ogTitle: 'Barones Labs | Conectando pessoas. Construindo negócios.',
     imageAlt: 'Wesley Barones com óculos futurista e a frase em neon projetos do zero',
   },
   langName: 'Português',
@@ -41,11 +41,11 @@ const pt = {
   hero: {
     status: 'Disponível para novos projetos',
     kicker: 'Criação de landing pages em Niterói-RJ',
-    title: 'Conectando pessoas. *Construindo Negócios.*',
-    sub: 'Landing pages com visual de agência, prontas em até 48h. Domínio, hospedagem e WhatsApp inclusos, sem dor de cabeça técnica.',
+    title: 'Seu site profissional no ar em *48h*.',
+    sub: 'Landing pages com visual de agência, no ar a partir de 48h. Domínio, hospedagem e WhatsApp inclusos, sem dor de cabeça técnica.',
     cta: 'Quero meu site',
     secondary: 'Ver projetos',
-    proof: ['Entrega 48h–7 dias', '3 alterações grátis', 'Garantia 7 dias'],
+    proof: ['Entrega 48h–7 dias', '★ 5,0 no Google', 'Garantia 7 dias'],
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'role',
@@ -54,7 +54,7 @@ const pt = {
     avatarAlt: 'Wesley Barones com óculos futurista; no reflexo das lentes, um notebook mostra a seção de pacotes deste site',
   },
   marquee: [
-    'Landing pages',
+    'Clínicas',
     'Barbearias',
     'Lojas',
     'Semijoias',
@@ -64,7 +64,7 @@ const pt = {
   ],
   problem: {
     label: '// 01_DIAGNÓSTICO',
-    title: 'Transforme audiência em *clientes*',
+    title: 'Seu site está te fazendo perder *clientes*?',
     sub: 'Se você se reconhece em algum destes pontos, o problema não é o seu produto. É a vitrine.',
     items: [
       'Já esperou mais de 1 mês por um site',
@@ -82,7 +82,7 @@ const pt = {
     blocks: [
       {
         tag: 'Velocidade',
-        title: 'Seu site no ar em até 48h.',
+        title: 'Seu site no ar a partir de 48h.',
         text: 'Sem meses de espera nem reuniões intermináveis. Você aprova, eu publico.',
       },
       {
@@ -102,7 +102,7 @@ const pt = {
   },
   audience: {
     label: '// 05_PARA_QUEM',
-    title: 'Feito para quem vende pelo *WhatsApp* e Instagram. E para quem quer existir além das redes sociais.',
+    title: 'Para quem vende pelo *WhatsApp* e quer existir além do Instagram.',
     sub: 'Para quem já tem site e quer um melhor, e para quem nunca teve um.',
     tiles: [
       { name: 'Profissionais liberais', text: 'Autoridade instantânea para quem pesquisa seu nome.' },
@@ -145,7 +145,7 @@ const pt = {
     title: 'Do primeiro contato ao *site no ar*',
     steps: [
       { title: 'Conversa no WhatsApp', text: 'Você me conta sobre o seu negócio, seus clientes e o que quer alcançar.' },
-      { title: 'Proposta e pagamento', text: 'Você escolhe o pacote e a forma de pagar que fica melhor para você.' },
+      { title: 'Proposta e pagamento', text: 'Você escolhe o pacote e paga só 50% para começar. Ou à vista com 5% de desconto, ou no cartão.' },
       { title: 'Criação', text: 'Seu site fica pronto em 48h a 7 dias, conforme o pacote.' },
       { title: 'Ajustes e lançamento', text: 'Até 3 alterações grátis e seu site no ar, com domínio e tudo funcionando.' },
     ],
@@ -175,9 +175,9 @@ const pt = {
         tagline: 'Para quem precisa estar online rápido.',
         delivery: 'em 48h',
         features: [
-          'Landing page enxuta',
+          'Página única com as seções essenciais',
           'Animações básicas',
-          'Ajuste do seu texto',
+          'Uso o seu texto, com revisão',
           '1 idioma',
           'Domínio + hospedagem',
           'WhatsApp, formulário e mapa',
@@ -195,7 +195,7 @@ const pt = {
         features: [
           'Landing completa com mais seções',
           'Animações modernas',
-          'Copy escrita para você',
+          'Textos escritos para vender',
           '1 idioma',
           'Domínio + hospedagem',
           'WhatsApp, formulário e mapa',
@@ -215,7 +215,7 @@ const pt = {
         features: [
           'Design exclusivo',
           'Animações avançadas e experiência imersiva',
-          'Copy estratégica de conversão',
+          'Textos estratégicos, pensados para vender',
           'Até 3 idiomas (PT/EN/ES)',
           'Domínio + hospedagem',
           'WhatsApp, formulário e mapa',
@@ -238,7 +238,7 @@ const pt = {
         'Hero em vídeo interativo, feito para a sua marca',
         'Site completo com até 7 páginas',
         'Animações 3D e experiência imersiva sob medida',
-        'Copy estratégica em até 3 idiomas',
+        'Textos estratégicos em até 3 idiomas',
         'Painel de contatos com a origem de cada cliente',
         'Pixel Meta, Google Analytics e conversões do Google Ads',
         'Perfil da Empresa no Google configurado e otimizado',
@@ -275,7 +275,7 @@ const pt = {
     spin: 'Segure e gire',
     fine: 'pedido em até 7 dias · reembolso em até 90 dias',
     title: 'Satisfação ou seu dinheiro de volta.',
-    text: 'Se em até 7 dias após a entrega você não estiver satisfeito, devolvo 100% do valor. Simples assim.',
+    text: 'Pediu em até 7 dias após a entrega, devolvo 100% do valor.',
   },
   testimonials: {
     label: '// 08_DEPOIMENTOS',
@@ -339,8 +339,8 @@ const pt = {
     ],
   },
   final: {
-    title: 'Conectando pessoas. *Construindo Negócios.*',
-    sub: 'Chama no WhatsApp e tenha seu site no ar em até 48h.',
+    title: 'Conectando pessoas. *Construindo negócios.*',
+    sub: 'Chama no WhatsApp e tenha seu site no ar a partir de 48h.',
     cta: 'Quero meu site agora',
   },
   footer: {
@@ -392,11 +392,11 @@ const en = {
   hero: {
     status: 'Available for new projects',
     kicker: 'Landing page design in Niterói, Brazil',
-    title: 'Connecting people. *Building businesses.*',
+    title: 'Your professional website, live in *48h*.',
     sub: 'Agency-grade landing pages, live in as little as 48 hours. Domain, hosting and WhatsApp included — zero technical headaches.',
     cta: 'I want my website',
     secondary: 'See projects',
-    proof: ['Delivery in 48h–7 days', '3 free revisions', '7-day guarantee'],
+    proof: ['Delivery in 48h–7 days', '★ 5.0 on Google', '7-day guarantee'],
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'scroll',
@@ -405,7 +405,7 @@ const en = {
     avatarAlt: "Wesley Barones wearing futuristic glasses; the lenses reflect a laptop showing this site's packages section",
   },
   marquee: [
-    'Landing pages',
+    'Clinics',
     'Barbershops',
     'Retail stores',
     'Jewelry brands',
@@ -415,7 +415,7 @@ const en = {
   ],
   problem: {
     label: '// 01_DIAGNOSIS',
-    title: 'Turn your audience into *customers*',
+    title: 'Is your website costing you *customers*?',
     sub: "If any of these sound familiar, your product isn't the problem. Your storefront is.",
     items: [
       'You waited over a month for a website',
@@ -453,7 +453,7 @@ const en = {
   },
   audience: {
     label: '// 05_WHO_ITS_FOR',
-    title: 'Built for businesses that sell on *WhatsApp* and Instagram. And for those who want a presence beyond social media.',
+    title: 'For businesses that sell on *WhatsApp* and want to exist beyond Instagram.',
     sub: "For those who already have a website and want a better one — and for those who've never had one.",
     tiles: [
       { name: 'Independent professionals', text: 'Instant credibility for anyone who looks you up.' },
@@ -496,7 +496,7 @@ const en = {
     title: 'From first contact to *launch day*',
     steps: [
       { title: 'A chat on WhatsApp', text: 'Tell me about your business, your customers and what you want to achieve.' },
-      { title: 'Proposal & payment', text: 'Pick the package and the payment option that works best for you.' },
+      { title: 'Proposal & payment', text: 'Pick your package and pay just 50% to get started. Or pay upfront with 5% off, or by card.' },
       { title: 'Build', text: 'Your website is ready in 48 hours to 7 days, depending on the package.' },
       { title: 'Tweaks & launch', text: 'Up to 3 free revisions, then your site goes live with everything working.' },
     ],
@@ -505,7 +505,7 @@ const en = {
     label: '// MISSION',
     title: 'My goal is to put *money* in your pocket.',
     text: 'A beautiful site is just the start. Every page is built to turn visits into WhatsApp conversations, and conversations into sales.',
-    points: ['WhatsApp on every screen', 'Loads fast, even on 4G', 'Copy written to sell'],
+    points: ['WhatsApp on every screen', 'Loads fast, even on 4G', 'Text written to sell'],
     cta: 'I want to sell more',
   },
   pricing: {
@@ -524,9 +524,9 @@ const en = {
         tagline: 'For when you need to be online fast.',
         delivery: 'in 48h',
         features: [
-          'Lean landing page',
+          'Single page with the essential sections',
           'Basic animations',
-          'Polish of your own copy',
+          'Your own text, proofread',
           '1 language',
           'Domain + hosting',
           'WhatsApp, contact form & map',
@@ -542,7 +542,7 @@ const en = {
         features: [
           'Full landing page with more sections',
           'Modern animations',
-          'Copy written for you',
+          'Text written to sell',
           '1 language',
           'Domain + hosting',
           'WhatsApp, contact form & map',
@@ -559,7 +559,7 @@ const en = {
         features: [
           'Exclusive design',
           'Advanced animation & immersive experience',
-          'Conversion-focused strategic copy',
+          'Strategic text, written to sell',
           'Up to 3 languages (PT/EN/ES)',
           'Domain + hosting',
           'WhatsApp, contact form & map',
@@ -582,7 +582,7 @@ const en = {
         'Interactive video hero, made for your brand',
         'Full website with up to 7 pages',
         'Custom 3D animations and immersive experience',
-        'Strategic copy in up to 3 languages',
+        'Strategic text in up to 3 languages',
         'Lead dashboard showing where each customer came from',
         'Meta Pixel, Google Analytics and Google Ads conversions',
         'Google Business Profile set up and optimised',
@@ -624,7 +624,7 @@ const en = {
     fine: 'request within 7 days · refund within 90 days',
     sealSub: 'Guarantee',
     title: 'Love it, or your money back.',
-    text: "If you're not satisfied within 7 days of delivery, I'll refund 100% of what you paid. Simple as that.",
+    text: "Ask within 7 days of delivery and I'll refund 100% of what you paid.",
   },
   testimonials: {
     label: '// 08_TESTIMONIALS',
@@ -711,7 +711,7 @@ const es = {
     ogLocale: 'es_ES',
     title: 'Creación de Landing Pages en Niterói, Brasil | Barones Labs',
     description:
-      'Landing pages con diseño de agencia desde Niterói, Brasil, en línea en hasta 48h, con dominio, hosting y WhatsApp incluidos. Pide tu presupuesto por WhatsApp.',
+      'Landing pages con diseño de agencia desde Niterói, Brasil, en línea desde 48h, con dominio, hosting y WhatsApp incluidos. Pide tu presupuesto por WhatsApp.',
     ogTitle: 'Barones Labs | Conectando personas. Construyendo negocios.',
     imageAlt: 'Wesley Barones con lentes futuristas junto a la frase en neón proyectos desde cero',
   },
@@ -742,11 +742,11 @@ const es = {
   hero: {
     status: 'Disponible para nuevos proyectos',
     kicker: 'Creación de landing pages en Niterói, Brasil',
-    title: 'Conectando personas. *Construyendo negocios.*',
-    sub: 'Landing pages con diseño de agencia, listas en hasta 48 horas. Dominio, hosting y WhatsApp incluidos, sin complicaciones técnicas.',
+    title: 'Tu sitio profesional en línea en *48h*.',
+    sub: 'Landing pages con diseño de agencia, en línea desde 48 horas. Dominio, hosting y WhatsApp incluidos, sin complicaciones técnicas.',
     cta: 'Quiero mi sitio',
     secondary: 'Ver proyectos',
-    proof: ['Entrega en 48h–7 días', '3 cambios gratis', 'Garantía de 7 días'],
+    proof: ['Entrega en 48h–7 días', '★ 5,0 en Google', 'Garantía de 7 días'],
     chips: ['LOAD 0.8s', 'MOBILE ✓', 'PT·EN·ES'],
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'desliza',
@@ -755,7 +755,7 @@ const es = {
     avatarAlt: 'Wesley Barones con lentes futuristas; en el reflejo, una laptop muestra la sección de paquetes de este sitio',
   },
   marquee: [
-    'Landing pages',
+    'Clínicas',
     'Barberías',
     'Tiendas',
     'Joyería',
@@ -765,7 +765,7 @@ const es = {
   ],
   problem: {
     label: '// 01_DIAGNÓSTICO',
-    title: 'Convierte tu audiencia en *clientes*',
+    title: '¿Tu sitio te está haciendo perder *clientes*?',
     sub: 'Si te identificas con alguno de estos puntos, el problema no es tu producto. Es tu vitrina.',
     items: [
       'Ya esperaste más de 1 mes por un sitio',
@@ -783,7 +783,7 @@ const es = {
     blocks: [
       {
         tag: 'Velocidad',
-        title: 'Tu sitio en línea en hasta 48h.',
+        title: 'Tu sitio en línea desde 48h.',
         text: 'Sin meses de espera ni reuniones eternas. Tú apruebas, yo publico.',
       },
       {
@@ -803,7 +803,7 @@ const es = {
   },
   audience: {
     label: '// 05_PARA_QUIÉN',
-    title: 'Hecho para quien vende por *WhatsApp* e Instagram. Y para quien quiere existir más allá de las redes sociales.',
+    title: 'Para quien vende por *WhatsApp* y quiere existir más allá de Instagram.',
     sub: 'Para quien ya tiene sitio y quiere uno mejor, y para quien nunca tuvo uno.',
     tiles: [
       { name: 'Profesionales independientes', text: 'Autoridad inmediata para quien busca tu nombre.' },
@@ -846,7 +846,7 @@ const es = {
     title: 'Del primer contacto al *sitio en línea*',
     steps: [
       { title: 'Charla por WhatsApp', text: 'Me cuentas sobre tu negocio, tus clientes y lo que quieres lograr.' },
-      { title: 'Propuesta y pago', text: 'Eliges el paquete y la forma de pago que mejor te funcione.' },
+      { title: 'Propuesta y pago', text: 'Eliges el paquete y pagas solo el 50% para empezar. O al contado con 5% de descuento, o con tarjeta.' },
       { title: 'Creación', text: 'Tu sitio queda listo en 48 horas a 7 días, según el paquete.' },
       { title: 'Ajustes y lanzamiento', text: 'Hasta 3 cambios gratis y tu sitio en línea, con todo funcionando.' },
     ],
@@ -874,9 +874,9 @@ const es = {
         tagline: 'Para quien necesita estar en línea rápido.',
         delivery: 'en 48h',
         features: [
-          'Landing page compacta',
+          'Página única con las secciones esenciales',
           'Animaciones básicas',
-          'Ajuste de tu texto',
+          'Uso tu texto, con revisión',
           '1 idioma',
           'Dominio + hosting',
           'WhatsApp, formulario y mapa',
@@ -892,7 +892,7 @@ const es = {
         features: [
           'Landing completa con más secciones',
           'Animaciones modernas',
-          'Textos escritos para ti',
+          'Textos escritos para vender',
           '1 idioma',
           'Dominio + hosting',
           'WhatsApp, formulario y mapa',
@@ -909,7 +909,7 @@ const es = {
         features: [
           'Diseño exclusivo',
           'Animaciones avanzadas y experiencia inmersiva',
-          'Copy estratégico de conversión',
+          'Textos estratégicos, pensados para vender',
           'Hasta 3 idiomas (PT/EN/ES)',
           'Dominio + hosting',
           'WhatsApp, formulario y mapa',
@@ -932,7 +932,7 @@ const es = {
         'Hero en video interactivo, hecho para tu marca',
         'Sitio completo con hasta 7 páginas',
         'Animaciones 3D y experiencia inmersiva a medida',
-        'Copy estratégico en hasta 3 idiomas',
+        'Textos estratégicos en hasta 3 idiomas',
         'Panel de contactos con el origen de cada cliente',
         'Pixel de Meta, Google Analytics y conversiones de Google Ads',
         'Perfil de Empresa en Google configurado y optimizado',
@@ -974,7 +974,7 @@ const es = {
     fine: 'solicitud en hasta 7 días · reembolso en hasta 90 días',
     sealSub: 'Garantía',
     title: 'Satisfacción o te devuelvo tu dinero.',
-    text: 'Si en los 7 días posteriores a la entrega no estás satisfecho, te devuelvo el 100% del valor. Así de simple.',
+    text: 'Si lo pides en los 7 días posteriores a la entrega, te devuelvo el 100% del valor.',
   },
   testimonials: {
     label: '// 08_TESTIMONIOS',
@@ -1040,7 +1040,7 @@ const es = {
   },
   final: {
     title: 'Conectando personas. *Construyendo negocios.*',
-    sub: 'Escríbeme por WhatsApp y ten tu sitio en línea en hasta 48h.',
+    sub: 'Escríbeme por WhatsApp y ten tu sitio en línea desde 48h.',
     cta: 'Quiero mi sitio ahora',
   },
   footer: {
