@@ -282,6 +282,14 @@ const pt = {
     reviews: 'avaliações no Google',
     seeAll: 'Ver todas no Google',
   },
+  reach: {
+    label: '// ALCANCE',
+    title: 'Do Rio de Janeiro para *o mundo*.',
+    text: 'Atendimento 100% online, em português, inglês e espanhol. Seu site pronto para vender onde o seu cliente estiver.',
+    points: ['PT · EN · ES', '100% online', 'Atendimento direto comigo'],
+    cta: 'Falar comigo',
+    hint: 'arraste para girar',
+  },
   about: {
     label: '// QUEM ESTÁ POR TRÁS',
     title: 'Prazer, *Wesley Barones*.',
@@ -622,6 +630,14 @@ const en = {
     seeAll: 'See all on Google',
     original: 'Original review in Portuguese',
   },
+  reach: {
+    label: '// REACH',
+    title: 'From Rio de Janeiro to *the world*.',
+    text: 'Fully online, in Portuguese, English and Spanish. A website ready to sell wherever your customers are.',
+    points: ['PT · EN · ES', '100% online', 'Straight to me'],
+    cta: 'Talk to me',
+    hint: 'drag to spin',
+  },
   about: {
     label: "// WHO'S BEHIND IT",
     title: "Hi, I'm *Wesley Barones*.",
@@ -961,6 +977,14 @@ const es = {
     reviews: 'reseñas en Google',
     seeAll: 'Ver todas en Google',
     original: 'Reseña original en portugués',
+  },
+  reach: {
+    label: '// ALCANCE',
+    title: 'De Río de Janeiro para *el mundo*.',
+    text: 'Atención 100% online, en portugués, inglés y español. Tu sitio listo para vender donde esté tu cliente.',
+    points: ['PT · EN · ES', '100% online', 'Atención directa conmigo'],
+    cta: 'Hablar conmigo',
+    hint: 'arrastra para girar',
   },
   about: {
     label: '// QUIÉN ESTÁ DETRÁS',

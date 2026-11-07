@@ -33,3 +33,11 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 - Prévias de link: robôs de redes sociais (WhatsApp, Facebook…) recebem `public/og.html` (só as tags), pela regra em `vercel.json`. Se mudar título/descrição/imagem, atualize também esse arquivo.
 - Imagem de compartilhamento: `public/og-baroneslabs-luz-1200x630.jpg` (1200×630), gerada de `design-refs/og/og-image.html`. Ao trocar, use um nome de arquivo novo (os apps guardam a prévia em cache) e atualize `src/config.js` e `index.html`.
 - Fontes self-hosted via `@fontsource` (`src/fonts.js`), com preload da imagem do hero e das fontes principais (plugin em `vite.config.js`).
+
+## Globo ("Do Rio de Janeiro para o mundo")
+
+- Componente: `src/components/DotGlobe.jsx` (Canvas 2D, sem biblioteca 3D); sessão: `src/sections/Reach.jsx`.
+- Pontos dos continentes: `src/assets/globe-land.json` (lat×10, lon×10), gerados a partir do
+  Natural Earth 110m (pacote `world-atlas`, domínio público) amostrando uma esfera de Fibonacci com
+  30 000 pontos e mantendo os que caem em terra (sem a Antártida).
+- Os arcos marcam regiões atendidas em cada idioma (PT/EN/ES), não clientes. Edite `TARGETS` em `Reach.jsx`.

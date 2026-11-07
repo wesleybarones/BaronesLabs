@@ -29,6 +29,7 @@ const LOADERS = {
   GuaranteeBonus: () => import('./sections/GuaranteeBonus'),
   Testimonials: () => import('./sections/Testimonials'),
   About: () => import('./sections/About'),
+  Reach: () => import('./sections/Reach'),
   FAQ: () => import('./sections/FAQ'),
   FinalCTA: () => import('./sections/FinalCTA'),
   Footer: () => import('./sections/Footer'),
@@ -191,6 +192,9 @@ export default function App() {
           </Deferred>
           <Deferred>
             <S.About />
+          </Deferred>
+          <Deferred>
+            <S.Reach />
           </Deferred>
           <Deferred>
             <S.FAQ />
