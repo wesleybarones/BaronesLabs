@@ -106,32 +106,26 @@ export default function Boot({ onDone, onMountSite, onReveal }) {
               transition={{ duration: 1.1, delay: T.burst + d, ease: [0.16, 1, 0.3, 1] }}
             />
           ))}
-          {/* 2b. LEDs flying out */}
+          {/* 2b. LEDs flying out — pure CSS animations (compositor), no per-frame JavaScript */}
           {leds.map((l, i) => (
-            <motion.span
+            <span
               key={i}
-              className="absolute left-0 top-0"
-              style={{ x: 0, y: 0 }}
-              initial={{ x: 0, y: 0, opacity: 0 }}
-              animate={{ x: l.x, y: l.y, opacity: [0, 1, 1, 0] }}
-              transition={{ duration: l.dur, delay: l.delay, ease: [0.12, 0.9, 0.3, 1], times: [0, 0.1, 0.6, 1] }}
+              className="boot-led absolute left-0 top-0"
+              style={{ '--x': `${l.x}px`, '--y': `${l.y}px`, '--dur': `${l.dur}s`, '--delay': `${l.delay}s` }}
             >
-              <motion.span
-                className="block rounded-full"
+              <span
+                className="boot-led-streak block rounded-full"
                 style={{
                   width: l.streak,
                   height: l.size,
                   marginLeft: -l.streak / 2,
                   marginTop: -l.size / 2,
-                  rotate: l.rot,
+                  '--rot': `${l.rot}deg`,
                   background: `linear-gradient(90deg, transparent, ${l.color} 60%, #fff)`,
                   boxShadow: `0 0 ${l.size * 2}px ${l.color}, 0 0 ${l.size * 5}px ${l.color}`,
                 }}
-                initial={{ scaleX: 0.3 }}
-                animate={{ scaleX: [0.3, 1.6, 0.5] }}
-                transition={{ duration: l.dur, delay: l.delay, ease: 'easeOut' }}
               />
-            </motion.span>
+            </span>
           ))}
         </div>
 

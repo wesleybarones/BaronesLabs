@@ -763,3 +763,25 @@ body {
 
 /* locking scroll during the intro hides the scrollbar: keep its space so nothing shifts sideways */
 html { scrollbar-gutter: stable; }
+
+/* ---- intro LEDs (CSS, compositor-only) ---- */
+.boot-led {
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: boot-led-fly var(--dur) cubic-bezier(0.12, 0.9, 0.3, 1) var(--delay) both;
+}
+@keyframes boot-led-fly {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 1; }
+  60% { opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+}
+.boot-led-streak {
+  transform: rotate(var(--rot)) scaleX(0.3);
+  animation: boot-led-stretch var(--dur) ease-out var(--delay) both;
+}
+@keyframes boot-led-stretch {
+  0% { transform: rotate(var(--rot)) scaleX(0.3); }
+  50% { transform: rotate(var(--rot)) scaleX(1.6); }
+  100% { transform: rotate(var(--rot)) scaleX(0.5); }
+}
