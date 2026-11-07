@@ -32,7 +32,7 @@ const defer = () => {
   return p
 }
 
-export function createAssembly({ root, layer, mobile = false, labels = {}, video = null }) {
+export function createAssembly({ root, layer, mobile = false, labels = {}, video = null, sound = null }) {
   const $ = (sel) => root.querySelector(sel)
   const $$ = (sel) => [...root.querySelectorAll(sel)]
   const L = {
@@ -150,6 +150,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     return move(cur, to, d, OUT)
   }
   const click = (cur, target) => {
+    sound?.click()
     const ring = mk('ha-ring')
     ring.style.setProperty('--c', cur.color)
     animate(ring, { x: cur.x, y: cur.y }, { duration: 0 })
@@ -184,6 +185,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
       [b.x, b.y],
     ]
     if (cur) await move(cur, corners[0], 0.45)
+    sound?.scan(d)
     const stroke = fin(animate(rect, { strokeDashoffset: [1, 0] }, { duration: d, ease: 'linear' }))
     if (cur) {
       const per = 2 * (b.w + b.h)
@@ -241,6 +243,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
         const n = Math.min(chars.length, Math.floor((performance.now() - t0) / (speed * 1000)) + 1)
         if (n > i) {
           while (i < n) chars[i++].classList.add('on')
+          sound?.key()
           const b = box(chars[i - 1])
           Object.assign(caret.style, { transform: `translate(${b.x + b.w + 2}px, ${b.y + b.h * 0.12}px)`, height: `${b.h * 0.78}px` })
           if (cur) {
@@ -267,6 +270,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     const b = box(el)
     const pad = 6
     await move(cur, [b.x - pad, b.y - pad], 0.38)
+    sound?.tick()
     const sel = mk('ha-sel')
     setBox(sel, b, pad)
     sel.innerHTML = `<i></i><i></i><i></i><i></i><span class="ha-measure">${Math.round(b.w)} × ${Math.round(b.h)}</span>`
@@ -280,6 +284,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)
     const kbd = mk('ha-kbd')
     kbd.textContent = mac ? '⌘C' : 'Ctrl+C'
+    sound?.pop()
     animate(kbd, { x: cur.x + 16, y: cur.y - 30 }, { duration: 0 })
     await fin(animate(kbd, { opacity: [0, 1], scale: [0.6, 1] }, { type: 'spring', stiffness: 520, damping: 22 }))
     if (sel) fin(animate(sel, { opacity: [1, 0.5, 1] }, { duration: 0.3 })).catch(() => {})
@@ -320,6 +325,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     // a little overshoot on the way, then the snap
     const nearX = tx - gx + (tx > gx ? -10 : 10)
     const nearY = ty - gy + 6
+    sound?.whoosh(d)
     fin(animate(ghost, { x: nearX, y: nearY, rotate: [0, -4, -2] }, { duration: d, ease: EASE })).catch(() => {})
     await move(cur, [gx + nearX + offX, gy + nearY + offY], d)
     // snap in sync with the photo's "catch" (video spark ≈ 3.4s)
@@ -328,6 +334,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     move(cur, [tx + offX, ty + offY], 0.18).catch(() => {})
     await wait(0.16)
     flash(to)
+    sound?.snap()
     reveal(to, { d: 0.3, dy: 0 }).catch(() => {})
     fin(animate(ghost, { opacity: 0 }, { duration: 0.25 })).then(() => ghost.remove(), () => {})
     for (const gl of [gh, gv]) fin(animate(gl, { opacity: 0 }, { duration: 0.3 })).then(() => gl.remove(), () => {})
@@ -380,11 +387,13 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     const work = []
     if (bar) {
       bar.style.scale = ''
+      sound?.scan(0.56)
       work.push(fin(bar.animate([{ scale: '0 1' }, { scale: '1 1' }], { duration: 560, easing: 'cubic-bezier(0.65,0,0.35,1)' })))
     }
     if (st && statusFinal != null) work.push(scramble(st, statusFinal, 0.56))
     await Promise.all(work)
     $('#deploy-status-wrap')?.classList.remove('ha-pending')
+    if (!mobile) sound?.chime()
     if (toast) await toast
     flash($('#hero-frame'), 'ha-pulse')
     await wait(mobile ? 0.2 : 0.3)
@@ -398,6 +407,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     await fin(t.querySelector('i').animate([{ scale: '0 1' }, { scale: '1 1' }], { duration: 520, easing: 'cubic-bezier(0.65,0,0.35,1)', fill: 'forwards' }))
     const st = t.querySelector('.ha-toast-st')
     st.textContent = L.online
+    sound?.chime()
     st.classList.add('ok')
     await wait(0.3)
     fin(animate(t, { opacity: 0, y: 10 }, { duration: 0.3 })).then(() => t.remove(), () => {})
@@ -486,7 +496,10 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
       if (outline) fin(animate(outline, { opacity: 0 }, { duration: 0.4 })).then(() => outline.remove(), () => {})
       const chips = $$('[data-ha-chip]')
       if (mobile) {
-        chips.forEach((ch, i) => reveal(ch, { d: 0.3, dy: 0, scale: 0.7, delay: i * 0.08 }).catch(() => {}))
+        chips.forEach((ch, i) => {
+          reveal(ch, { d: 0.3, dy: 0, scale: 0.7, delay: i * 0.08 }).catch(() => {})
+          later(i * 0.08, () => sound?.pop())
+        })
         if (slot) reveal(slot, { d: 0.3, dy: 0, scale: 0.7, delay: chips.length * 0.08 }).catch(() => {})
         return
       }
@@ -584,3 +597,4 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
   }
 }
 export { createHeroVideo } from './video.js'
+export { createSound, soundPref } from './sound.js'

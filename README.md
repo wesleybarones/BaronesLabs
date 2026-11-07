@@ -70,6 +70,10 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
   No desktop o encaixe do card espera o "agarrar" do vídeo (3,4s) e o clique do DEPLOY espera o toque no ar (4,0s);
   no celular o vídeo toca quando a foto aparece na tela. No fim ele se dissolve de volta na foto.
   Para trocar o clipe: recorte 864×1080 do centro do 1920×1080 e gere os 4 arquivos com os mesmos nomes.
+- **Sons** (`src/hero-assembly/sound.js`): efeitos sci-fi sintetizados por código (Web Audio, sem arquivos): teclado no título,
+  "tic" na seleção, arraste, encaixe, cliques e acorde no ONLINE. Navegadores só tocam som depois de um clique, então
+  a primeira montagem começa muda com o botão **Ativar som** (a escolha fica salva em `localStorage` `bl-sound`);
+  o **↻ Rever montagem** já toca com som, a menos que a pessoa tenha desligado.
 - Ritmo e ordem: funções `copyTrack`, `uiTrack`, `wesleyTrack` e `deployTrack` dentro de `play()`.
   Nomes e cores dos cursores: `CURSORS` no topo do arquivo. Textos (PT/EN/ES): `hero.assembly` em `translations.js`.
 

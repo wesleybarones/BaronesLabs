@@ -50,7 +50,7 @@ const pt = {
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'role',
     neon: ['projetos', 'do zero'],
-    assembly: { waiting: 'AGUARDANDO DEPLOY_', skip: 'Pular animação →', replay: '↻ Rever montagem', deploying: 'DEPLOY', online: 'ONLINE ✓' },
+    assembly: { waiting: 'AGUARDANDO DEPLOY_', skip: 'Pular animação →', replay: '↻ Rever montagem', soundOff: 'Ativar som', soundOn: 'Som ligado', deploying: 'DEPLOY', online: 'ONLINE ✓' },
     avatarAlt: 'Wesley Barones com óculos futurista; no reflexo das lentes, um notebook mostra a seção de pacotes deste site',
   },
   marquee: [
@@ -401,7 +401,7 @@ const en = {
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'scroll',
     neon: ['projects', 'from scratch'],
-    assembly: { waiting: 'AWAITING DEPLOY_', skip: 'Skip animation →', replay: '↻ Replay build', deploying: 'DEPLOY', online: 'ONLINE ✓' },
+    assembly: { waiting: 'AWAITING DEPLOY_', skip: 'Skip animation →', replay: '↻ Replay build', soundOff: 'Turn sound on', soundOn: 'Sound on', deploying: 'DEPLOY', online: 'ONLINE ✓' },
     avatarAlt: "Wesley Barones wearing futuristic glasses; the lenses reflect a laptop showing this site's packages section",
   },
   marquee: [
@@ -751,7 +751,7 @@ const es = {
     coords: 'LAT −22.90 · LON −43.17',
     scroll: 'desliza',
     neon: ['proyectos', 'desde cero'],
-    assembly: { waiting: 'ESPERANDO DEPLOY_', skip: 'Saltar animación →', replay: '↻ Ver montaje', deploying: 'DEPLOY', online: 'ONLINE ✓' },
+    assembly: { waiting: 'ESPERANDO DEPLOY_', skip: 'Saltar animación →', replay: '↻ Ver montaje', soundOff: 'Activar sonido', soundOn: 'Sonido activado', deploying: 'DEPLOY', online: 'ONLINE ✓' },
     avatarAlt: 'Wesley Barones con lentes futuristas; en el reflejo, una laptop muestra la sección de paquetes de este sitio',
   },
   marquee: [

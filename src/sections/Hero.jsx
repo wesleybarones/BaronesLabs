@@ -92,15 +92,51 @@ export default function Hero() {
   */
   const layerRef = useRef(null)
   const videoRef = useRef(null)
+  const soundRef = useRef(null)
+  const [soundOn, setSoundOn] = useState(false)
   const ctrl = useRef(null)
   const [phase, setPhase] = useState(assembly ? 'planned' : 'idle') // planned | running | done | idle
   const readyRef = useRef(ready)
   readyRef.current = ready
   const loadAssembly = () => import('../hero-assembly/assembly.js')
-  const build = (m) => {
+  const build = (m, { replay = false } = {}) => {
     const mobile = window.innerWidth < 1024
     const video = m.createHeroVideo(videoRef.current, { mobile })
-    return m.createAssembly({ root: ref.current, layer: layerRef.current, mobile, labels: t.hero.assembly, video })
+    const sound = (soundRef.current ||= m.createSound())
+    const pref = m.soundPref()
+    if (replay && pref !== '0') {
+      // the replay is a click, so it can play with sound (unless the visitor turned sound off)
+      sound.enable(false)
+      setSoundOn(true)
+    } else if (!replay && pref === '1') {
+      // chose sound on a previous visit: starts at the first click/tap (browsers need one)
+      setSoundOn(true)
+      const go = () => sound.enable(false)
+      window.addEventListener('pointerdown', go, { once: true })
+      window.addEventListener('keydown', go, { once: true })
+    }
+    return m.createAssembly({ root: ref.current, layer: layerRef.current, mobile, labels: t.hero.assembly, video, sound })
+  }
+  // unlock audio inside the click itself (iPhone only allows it synchronously in the gesture)
+  const unlockAudio = () => {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext
+      if (!AC) return
+      window.__blAC ||= new AC()
+      window.__blAC.resume?.()
+    } catch {}
+  }
+  const toggleSound = () => {
+    const snd = soundRef.current
+    if (!snd) return
+    if (snd.on) {
+      snd.disable()
+      setSoundOn(false)
+    } else {
+      unlockAudio()
+      snd.enable()
+      setSoundOn(true)
+    }
   }
   const run = () => {
     const c = ctrl.current
@@ -145,9 +181,10 @@ export default function Hero() {
   useEffect(() => setHeroBusy(phase === 'running'), [phase]) // eslint-disable-line
   const replay = async () => {
     if (phase === 'running' || phase === 'planned') return
+    unlockAudio()
     const m = await loadAssembly()
     lenis ? lenis.scrollTo(0, { immediate: true }) : window.scrollTo(0, 0)
-    ctrl.current = build(m)
+    ctrl.current = build(m, { replay: true })
     ctrl.current.prepare()
     requestAnimationFrame(run)
   }
@@ -413,13 +450,27 @@ export default function Hero() {
       {/* live assembly: cursors and their tools are drawn here */}
       <div ref={layerRef} aria-hidden className="ha-layer" />
       {phase === 'running' && (
-        <button
-          type="button"
-          onClick={() => ctrl.current?.skip()}
-          className="hud fixed bottom-6 left-6 z-[120] border border-line bg-bg/70 px-3 py-2 text-ink-2 backdrop-blur transition-colors hover:border-cyan hover:text-cyan"
-        >
-          {t.hero.assembly.skip}
-        </button>
+        <div className="fixed bottom-6 left-6 z-[120] flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => ctrl.current?.skip()}
+            className="hud border border-line bg-bg/70 px-3 py-2 text-ink-2 backdrop-blur transition-colors hover:border-cyan hover:text-cyan"
+          >
+            {t.hero.assembly.skip}
+          </button>
+          <button
+            type="button"
+            onClick={toggleSound}
+            aria-pressed={soundOn}
+            className={`hud flex items-center gap-2 border bg-bg/70 px-3 py-2 backdrop-blur transition-colors hover:border-cyan hover:text-cyan ${soundOn ? 'border-cyan/60 text-cyan' : 'border-line text-ink-2'}`}
+          >
+            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+              <path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" stroke="none" />
+              {soundOn ? <path d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9" /> : <path d="M10.5 6l4 4M14.5 6l-4 4" />}
+            </svg>
+            {soundOn ? t.hero.assembly.soundOn : t.hero.assembly.soundOff}
+          </button>
+        </div>
       )}
     </section>
   )
