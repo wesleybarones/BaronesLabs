@@ -45,8 +45,8 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 ## Hero "viva" (sem vídeo)
 
 - `src/components/LivePortrait.jsx`: a foto vira camadas (`src/assets/live/plate-780.webp` = fundo,
-  `person-780.webp` = recorte, `visor-mask.png` = máscara das lentes). Cursor/giroscópio movem as camadas,
-  uma luz ciano segue o ponteiro e as lentes têm reflexos animados.
+  `person-780.webp` = recorte). Cursor/giroscópio movem as camadas,
+  e uma luz ciano segue o ponteiro (lentes sem animação extra, só a linha de varredura original).
 - O reflexo do notebook nas lentes mostra os pacotes atuais (Fast R$ 497, Profissional R$ 1.397,
   Premium R$ 1.497 em destaque). Se os preços mudarem, refaça o reflexo e regere as camadas.
 - Cursor: seta SVG nativa (`src/assets/cursor-arrow*.svg`), sem atraso.

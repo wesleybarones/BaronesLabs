@@ -41,7 +41,7 @@ function ReviewCard({ r, tt, lang }) {
       <span aria-hidden className="mt-5 font-display text-[56px] leading-none text-cyan/30 [text-shadow:-2px_0_rgba(224,64,216,0.4)]">
         “
       </span>
-      <blockquote lang="pt-BR" className="-mt-5 flex-1 font-display text-[20px] font-medium leading-[1.45] text-ink md:text-[23px]">
+      <blockquote lang="pt-BR" className={`-mt-5 flex-1 whitespace-pre-line font-display font-medium leading-[1.45] text-ink ${r.text.length > 160 ? 'text-[17px] md:text-[19px]' : 'text-[20px] md:text-[23px]'}`}>
         {r.text}
       </blockquote>
       {lang !== 'pt' && tt.original && <p className="mt-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-ink-3">{tt.original}</p>}
@@ -54,7 +54,10 @@ function ReviewCard({ r, tt, lang }) {
         </span>
         <span className="flex flex-col">
           <span className="font-display text-[16px] font-semibold text-ink">{r.name}</span>
-          <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-3">{tt.source}</span>
+          <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink-3">
+            {r.business ? `${r.business} · ` : ''}
+            {tt.source}
+          </span>
         </span>
       </figcaption>
     </figure>
@@ -97,9 +100,9 @@ export default function Testimonials() {
           </div>
         </div>
 
-        <Stagger className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6" stagger={0.1}>
+        <Stagger className="columns-1 gap-5 md:columns-2 md:gap-6" stagger={0.08}>
           {REVIEWS.map((r) => (
-            <StaggerItem key={r.name}>
+            <StaggerItem key={r.name} className="mb-5 break-inside-avoid md:mb-6">
               <ReviewCard r={r} tt={tt} lang={lang} />
             </StaggerItem>
           ))}

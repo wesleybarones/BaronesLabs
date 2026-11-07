@@ -730,22 +730,3 @@ body {
   from { transform: rotateY(-2.2deg) rotateX(0.8deg) translateY(1px) scale(1); }
   to { transform: rotateY(2.2deg) rotateX(-0.8deg) translateY(-2px) scale(1.012); }
 }
-.visor-data {
-  mix-blend-mode: screen;
-  opacity: 0.55;
-  background:
-    repeating-linear-gradient(0deg, rgba(0, 240, 255, 0.22) 0 1px, transparent 1px 4px),
-    linear-gradient(90deg, transparent 0%, rgba(0, 240, 255, 0.35) 45%, rgba(224, 64, 216, 0.25) 55%, transparent 100%);
-  background-size: 100% 8px, 220% 100%;
-  animation: visor-data 3.2s linear infinite;
-}
-@keyframes visor-data {
-  from { background-position: 0 0, 160% 0; }
-  to { background-position: 0 32px, -60% 0; }
-}
-.visor-glare {
-  mix-blend-mode: screen;
-  background: linear-gradient(100deg, transparent, rgba(220, 255, 255, 0.55) 45%, rgba(0, 240, 255, 0.35) 55%, transparent);
-  transform: skewX(-18deg);
-  filter: blur(2px);
-}

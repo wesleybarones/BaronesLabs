@@ -23,10 +23,24 @@ export const ABOUT_PHOTO = wesleyPhoto
 /*
   Avaliações reais do Perfil da Empresa no Google (copiadas do Google, sem edição).
   Para adicionar outra: copie nome, data e texto exatamente como estão no Google.
+  Só entram avaliações com comentário (as só de estrelas ficam de fora).
 */
 export const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps?cid=14365799348690095596'
 export const GOOGLE_RATING = { score: '5,0', count: 7 }
 export const REVIEWS = [
+  {
+    name: 'Iury Ferreira',
+    business: 'Papel de Parede RJ',
+    stars: 5,
+    when: 'nov. 2026',
+    text: 'Amei o meu site, sou um dos donos da microempresa Papel de parede rj e precisava muito de um site com a minha cara e a Baroneslabs me deu isso!!! Muito top o trabalho realizado, meu site ficou dinâmico, interativa, fácil de mexer, fácil do público entender o que eu queria explicar, não ficou pesado, muito pelo contrário  ficou muito suave de mexer, muito Boom !!!\nEstou super satisfeito mesmo!!!\nEu recomendo fácil!!!!\nA atenção dada pra fazer o site do seu jeito é surreal, excelente profissional!!!!',
+  },
+  {
+    name: 'Brenda Elis',
+    stars: 5,
+    when: 'nov. 2026',
+    text: 'Excelente profissional! O Wesley realiza um trabalho impecável, com muita dedicação, competência e compromisso. É nítido o cuidado e a qualidade em cada detalhe. Além de ser atencioso, demonstra muito profissionalismo e respeito pelos clientes. Recomendo de olhos fechados! Sucesso sempre, Wesley!',
+  },
   {
     name: 'Isabelle Senna',
     stars: 5,
@@ -38,6 +52,12 @@ export const REVIEWS = [
     stars: 5,
     when: 'nov. 2026',
     text: 'Empresa de confiança, trabalho muito bom',
+  },
+  {
+    name: 'Bruno Henrique Almeida Brandão',
+    stars: 5,
+    when: 'nov. 2026',
+    text: 'Muito bom',
   },
 ]
 
