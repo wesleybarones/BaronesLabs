@@ -785,3 +785,9 @@ html { scrollbar-gutter: stable; }
   50% { transform: rotate(var(--rot)) scaleX(1.6); }
   100% { transform: rotate(var(--rot)) scaleX(0.5); }
 }
+
+/* final CTA: the big hexagon dissolves into the page instead of ending at the section box */
+.final-fade {
+  -webkit-mask-image: radial-gradient(closest-side at 50% 58%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(closest-side at 50% 58%, #000 55%, transparent 100%);
+}

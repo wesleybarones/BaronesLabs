@@ -19,8 +19,9 @@ export default function FinalCTA() {
   const scale = useTransform(scrollYProgress, [0, 0.5], reduce ? [1, 1] : [0.85, 1])
 
   return (
-    <section id="final" ref={ref} className="relative flex min-h-[100svh] items-center justify-center overflow-hidden py-24">
-      <motion.div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ scale }}>
+    <section id="final" ref={ref} className="relative -mt-16 flex min-h-[100svh] items-center justify-center overflow-x-clip pb-24 pt-12 md:-mt-24">
+      {/* decor fades out on every side (no hard edge): the FAQ and this section read as one */}
+      <motion.div aria-hidden className="final-fade pointer-events-none absolute inset-x-0 -top-[30vh] bottom-0 flex items-center justify-center" style={{ scale }}>
         <motion.div
           className="h-[130vmin] w-[130vmin] md:h-[110vmin] md:w-[110vmin]"
           animate={reduce ? {} : { rotate: 360 }}
@@ -38,8 +39,8 @@ export default function FinalCTA() {
           </motion.div>
         </motion.div>
       </motion.div>
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(0,240,255,0.08),transparent_70%)]" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_30%,#07080D_75%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-[30vh] bottom-0 bg-[radial-gradient(50%_45%_at_50%_58%,rgba(0,240,255,0.08),transparent_70%)]" />
+
 
       <div className="relative mx-auto flex max-w-[980px] flex-col items-center px-4 text-center md:px-8">
         <Reveal distance={14} className="hud mb-8 flex items-center gap-3">
