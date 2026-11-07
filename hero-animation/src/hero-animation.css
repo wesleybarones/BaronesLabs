@@ -1,0 +1,130 @@
+/* =====================================================================
+   Animação do herói — estilos (CSS puro, sem dependência de Tailwind).
+   Todas as classes usam o prefixo ha- para não colidir com o site.
+   ===================================================================== */
+:root {
+  --ha-bg: #07080d;
+  --ha-panel: #0c0e16;
+  --ha-line: #1a2030;
+  --ha-cyan: #00f0ff;
+  --ha-magenta: #e040d8;
+  --ha-muted: #8a9bb0;
+  --ha-lime: #d4ff24;
+  --ha-lime-glow: rgba(212, 255, 36, 0.8);
+  --ha-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* trava a rolagem durante boot + montagem */
+html.ha-locked { overflow: hidden; }
+
+/* ---------- Camada do enxame (do tamanho do documento) ---------- */
+.ha-swarm { position: absolute; left: 0; top: 0; width: 100%; z-index: 60; pointer-events: none; overflow: clip; }
+
+/* ---------- Cursor ---------- */
+.ha-cursor { position: absolute; left: 0; top: 0; pointer-events: none; opacity: 0; visibility: hidden; }
+.ha-cursor-body { transform-origin: 3px 3px; }
+.ha-cursor-label {
+  position: absolute; left: 20px; top: 20px; white-space: nowrap;
+  font: 600 10.5px/1 var(--ha-mono); letter-spacing: 0.08em;
+  padding: 4px 6px; color: var(--ha-bg); background: var(--cc);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--cc) 55%, transparent);
+}
+.ha-cursor-ripple {
+  position: absolute; left: -19px; top: -19px; width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--ha-cyan); box-shadow: 0 0 12px var(--ha-cyan); opacity: 0; transform: scale(0);
+}
+.ha-cursor-grab { position: absolute; left: 14px; top: -6px; opacity: 0; transition: opacity 0.15s; }
+.ha-cursor[data-state='dragging'] .ha-cursor-grab { opacity: 1; }
+.ha-cursor[data-state='dragging'] .ha-cursor-label::after { content: ' · ARRASTANDO'; }
+
+/* ---------- Boot ---------- */
+.ha-boot { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--ha-bg); }
+.ha-boot-inner { display: flex; flex-direction: column; align-items: center; width: min(80vw, 320px); }
+.ha-boot-logo { height: 64px; width: auto; }
+.ha-boot-logo-m { filter: hue-rotate(110deg) saturate(2); }
+.ha-boot-ghost { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; opacity: 0; mix-blend-mode: screen; }
+.ha-boot-ghost .ha-boot-logo { opacity: 0.7; }
+.ha-boot-row {
+  margin-top: 32px; width: 100%; display: flex; align-items: center; justify-content: space-between;
+  font: 400 12px/1 var(--ha-mono); letter-spacing: 0.2em; color: var(--ha-cyan);
+}
+.ha-boot-pct { color: var(--ha-muted); }
+.ha-boot-track { margin-top: 8px; height: 1px; width: 100%; background: var(--ha-line); }
+.ha-boot-bar { height: 100%; width: 100%; transform-origin: 0 50%; background: var(--ha-lime); box-shadow: 0 0 10px var(--ha-lime-glow); }
+.ha-boot-skip {
+  position: absolute; right: 24px; bottom: 24px; background: none; border: 0; cursor: pointer;
+  font: 400 12px/1 var(--ha-mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--ha-muted);
+}
+.ha-boot-skip:hover { color: var(--ha-cyan); }
+.ha-blink { animation: ha-blink 1s steps(1) infinite; }
+@keyframes ha-blink { 50% { opacity: 0; } }
+
+/* ---------- Botões "Pular animação" / "Rever montagem" ---------- */
+.ha-btn {
+  cursor: pointer; border: 1px solid var(--ha-line); background: rgba(7, 8, 13, 0.85); color: var(--ha-muted);
+  padding: 8px 12px; font: 400 11px/1 var(--ha-mono); letter-spacing: 0.18em; text-transform: uppercase;
+  transition: color 0.2s, border-color 0.2s;
+}
+.ha-btn:hover { color: var(--ha-cyan); border-color: var(--ha-cyan); }
+.ha-skip { position: fixed; left: 50%; top: 76px; z-index: 70; transform: translateX(-50%); backdrop-filter: blur(6px); }
+@media (min-width: 768px) { .ha-skip { top: auto; bottom: 20px; } }
+.ha-replay { border-color: transparent; background: transparent; padding-left: 0; padding-right: 0; }
+.ha-replay:hover { border-color: transparent; }
+
+/* ---------- Efeitos da coreografia ---------- */
+.ha-fx { position: absolute; left: 0; top: 0; pointer-events: none; }
+
+/* draw: 4 arestas escaladas (só transform) */
+.ha-fx-draw { --dc: var(--ha-cyan); }
+.ha-fx-draw .e { position: absolute; display: block; background: var(--dc); box-shadow: 0 0 6px var(--dc), 0 0 1px var(--dc); }
+.ha-fx-draw .e-t { left: 0; top: 0; width: 100%; height: 1.5px; transform-origin: 0 50%; transform: scaleX(0); }
+.ha-fx-draw .e-r { right: 0; top: 0; width: 1.5px; height: 100%; transform-origin: 50% 0; transform: scaleY(0); }
+.ha-fx-draw .e-b { right: 0; bottom: 0; width: 100%; height: 1.5px; transform-origin: 100% 50%; transform: scaleX(0); }
+.ha-fx-draw .e-l { left: 0; bottom: 0; width: 1.5px; height: 100%; transform-origin: 50% 100%; transform: scaleY(0); }
+
+/* select */
+.ha-fx-select { border: 1px solid var(--ha-cyan); box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.12), 0 0 18px rgba(0, 240, 255, 0.25); }
+.ha-fx-handle { position: absolute; width: 7px; height: 7px; margin: -4px 0 0 -4px; background: var(--ha-bg); border: 1px solid var(--ha-cyan); }
+.ha-fx-measure {
+  position: absolute; left: 50%; top: calc(100% + 8px); transform: translateX(-50%); white-space: nowrap;
+  font: 600 10px/1 var(--ha-mono); letter-spacing: 0.06em; background: var(--ha-cyan); color: var(--ha-bg); padding: 3px 5px;
+}
+
+/* copy */
+.ha-fx-tooltip { white-space: nowrap; font: 600 11px/1 var(--ha-mono); background: var(--ha-panel); color: #fff; border: 1px solid var(--ha-line); padding: 5px 7px; }
+.ha-fx-tooltip kbd { color: var(--ha-cyan); font: inherit; }
+.ha-fx-clone { box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.9), 0 0 0 1px var(--ha-cyan), 0 0 22px rgba(0, 240, 255, 0.3); }
+.ha-fx-clone > * { width: 100%; height: 100%; margin: 0; background: var(--ha-panel) !important; }
+
+/* drag: guias de alinhamento + medidas */
+.ha-fx-guide { background: var(--ha-magenta); box-shadow: 0 0 6px var(--ha-magenta); transform-origin: 0 0; }
+.ha-fx-guide-v { width: 1px; height: 100px; }
+.ha-fx-guide-h { height: 1px; width: 100px; }
+.ha-fx-dim {
+  white-space: nowrap; font: 600 10px/1 var(--ha-mono); color: var(--ha-magenta);
+  background: rgba(7, 8, 13, 0.9); border: 1px solid rgba(224, 64, 216, 0.5); padding: 3px 5px;
+}
+
+/* snap / flash / type */
+.ha-fx-flash { background: rgba(0, 240, 255, 0.35); box-shadow: 0 0 30px var(--ha-cyan); }
+.ha-fx-pulse { border: 1px solid var(--pc); box-shadow: 0 0 0 1px var(--pc), 0 0 40px var(--pc), inset 0 0 30px color-mix(in srgb, var(--pc) 30%, transparent); }
+.ha-fx-caret { font-family: var(--ha-mono); line-height: 1; color: var(--ha-magenta); text-shadow: 0 0 8px var(--ha-magenta); }
+
+/* deploy (mobile) */
+.ha-fx-toast {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px;
+  background: rgba(12, 14, 22, 0.96); border: 1px solid var(--ha-line);
+  font: 600 11px/1 var(--ha-mono); letter-spacing: 0.08em; color: var(--ha-muted);
+}
+.ha-fx-toast-btn { border: 1px solid rgba(0, 240, 255, 0.6); color: var(--ha-cyan); padding: 5px 8px; letter-spacing: 0.2em; }
+.ha-fx-toast-status.ha-online { color: var(--ha-lime); text-shadow: 0 0 8px var(--ha-lime-glow); }
+.ha-fx-toast-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ha-lime); box-shadow: 0 0 8px var(--ha-lime-glow); transform-origin: 0 50%; }
+
+/* ---------- Classes aplicadas nos elementos do SEU herói durante a montagem ---------- */
+.ha-pressed, .ha-fx-toast-btn.ha-pressed { background: var(--ha-cyan) !important; color: var(--ha-bg) !important; box-shadow: 0 0 16px rgba(0, 240, 255, 0.6); }
+.ha-pending { color: var(--ha-muted) !important; }
+/* destaque com contorno duplo (.hl) só aparece quando a digitação termina */
+.ha-typing .hl::before, .ha-typing .hl::after { opacity: 0 !important; }
+
+/* reduced-motion: sem boot (a página aparece no estado final) */
+@media (prefers-reduced-motion: reduce) { #ha-boot { display: none !important; } }
