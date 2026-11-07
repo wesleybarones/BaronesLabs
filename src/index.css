@@ -701,3 +701,25 @@ html.has-custom-cursor * {
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 74%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 74%, transparent 100%);
 }
+
+/* ---- Barones Signature card ---- */
+.signature-spin::before {
+  background: conic-gradient(
+    rgba(224, 64, 216, 0.15) 0deg,
+    #e040d8 50deg,
+    #ffffff 80deg,
+    #00f0ff 110deg,
+    rgba(0, 240, 255, 0.15) 170deg,
+    rgba(224, 64, 216, 0.15) 260deg,
+    #00f0ff 300deg,
+    rgba(224, 64, 216, 0.15) 360deg
+  );
+  animation-duration: 9s;
+}
+.signature-title {
+  background: linear-gradient(100deg, #ffffff 0%, #bdfcff 30%, #00f0ff 50%, #e040d8 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.25));
+}

@@ -154,6 +154,75 @@ function PlanCard({ plan, i, showPrices }) {
   )
 }
 
+/** "Barones Signature": the top-tier edition, shown apart from the three regular plans. */
+function SignatureCard({ sig, showPrices }) {
+  const { t } = useLang()
+  const reduce = useReducedMotion()
+  return (
+    <Reveal once className="mt-12 md:mt-16">
+      <div className="group relative [filter:drop-shadow(0_0_28px_rgba(224,64,216,0.18))]">
+        <div className="chamfer chamfer-lg border-spin signature-spin h-full p-[1.5px]">
+          <div
+            className="chamfer chamfer-lg relative overflow-hidden bg-[radial-gradient(120%_120%_at_0%_0%,rgba(224,64,216,0.10),transparent_45%),radial-gradient(120%_120%_at_100%_100%,rgba(0,240,255,0.10),transparent_50%),linear-gradient(135deg,#0E121C,#0A0C13)]"
+            style={{ '--chamfer': '21px' }}
+          >
+            {!reduce && <span aria-hidden className="holo-sweep pointer-events-none absolute inset-y-0 left-0 z-10 w-1/2" />}
+            <div className="relative grid gap-10 p-7 md:p-10 lg:grid-cols-12 lg:gap-12 lg:p-12">
+              <div className="flex flex-col lg:col-span-5">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="hud text-[11.5px] text-magenta/90">{sig.edition}</span>
+                  <span className="inline-flex items-center gap-2 border border-magenta/40 bg-magenta/[0.08] px-2.5 py-1 font-mono text-[10.5px] uppercase tracking-[0.16em] text-ink">
+                    <span aria-hidden className="live-dot scale-75" />
+                    {sig.slots}
+                  </span>
+                </div>
+                <h3 className="signature-title mt-5 font-display text-[38px] font-bold uppercase leading-[0.95] tracking-[0.01em] md:text-[52px]">
+                  {sig.name}
+                </h3>
+                <p className="mt-4 max-w-[440px] text-[16px] leading-relaxed text-ink-2 md:text-[17px]">{sig.tagline}</p>
+                <div className="mt-8 border-y border-line py-6">
+                  {showPrices && sig.price ? (
+                    <>
+                      <div className="flex items-baseline gap-2 text-ink">
+                        <span className="font-display text-[20px] font-semibold text-ink-2">R$</span>
+                        <Counter
+                          value={sig.price}
+                          format={brl}
+                          className="font-display text-[60px] font-bold leading-none tabular-nums tracking-[-0.02em] text-ink [text-shadow:0_0_24px_rgba(224,64,216,0.35)]"
+                        />
+                      </div>
+                      <p className="mt-2 text-[15px] text-ink-2">{sig.priceNote}</p>
+                    </>
+                  ) : (
+                    <p className="font-display text-[30px] font-bold leading-none text-ink">{sig.priceNote}</p>
+                  )}
+                </div>
+                <p className="mt-4 flex items-center justify-between font-mono text-[12px] uppercase tracking-[0.16em]">
+                  <span className="text-ink-3">{t.pricing.deliveryLabel}</span>
+                  <span className="text-cyan">{sig.delivery}</span>
+                </p>
+                <div className="mt-8 lg:mt-auto lg:pt-8">
+                  <Button href={waLink(t.wa.plan(sig.name))} size="lg" magnetic full icon={<IconArrow className="h-5 w-5" />}>
+                    {sig.cta}
+                  </Button>
+                </div>
+              </div>
+              <ul className="grid content-start gap-x-8 gap-y-3.5 sm:grid-cols-2 lg:col-span-7 lg:border-l lg:border-line lg:pl-12">
+                {sig.features.map((f) => (
+                  <li key={f} className="flex items-start gap-3 text-[15.5px] leading-snug text-ink">
+                    <IconCheck className="mt-0.5 h-[18px] w-[18px] shrink-0 text-magenta" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  )
+}
+
 export default function Pricing() {
   const { t } = useLang()
   const p = t.pricing
@@ -198,6 +267,8 @@ export default function Pricing() {
             <PlanCard key={plan.id} plan={plan} i={i} showPrices={p.showPrices} />
           ))}
         </div>
+
+        {p.signature && <SignatureCard sig={p.signature} showPrices={p.showPrices} />}
 
         {p.payments.length > 0 && (
           <Reveal once className="mt-14">
