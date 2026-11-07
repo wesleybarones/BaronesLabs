@@ -3,10 +3,12 @@ import { useLang } from '../i18n/LangContext'
 import { EASE } from '../lib/motion'
 import { HEX_PATH, HEX_INNER } from '../components/Logo'
 import Reveal from '../components/ui/Reveal'
+import { useReducedMotion } from '../lib/hooks'
 
 export default function Guarantee() {
   const { t } = useLang()
   const g = t.guarantee
+  const reduce = useReducedMotion()
   return (
     <div className="relative flex h-full flex-col items-center justify-center border border-cyan/30 bg-surface/60 p-8 pb-12 text-center md:p-12 md:pb-14">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_30%,rgba(0,240,255,0.08),transparent)]" />
@@ -15,7 +17,12 @@ export default function Guarantee() {
           {g.label}
         </Reveal>
         <div className="relative h-[190px] w-[190px] md:h-[220px] md:w-[220px]">
-          <div aria-hidden className="absolute inset-[15%] rounded-full bg-cyan/15 blur-3xl" />
+          <motion.div
+            aria-hidden
+            className="absolute inset-[15%] rounded-full bg-cyan/15 blur-3xl"
+            animate={reduce ? {} : { opacity: [0.6, 1, 0.6], scale: [0.95, 1.08, 0.95] }}
+            transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+          />
           <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
             <motion.path
               d={HEX_PATH}
@@ -45,12 +52,45 @@ export default function Guarantee() {
               stroke="#00F0FF"
               strokeWidth="0.5"
               strokeDasharray="1.5 1.5"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 0.7, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.9, rotate: 0 }}
+              whileInView={reduce ? { opacity: 0.7, scale: 1 } : { opacity: 0.7, scale: 1, rotate: 360 }}
               viewport={{ once: true, amount: 0.6 }}
-              transition={{ duration: 0.8, ease: EASE, delay: 0.7 }}
+              transition={{
+                opacity: { duration: 0.8, ease: EASE, delay: 0.7 },
+                scale: { duration: 0.8, ease: EASE, delay: 0.7 },
+                rotate: { duration: 30, ease: 'linear', repeat: Infinity },
+              }}
               style={{ transformOrigin: '50px 50px' }}
             />
+            {/* light running around the seal, after it is drawn */}
+            {!reduce && (
+              <>
+                <motion.path
+                  d={HEX_PATH}
+                  fill="none"
+                  stroke="#E9FFFF"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  style={{ filter: 'drop-shadow(0 0 3px #00F0FF) drop-shadow(0 0 7px #00F0FF)' }}
+                  initial={{ pathLength: 0.14, pathOffset: 0, opacity: 0 }}
+                  whileInView={{ pathOffset: [0, 1], opacity: 1 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ pathOffset: { duration: 3.4, ease: 'linear', repeat: Infinity, delay: 1.5 }, opacity: { duration: 0.4, delay: 1.5 } }}
+                />
+                <motion.path
+                  d={HEX_PATH}
+                  fill="none"
+                  stroke="#E040D8"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  transform="translate(-1.6 0.8)"
+                  initial={{ pathLength: 0.08, pathOffset: 0.5, opacity: 0 }}
+                  whileInView={{ pathOffset: [0.5, 1.5], opacity: 0.8 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ pathOffset: { duration: 5.2, ease: 'linear', repeat: Infinity, delay: 1.5 }, opacity: { duration: 0.4, delay: 1.5 } }}
+                />
+              </>
+            )}
           </svg>
           <motion.div
             className="absolute inset-0 flex flex-col items-center justify-center"
@@ -59,7 +99,13 @@ export default function Guarantee() {
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.9 }}
           >
-            <span className="font-display text-[30px] font-bold leading-none text-ink md:text-[34px]">{g.seal}</span>
+            <motion.span
+              className="font-display text-[30px] font-bold leading-none text-ink md:text-[34px]"
+              animate={reduce ? {} : { textShadow: ['0 0 0px rgba(0,240,255,0)', '0 0 16px rgba(0,240,255,0.7)', '0 0 0px rgba(0,240,255,0)'] }}
+              transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+            >
+              {g.seal}
+            </motion.span>
             <span className="mt-2 font-mono text-[11px] uppercase tracking-[0.3em] text-cyan">{g.sealSub}</span>
           </motion.div>
         </div>
