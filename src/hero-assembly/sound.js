@@ -1,7 +1,14 @@
 /*
-  Sci-fi interface sounds for the hero assembly, synthesised with the Web Audio API (no audio files).
+  Hero assembly sound: premium and minimal. Only four moments make a sound, everything else is silent:
+    shimmer — the photo appears (airy swell + a barely-there fifth)
+    snap    — the copied card snaps onto the photo (glassy "tink")
+    press   — DEPLOY is clicked (soft, low, rounded tap)
+    chime   — ONLINE ✓ (bell-like chord, FM synthesis)
+  All synthesised with the Web Audio API (no files) and sent through a small generated room reverb,
+  so nothing sounds dry or "computer-like".
+
   Browsers only allow sound after a click/tap, so it starts muted on the first visit:
-    • the "som" button during the assembly turns it on (the choice is remembered: localStorage bl-sound);
+    • the "som" button during the assembly turns it on (remembered: localStorage bl-sound);
     • "↻ Rever montagem" is a click, so the replay plays with sound unless the visitor turned it off.
 */
 const KEY = 'bl-sound'
@@ -16,10 +23,10 @@ export const soundPref = () => {
 
 export function createSound() {
   let ctx = null
-  let master = null
+  let dry = null
+  let wet = null
   let on = false
   let noiseBuf = null
-  let lastKey = 0
 
   const init = () => {
     if (ctx) return true
@@ -27,53 +34,71 @@ export function createSound() {
     if (!AC) return false
     ctx = window.__blAC || new AC() // may already exist: unlocked synchronously in the click (iPhone)
     window.__blAC = ctx
-    master = ctx.createGain()
-    master.gain.value = 0.32
-    // gentle limiter so overlapping cues never clip
+    const out = ctx.createGain()
+    out.gain.value = 1.25
     const comp = ctx.createDynamicsCompressor()
-    comp.threshold.value = -14
-    comp.ratio.value = 6
-    master.connect(comp).connect(ctx.destination)
-    noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.5, ctx.sampleRate)
-    const d = noiseBuf.getChannelData(0)
-    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1
+    comp.threshold.value = -9
+    comp.ratio.value = 4
+    out.connect(comp).connect(ctx.destination)
+    // soft room: stereo noise decaying over ~1.6s, darkened
+    const len = Math.floor(ctx.sampleRate * 1.6)
+    const ir = ctx.createBuffer(2, len, ctx.sampleRate)
+    for (let ch = 0; ch < 2; ch++) {
+      const d = ir.getChannelData(ch)
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2)
+    }
+    const verb = ctx.createConvolver()
+    verb.buffer = ir
+    const tone = ctx.createBiquadFilter()
+    tone.type = 'lowpass'
+    tone.frequency.value = 4200
+    const wetGain = ctx.createGain()
+    wetGain.gain.value = 0.32
+    wet = ctx.createGain()
+    wet.connect(verb).connect(tone).connect(wetGain).connect(out)
+    dry = ctx.createGain()
+    dry.connect(out)
+    noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate)
+    const n = noiseBuf.getChannelData(0)
+    for (let i = 0; i < n.length; i++) n[i] = Math.random() * 2 - 1
     return true
   }
 
   const ready = () => on && ctx && ctx.state === 'running'
+  // route a node to the dry bus and (a little) to the reverb
+  const send = (node, wetAmt = 0.6) => {
+    node.connect(dry)
+    const g = ctx.createGain()
+    g.gain.value = wetAmt
+    node.connect(g).connect(wet)
+  }
+  const adsr = (param, t, a, peak, d, sustain = 0.0001) => {
+    param.setValueAtTime(0.0001, t)
+    param.exponentialRampToValueAtTime(peak, t + a)
+    param.exponentialRampToValueAtTime(Math.max(sustain, 0.0001), t + a + d)
+  }
 
-  // ── building blocks ──
-  const env = (g, t, a, peak, dec) => {
-    g.gain.setValueAtTime(0.0001, t)
-    g.gain.exponentialRampToValueAtTime(peak, t + a)
-    g.gain.exponentialRampToValueAtTime(0.0001, t + a + dec)
-  }
-  const tone = (type, f0, f1, dur, peak = 0.3, delay = 0, a = 0.004) => {
-    const t = ctx.currentTime + delay
-    const o = ctx.createOscillator()
-    const g = ctx.createGain()
-    o.type = type
-    o.frequency.setValueAtTime(f0, t)
-    if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur)
-    env(g, t, a, peak, dur)
-    o.connect(g).connect(master)
-    o.start(t)
-    o.stop(t + a + dur + 0.05)
-  }
-  const noise = (dur, peak, fType, f0, f1 = f0, q = 1, delay = 0, a = 0.003) => {
-    const t = ctx.currentTime + delay
-    const src = ctx.createBufferSource()
-    src.buffer = noiseBuf
-    const f = ctx.createBiquadFilter()
-    f.type = fType
-    f.Q.value = q
-    f.frequency.setValueAtTime(f0, t)
-    if (f1 !== f0) f.frequency.exponentialRampToValueAtTime(f1, t + dur)
-    const g = ctx.createGain()
-    env(g, t, a, peak, dur)
-    src.connect(f).connect(g).connect(master)
-    src.start(t, Math.random() * 0.3)
-    src.stop(t + a + dur + 0.05)
+  // FM bell voice: carrier + modulator whose brightness fades as the note rings
+  const bell = (f, { t = ctx.currentTime, gain = 0.12, decay = 1.6, ratio = 2, index = 1.4, wetAmt = 0.7 } = {}) => {
+    const car = ctx.createOscillator()
+    const mod = ctx.createOscillator()
+    const modGain = ctx.createGain()
+    const amp = ctx.createGain()
+    const lp = ctx.createBiquadFilter()
+    car.frequency.value = f
+    mod.frequency.value = f * ratio
+    modGain.gain.setValueAtTime(f * index, t)
+    modGain.gain.exponentialRampToValueAtTime(f * 0.02, t + decay * 0.6)
+    lp.type = 'lowpass'
+    lp.frequency.value = 7000
+    adsr(amp.gain, t, 0.006, gain, decay)
+    mod.connect(modGain).connect(car.frequency)
+    car.connect(lp).connect(amp)
+    send(amp, wetAmt)
+    car.start(t)
+    mod.start(t)
+    car.stop(t + decay + 0.1)
+    mod.stop(t + decay + 0.1)
   }
 
   return {
@@ -99,53 +124,72 @@ export function createSound() {
         } catch {}
     },
 
-    // ── cues ──
-    key() {
-      // soft mechanical key, slightly different each time (throttled: one per 30ms)
+    // the photo appears: a soft airy swell with a quiet open fifth underneath
+    shimmer() {
       if (!ready()) return
-      const now = performance.now()
-      if (now - lastKey < 30) return
-      lastKey = now
-      noise(0.03, 0.22, 'bandpass', 2600 + Math.random() * 1800, undefined, 2.5)
-      tone('square', 180 + Math.random() * 60, 120, 0.02, 0.04)
+      const t = ctx.currentTime
+      const src = ctx.createBufferSource()
+      src.buffer = noiseBuf
+      const bp = ctx.createBiquadFilter()
+      bp.type = 'bandpass'
+      bp.Q.value = 0.9
+      bp.frequency.setValueAtTime(1800, t)
+      bp.frequency.exponentialRampToValueAtTime(6500, t + 0.9)
+      const g = ctx.createGain()
+      g.gain.setValueAtTime(0.0001, t)
+      g.gain.exponentialRampToValueAtTime(0.075, t + 0.35)
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 1.2)
+      src.connect(bp).connect(g)
+      send(g, 0.9)
+      src.start(t)
+      src.stop(t + 1.3)
+      for (const f of [440, 659.3]) {
+        const o = ctx.createOscillator()
+        const a = ctx.createGain()
+        o.type = 'sine'
+        o.frequency.value = f
+        a.gain.setValueAtTime(0.0001, t)
+        a.gain.exponentialRampToValueAtTime(0.036, t + 0.4)
+        a.gain.exponentialRampToValueAtTime(0.0001, t + 1.4)
+        o.connect(a)
+        send(a, 0.9)
+        o.start(t)
+        o.stop(t + 1.5)
+      }
     },
-    tick() {
-      if (!ready()) return
-      tone('sine', 1900, 1500, 0.05, 0.16)
-    },
-    pop() {
-      if (!ready()) return
-      tone('sine', 520, 980, 0.08, 0.22)
-      noise(0.02, 0.06, 'highpass', 4000)
-    },
-    click() {
-      if (!ready()) return
-      tone('sine', 160, 70, 0.09, 0.35)
-      noise(0.015, 0.18, 'highpass', 3000)
-    },
-    scan(dur = 0.9) {
-      // electric trace along the outline / progress bar
-      if (!ready()) return
-      tone('sawtooth', 220, 660, dur, 0.035, 0, 0.05)
-      noise(dur, 0.05, 'bandpass', 800, 3200, 4, 0, 0.05)
-    },
-    whoosh(dur = 0.7) {
-      if (!ready()) return
-      noise(dur, 0.22, 'bandpass', 300, 2600, 1.4, 0, dur * 0.45)
-    },
+
+    // the card snaps onto the photo: glassy "tink"
     snap() {
       if (!ready()) return
-      tone('square', 240, 110, 0.05, 0.12)
-      noise(0.025, 0.25, 'highpass', 2500)
-      tone('sine', 1400, 1400, 0.12, 0.12, 0.03)
+      bell(2093, { gain: 0.1, decay: 0.45, ratio: 3.01, index: 0.9, wetAmt: 0.5 })
+      bell(3136, { gain: 0.045, decay: 0.3, ratio: 2, index: 0.5, wetAmt: 0.5 })
     },
-    chime() {
-      // ONLINE ✓: bright rising triad
+
+    // DEPLOY is clicked: soft, low, rounded tap
+    press() {
       if (!ready()) return
-      ;[1046.5, 1318.5, 1568, 2093].forEach((f, i) => {
-        tone('triangle', f, f, 0.7, 0.16, i * 0.07, 0.01)
-        tone('sine', f * 2, f * 2, 0.4, 0.03, i * 0.07, 0.01)
-      })
+      const t = ctx.currentTime
+      const o = ctx.createOscillator()
+      const a = ctx.createGain()
+      const lp = ctx.createBiquadFilter()
+      o.type = 'sine'
+      o.frequency.setValueAtTime(190, t)
+      o.frequency.exponentialRampToValueAtTime(95, t + 0.12)
+      lp.type = 'lowpass'
+      lp.frequency.value = 900
+      adsr(a.gain, t, 0.004, 0.16, 0.16)
+      o.connect(lp).connect(a)
+      send(a, 0.25)
+      o.start(t)
+      o.stop(t + 0.25)
+    },
+
+    // ONLINE ✓: a warm, bell-like Dmaj9 chord, gently rolled
+    chime() {
+      if (!ready()) return
+      const t = ctx.currentTime + 0.02
+      ;[587.3, 740, 880, 1318.5].forEach((f, i) => bell(f, { t: t + i * 0.055, gain: 0.1 - i * 0.012, decay: 1.9, ratio: 2, index: 1.1 }))
+      bell(293.7, { t, gain: 0.065, decay: 1.6, ratio: 1, index: 0.6 })
     },
   }
 }
