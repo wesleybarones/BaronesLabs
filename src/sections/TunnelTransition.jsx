@@ -14,7 +14,27 @@ const FOCAL = 1.15
 const SPEED = 0.9 // world units per second
 
 const CYAN = [0, 240, 255]
+const LIME = [212, 255, 36]
 const MAGENTA = [224, 64, 216]
+
+// speed streaks: particles that rush past the sides of the tunnel, faster than the flight itself
+const STREAK_LEN = RINGS * SPACING
+function makeStreaks(n) {
+  let seed = 7
+  const r = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646
+  return Array.from({ length: n }, () => {
+    const pick = r()
+    return {
+      a: r() * Math.PI * 2, // angle around the tunnel axis
+      rad: 0.55 + r() * 0.9, // mostly along and just outside the walls
+      z0: r() * STREAK_LEN,
+      sp: 3.2 + r() * 4.2, // world units per second (camera is 0.9)
+      len: 1.6 + r() * 2.6, // trail length in world units
+      col: pick < 0.72 ? CYAN : pick < 0.92 ? MAGENTA : LIME,
+      w: 1 + r() * 1.6,
+    }
+  })
+}
 
 export default function TunnelTransition() {
   const { t } = useLang()
@@ -22,6 +42,7 @@ export default function TunnelTransition() {
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
   const state = useRef({ time: 0, w: 0, h: 0, dpr: 1, raf: 0 })
+  const streaks = useRef(null)
 
   const draw = () => {
     const st = state.current
@@ -111,6 +132,43 @@ export default function TunnelTransition() {
         ctx.fill()
       }
     }
+    // speed streaks rushing past the camera (additive light)
+    if (!streaks.current) streaks.current = makeStreaks(w < 768 ? 70 : 140)
+    ctx.globalCompositeOperation = 'lighter'
+    for (const p of streaks.current) {
+      const head = (((p.z0 - time * p.sp) % STREAK_LEN) + STREAK_LEN) % STREAK_LEN
+      if (head < 0.12) continue
+      const tail = head + p.len
+      const cosA = Math.cos(p.a + twist * 0.5)
+      const sinA = Math.sin(p.a + twist * 0.5) * 0.92
+      const sh = (FOCAL / head) * unit * p.rad
+      const stl = (FOCAL / tail) * unit * p.rad
+      const hx = cx + cosA * sh
+      const hy = cy + sinA * sh
+      const tx = cx + cosA * stl
+      const ty = cy + sinA * stl
+      // fade in from the far end and out as it leaves the frame
+      const f = Math.min(1, fog(head) * 1.6) * Math.min(1, head / 0.5)
+      if (f <= 0.01) continue
+      const grad = ctx.createLinearGradient(tx, ty, hx, hy)
+      grad.addColorStop(0, rgba(p.col, 0))
+      grad.addColorStop(0.7, rgba(p.col, 0.7 * f))
+      grad.addColorStop(1, rgba([235, 255, 255], f))
+      const lw = p.w * Math.max(0.6, Math.min(3, (FOCAL / head) * 1.4))
+      ctx.strokeStyle = grad
+      ctx.beginPath()
+      ctx.moveTo(tx, ty)
+      ctx.lineTo(hx, hy)
+      // soft glow pass, then the bright core
+      ctx.globalAlpha = 0.22
+      ctx.lineWidth = lw * 4
+      ctx.stroke()
+      ctx.globalAlpha = 1
+      ctx.lineWidth = lw
+      ctx.stroke()
+    }
+    ctx.globalCompositeOperation = 'source-over'
+
     // light at the end of the tunnel
     const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, unit * 0.5)
     g.addColorStop(0, `rgba(0,240,255,${0.26 + Math.sin(time * 0.8) * 0.06})`)
