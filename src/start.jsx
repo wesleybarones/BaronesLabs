@@ -1,11 +1,13 @@
-import { StrictMode } from 'react'
+import { StrictMode, startTransition } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import App from './App'
 import { LangProvider } from './i18n/LangContext'
 
 export default function start() {
-  createRoot(document.getElementById('root')).render(
+  // concurrent first render: React yields to the browser instead of one long blocking task
+  const root = createRoot(document.getElementById('root'))
+  startTransition(() => root.render(
   <StrictMode>
     <HelmetProvider>
       <LangProvider>
@@ -13,5 +15,5 @@ export default function start() {
       </LangProvider>
     </HelmetProvider>
   </StrictMode>,
-  )
+  ))
 }

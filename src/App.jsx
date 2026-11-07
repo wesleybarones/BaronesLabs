@@ -2,7 +2,7 @@ import { AnimatePresence, MotionConfig } from 'motion/react'
 import { lazy } from 'react'
 import Deferred, { mountAllSections } from './components/Deferred'
 import { BOT } from './lib/bot'
-import { useCallback, useEffect, useState } from 'react'
+import { startTransition, useCallback, useEffect, useState } from 'react'
 import { AppProvider, useLockScroll } from './lib/AppContext'
 import { useLang } from './i18n/LangContext'
 import Seo from './components/Seo'
@@ -130,7 +130,7 @@ export default function App() {
     setReady(true)
     setBooting(false)
   }, [])
-  const mountSite = useCallback(() => setSiteMounted(true), [])
+  const mountSite = useCallback(() => startTransition(() => setSiteMounted(true)), [])
   const reveal = useCallback(() => setReady(true), [])
 
   return (
