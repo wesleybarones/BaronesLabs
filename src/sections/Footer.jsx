@@ -21,16 +21,12 @@ export default function Footer() {
   }
   return (
     <footer className="relative border-t border-line bg-surface/40">
-      <div className="mx-auto grid max-w-[1360px] grid-cols-1 gap-12 px-4 py-16 md:grid-cols-12 md:px-8 md:py-20">
-        <div className="flex flex-col gap-8 sm:flex-row sm:items-center md:col-span-5 md:gap-6 lg:gap-10">
-          <div>
-            <FooterLogo />
-            <p className="mt-5 max-w-[340px] text-[15px] leading-relaxed text-ink-2">{t.footer.tagline}</p>
-          </div>
-          {/* this site is a Barones Signature project */}
-          <SignatureSeal onOpen={() => scrollToId('signature', lenis)} />
+      <div className="mx-auto grid max-w-[1360px] grid-cols-1 gap-12 px-4 py-16 md:grid-cols-[1fr_auto_1.3fr] md:gap-x-8 md:px-8 md:py-20 lg:flex lg:items-start lg:justify-between lg:gap-10">
+        <div className="md:col-span-3 lg:max-w-[320px]">
+          <FooterLogo />
+          <p className="mt-5 max-w-[340px] text-[15px] leading-relaxed text-ink-2">{t.footer.tagline}</p>
         </div>
-        <nav className="md:col-span-2" aria-label={t.footer.links}>
+        <nav aria-label={t.footer.links}>
           <h2 className="hud mb-5 text-[11px] text-ink-3">{t.footer.links}</h2>
           <ul className="space-y-0">
             {links.map(([id, label]) => (
@@ -42,11 +38,15 @@ export default function Footer() {
             ))}
           </ul>
         </nav>
-        <div className="md:col-span-3">
+        {/* this site is a Barones Signature project */}
+        <div className="flex md:justify-center lg:-mt-2">
+          <SignatureSeal onOpen={() => scrollToId('signature', lenis)} />
+        </div>
+        <div>
           <h2 className="hud mb-5 text-[11px] text-ink-3">{t.footer.contact}</h2>
           <ul className="space-y-0">
             <li>
-              <a href={waLink(t.wa.default)} target="_blank" rel="noopener noreferrer" className="link-u link-u-tall inline-flex min-h-12 items-center gap-2.5 text-[15px] text-ink-2 hover:text-ink">
+              <a href={waLink(t.wa.default)} target="_blank" rel="noopener noreferrer" className="link-u link-u-tall inline-flex min-h-12 items-center gap-2.5 whitespace-nowrap text-[15px] text-ink-2 hover:text-ink">
                 <IconWhatsApp className="h-4 w-4 text-cyan" />
                 WhatsApp {WHATSAPP_DISPLAY}
               </a>
@@ -58,7 +58,7 @@ export default function Footer() {
             </li>
           </ul>
         </div>
-        <div className="md:col-span-2">
+        <div>
           <h2 className="hud mb-5 text-[11px] text-ink-3">{t.footer.language}</h2>
           <Flags />
         </div>
