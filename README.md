@@ -50,3 +50,11 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 - O reflexo do notebook nas lentes mostra os pacotes atuais (Fast R$ 497, Profissional R$ 1.397,
   Premium R$ 1.497 em destaque). Se os preços mudarem, refaça o reflexo e regere as camadas.
 - Cursor: seta SVG nativa (`src/assets/cursor-arrow*.svg`), sem atraso.
+
+## Primeira tela estática (desempenho no celular)
+
+- `src/hero-shell.html` é o HTML do cabeçalho + hero já renderizado, colocado dentro de `#root` no build
+  (plugin em `vite.config.js`). Ele aparece antes do JavaScript; o React substitui pelo mesmo conteúdo.
+- Na primeira visita uma capa escura (o fundo da intro) cobre a tela até a intro começar.
+- **Depois de mudar o cabeçalho ou a hero, regenere:** `npx vite build && node scripts/capture-hero-shell.cjs`
+  e faça o build de novo.

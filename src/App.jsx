@@ -143,13 +143,15 @@ export default function App() {
         >
           {t.a11y.skip}
         </a>
-        {siteMounted && (
-          <>
+        {/* the hero is painted from the first frame, under the intro (it holds the LCP text and image);
+            its entrance animations still wait for the intro to open (ready). The rest mounts later. */}
         <Background />
         <ScrollProgress />
         <Header />
         <main id="content" tabIndex={-1} className="relative outline-none">
           <Hero />
+          {siteMounted && (
+            <>
           <Marquee />
           <Deferred>
             <S.Problem />
@@ -199,10 +201,10 @@ export default function App() {
           <Deferred>
             <S.Footer />
           </Deferred>
+            </>
+          )}
         </main>
-        <WhatsAppFloat />
-          </>
-        )}
+        {siteMounted && <WhatsAppFloat />}
         <AnimatePresence>{booting && <Boot onDone={endBoot} onMountSite={mountSite} onReveal={reveal} />}</AnimatePresence>
       </AppProvider>
     </MotionConfig>
