@@ -855,3 +855,31 @@ html { scrollbar-gutter: stable; }
 .ha-pressed { box-shadow: 0 0 0 2px #00f0ff, 0 0 44px rgba(0, 240, 255, 0.85) !important; filter: brightness(1.2); }
 .ha-pending .live-dot { filter: grayscale(1); opacity: 0.45; }
 .ha-pending { color: rgba(212, 255, 36, 0.85); }
+
+/* ── Footer: Barones Signature seal (src/components/SignatureSeal.jsx) ── */
+.sig-hex { clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.sig-tilt, .sig-flip { transform-style: preserve-3d; }
+.sig-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.sig-back { transform: rotateY(180deg); }
+.sig-edge { overflow: hidden; }
+.sig-edge::before {
+  content: ''; position: absolute; inset: -40%;
+  background: conic-gradient(rgba(224, 64, 216, 0.15), #e040d8 50deg, #ffffff 80deg, #00f0ff 110deg, rgba(0, 240, 255, 0.15) 170deg, rgba(224, 64, 216, 0.15) 360deg);
+  animation: sig-spin 4s linear infinite;
+}
+.sig-inner {
+  overflow: hidden;
+  background:
+    radial-gradient(110% 80% at 50% 0%, rgba(224, 64, 216, 0.14), transparent 55%),
+    radial-gradient(110% 80% at 50% 100%, rgba(0, 240, 255, 0.12), transparent 55%),
+    #0b0e16;
+}
+.sig-sweep {
+  pointer-events: none; mix-blend-mode: screen;
+  background: linear-gradient(100deg, transparent 30%, rgba(0, 240, 255, 0.12) 46%, rgba(255, 255, 255, 0.14) 50%, rgba(224, 64, 216, 0.1) 54%, transparent 70%);
+  transform: translateX(-120%);
+  animation: sig-sweep 4.5s ease-in-out 1s infinite;
+}
+@keyframes sig-spin { to { transform: rotate(360deg); } }
+@keyframes sig-sweep { 0% { transform: translateX(-120%); } 40%, 100% { transform: translateX(160%); } }
+@media (prefers-reduced-motion: reduce) { .sig-edge::before, .sig-sweep { animation: none; } }

@@ -351,6 +351,7 @@ const pt = {
     rights: '© Barones Labs. Todos os direitos reservados.',
     status: 'System online',
     back: 'Voltar ao topo',
+    seal: { edition: 'EDIÇÃO ASSINADA', back: 'Este site é um projeto Signature.', cta: 'VER O PACOTE →', ariaFront: 'Selo Barones Signature: toque para virar', ariaBack: 'Ver o pacote Barones Signature' },
   },
   float: { tooltip: 'Fale comigo' },
 }
@@ -701,6 +702,7 @@ const en = {
     rights: '© Barones Labs. All rights reserved.',
     status: 'System online',
     back: 'Back to top',
+    seal: { edition: 'SIGNED EDITION', back: 'This website is a Signature project.', cta: 'SEE THE PACKAGE →', ariaFront: 'Barones Signature seal: tap to flip', ariaBack: 'See the Barones Signature package' },
   },
   float: { tooltip: 'Talk to me' },
 }
@@ -1051,6 +1053,7 @@ const es = {
     rights: '© Barones Labs. Todos los derechos reservados.',
     status: 'System online',
     back: 'Volver arriba',
+    seal: { edition: 'EDICIÓN FIRMADA', back: 'Este sitio es un proyecto Signature.', cta: 'VER EL PAQUETE →', ariaFront: 'Sello Barones Signature: toca para girar', ariaBack: 'Ver el paquete Barones Signature' },
   },
   float: { tooltip: 'Háblame' },
 }

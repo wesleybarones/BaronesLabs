@@ -162,6 +162,7 @@ function SignatureCard({ sig, showPrices }) {
   const reduce = useReducedMotion()
   return (
     <Reveal once className="mt-12 md:mt-16">
+      <span id="signature" aria-hidden className="relative -top-32 block" />
       <div className="group relative [filter:drop-shadow(0_0_28px_rgba(224,64,216,0.18))]">
         <div className="chamfer chamfer-lg border-spin signature-spin h-full p-[1.5px]">
           <div
