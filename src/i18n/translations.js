@@ -276,14 +276,14 @@ const pt = {
     text: 'Se em até 7 dias após a entrega você não estiver satisfeito, devolvo 100% do valor. Simples assim.',
   },
   testimonials: {
-    label: '// 04_DEPOIMENTOS',
+    label: '// 08_DEPOIMENTOS',
     title: 'Quem já tem um site *Barones Labs*.',
     source: 'Avaliação no Google',
     reviews: 'avaliações no Google',
     seeAll: 'Ver todas no Google',
   },
   reach: {
-    label: '// ALCANCE',
+    label: '// 04_ALCANCE',
     title: 'Do Rio de Janeiro para *o mundo*.',
     text: 'Atendimento 100% online, em português, inglês e espanhol. Seu site pronto para vender onde o seu cliente estiver.',
     points: ['PT · EN · ES', '100% online', 'Atendimento direto comigo'],
@@ -307,7 +307,7 @@ const pt = {
     instagram: 'Siga no Instagram',
   },
   faq: {
-    label: '// 08_FAQ',
+    label: '// 09_FAQ',
     title: 'Dúvidas frequentes.',
     items: [
       {
@@ -623,7 +623,7 @@ const en = {
     text: "If you're not satisfied within 7 days of delivery, I'll refund 100% of what you paid. Simple as that.",
   },
   testimonials: {
-    label: '// 04_TESTIMONIALS',
+    label: '// 08_TESTIMONIALS',
     title: 'People who already have a *Barones Labs* site.',
     source: 'Google review',
     reviews: 'reviews on Google',
@@ -631,7 +631,7 @@ const en = {
     original: 'Original review in Portuguese',
   },
   reach: {
-    label: '// REACH',
+    label: '// 04_REACH',
     title: 'From Rio de Janeiro to *the world*.',
     text: 'Fully online, in Portuguese, English and Spanish. A website ready to sell wherever your customers are.',
     points: ['PT · EN · ES', '100% online', 'Straight to me'],
@@ -655,7 +655,7 @@ const en = {
     instagram: 'Follow on Instagram',
   },
   faq: {
-    label: '// 08_FAQ',
+    label: '// 09_FAQ',
     title: 'Frequently asked questions.',
     items: [
       {
@@ -971,7 +971,7 @@ const es = {
     text: 'Si en los 7 días posteriores a la entrega no estás satisfecho, te devuelvo el 100% del valor. Así de simple.',
   },
   testimonials: {
-    label: '// 04_TESTIMONIOS',
+    label: '// 08_TESTIMONIOS',
     title: 'Quienes ya tienen un sitio *Barones Labs*.',
     source: 'Reseña en Google',
     reviews: 'reseñas en Google',
@@ -979,7 +979,7 @@ const es = {
     original: 'Reseña original en portugués',
   },
   reach: {
-    label: '// ALCANCE',
+    label: '// 04_ALCANCE',
     title: 'De Río de Janeiro para *el mundo*.',
     text: 'Atención 100% online, en portugués, inglés y español. Tu sitio listo para vender donde esté tu cliente.',
     points: ['PT · EN · ES', '100% online', 'Atención directa conmigo'],
@@ -1003,7 +1003,7 @@ const es = {
     instagram: 'Sígueme en Instagram',
   },
   faq: {
-    label: '// 08_FAQ',
+    label: '// 09_FAQ',
     title: 'Preguntas frecuentes.',
     items: [
       {

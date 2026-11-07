@@ -52,7 +52,7 @@ export default function ScanTransition() {
             ok ? 'border-cyan/40 text-cyan' : 'border-magenta/40 text-magenta'
           }`}
         >
-          <span className={`h-1.5 w-1.5 ${ok ? 'rounded-full bg-yellow shadow-[0_0_8px_#FFE600]' : 'bg-magenta'}`} />
+          <span className={`h-1.5 w-1.5 ${ok ? 'rounded-full bg-yellow shadow-[0_0_8px_#7CFFC4]' : 'bg-magenta'}`} />
           {ok ? t.scan.ok : `${t.scan.fixing}…`}
         </motion.span>
       </div>

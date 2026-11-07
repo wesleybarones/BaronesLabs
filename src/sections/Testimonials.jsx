@@ -2,7 +2,8 @@ import { useLang } from '../i18n/LangContext'
 import RevealHeading from '../components/ui/RevealHeading'
 import SectionLabel from '../components/ui/SectionLabel'
 import HudCorners from '../components/ui/HudCorners'
-import { Stagger, StaggerItem } from '../components/ui/Reveal'
+import { useRef } from 'react'
+import { IconArrow } from '../components/Icons'
 import { GOOGLE_RATING, GOOGLE_REVIEWS_URL, REVIEWS } from '../config'
 
 /*
@@ -14,7 +15,7 @@ function Stars({ n = 5, className = '' }) {
   return (
     <span className={`flex items-center gap-0.5 ${className}`} aria-label={`${n}/5`}>
       {Array.from({ length: 5 }, (_, i) => (
-        <svg key={i} viewBox="0 0 20 20" className={`h-4 w-4 ${i < n ? 'text-yellow drop-shadow-[0_0_4px_rgba(255,230,0,0.55)]' : 'text-ink-3/40'}`} aria-hidden>
+        <svg key={i} viewBox="0 0 20 20" className={`h-4 w-4 ${i < n ? 'text-yellow drop-shadow-[0_0_4px_rgba(124,255,196,0.55)]' : 'text-ink-3/40'}`} aria-hidden>
           <path fill="currentColor" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z" />
         </svg>
       ))}
@@ -32,7 +33,7 @@ const initials = (name) =>
 
 function ReviewCard({ r, tt, lang }) {
   return (
-    <figure className="group relative flex h-full flex-col border border-line bg-surface/70 p-7 transition-colors duration-500 hover:border-cyan/40 md:p-9">
+    <figure className="group relative flex h-full flex-col border border-line bg-surface/80 backdrop-blur-sm p-7 transition-colors duration-500 hover:border-cyan/40 md:p-9">
       <HudCorners inset={-1} size={16} />
       <div className="flex items-center justify-between gap-4">
         <Stars n={r.stars} />
@@ -67,8 +68,16 @@ function ReviewCard({ r, tt, lang }) {
 export default function Testimonials() {
   const { t, lang } = useLang()
   const tt = t.testimonials
+  const trackRef = useRef(null)
+  const slide = (d) => {
+    const el = trackRef.current
+    if (!el) return
+    const card = el.firstElementChild
+    const step = card ? card.getBoundingClientRect().width + 24 : el.clientWidth * 0.8
+    el.scrollBy({ left: d * step, behavior: 'smooth' })
+  }
   return (
-    <section id="testimonials" className="relative py-24 md:py-36">
+    <section id="testimonials" className="relative overflow-hidden py-24 md:py-36">
       <div className="mx-auto max-w-[1180px] px-4 md:px-8">
         <div className="mb-12 flex flex-col gap-8 md:mb-14 md:flex-row md:items-end md:justify-between">
           <div>
@@ -100,13 +109,32 @@ export default function Testimonials() {
           </div>
         </div>
 
-        <Stagger className="columns-1 gap-5 md:columns-2 md:gap-6" stagger={0.08}>
+      </div>
+
+      {/* side-scrolling track over a soft glow; native scroll + snap (touch/trackpad), arrows on desktop */}
+      <div className="relative">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 h-[140%] -translate-y-1/2 bg-[radial-gradient(45%_55%_at_30%_50%,rgba(0,240,255,0.24),transparent_70%),radial-gradient(40%_50%_at_75%_55%,rgba(224,64,216,0.2),transparent_70%)] blur-2xl" />
+        <div
+          ref={trackRef}
+          className="reviews-track flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-6 md:gap-6 md:px-[max(2rem,calc((100vw_-_1180px)/2_+_2rem))] md:scroll-px-[max(2rem,calc((100vw_-_1180px)/2_+_2rem))] scroll-px-4"
+          role="region"
+          aria-label={tt.label}
+          tabIndex={0}
+        >
           {REVIEWS.map((r) => (
-            <StaggerItem key={r.name} className="mb-5 break-inside-avoid md:mb-6">
+            <div key={r.name} className="w-[min(86vw,420px)] shrink-0 snap-start">
               <ReviewCard r={r} tt={tt} lang={lang} />
-            </StaggerItem>
+            </div>
           ))}
-        </Stagger>
+        </div>
+      </div>
+      <div className="mx-auto mt-4 flex max-w-[1180px] items-center justify-end gap-3 px-4 md:px-8">
+        <button type="button" onClick={() => slide(-1)} aria-label={t.a11y.prev} className="flex h-12 w-12 items-center justify-center border border-line text-cyan transition-colors hover:border-cyan hover:bg-cyan/10">
+          <IconArrow className="h-5 w-5 rotate-180" />
+        </button>
+        <button type="button" onClick={() => slide(1)} aria-label={t.a11y.next} className="flex h-12 w-12 items-center justify-center border border-line text-cyan transition-colors hover:border-cyan hover:bg-cyan/10">
+          <IconArrow className="h-5 w-5" />
+        </button>
       </div>
     </section>
   )

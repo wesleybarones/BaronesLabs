@@ -61,7 +61,7 @@ export default function Boot({ onDone, onMountSite, onReveal }) {
         rot: (ang * 180) / Math.PI,
         size,
         streak: r() < 0.6 ? size * (3 + r() * 5) : size, // most LEDs leave a light trail
-        color: pick < 0.7 ? '#00F0FF' : pick < 0.9 ? '#E040D8' : '#FFE600',
+        color: pick < 0.7 ? '#00F0FF' : pick < 0.9 ? '#E040D8' : '#7CFFC4',
         delay: T.burst + r() * 0.1,
         dur: 0.9 + r() * 0.7,
       }

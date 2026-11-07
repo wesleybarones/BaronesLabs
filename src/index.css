@@ -11,7 +11,7 @@
   --color-cyan: #00f0ff;
   --color-cyan-hi: #5cf7ff;
   --color-magenta: #e040d8;
-  --color-yellow: #ffe600;
+  --color-yellow: #7CFFC4; /* accent "signal": mint (was yellow); token name kept */
   --color-ink: #e8f7fa;
   --color-ink-2: #8a9bb0;
   --color-ink-3: #55637a;
@@ -31,7 +31,7 @@
   --border: rgba(0, 240, 255, 0.14);
   --cyan: #00f0ff;
   --magenta: #e040d8;
-  --yellow: #ffe600;
+  --yellow: #7CFFC4;
   --text: #e8f7fa;
   --text-2: #8a9bb0;
   --text-3: #55637a;
@@ -336,14 +336,14 @@ body {
   height: 8px;
   border-radius: 999px;
   background: var(--yellow);
-  box-shadow: 0 0 10px rgba(255, 230, 0, 0.8);
+  box-shadow: 0 0 10px rgba(124,255,196, 0.8);
 }
 .live-dot::after {
   content: "";
   position: absolute;
   inset: -4px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 230, 0, 0.7);
+  border: 1px solid rgba(124,255,196, 0.7);
   animation: ping 1.8s var(--ease-out-expo) infinite;
 }
 @keyframes ping {
@@ -730,3 +730,11 @@ body {
   from { transform: rotateY(-2.2deg) rotateX(0.8deg) translateY(1px) scale(1); }
   to { transform: rotateY(2.2deg) rotateX(-0.8deg) translateY(-2px) scale(1.012); }
 }
+
+/* reviews carousel: hidden scrollbar, soft fade at the edges */
+.reviews-track {
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+.reviews-track::-webkit-scrollbar { display: none; }

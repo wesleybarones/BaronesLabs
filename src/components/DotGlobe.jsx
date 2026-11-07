@@ -197,20 +197,20 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
       const [hx, hy, hz] = project(home)
       if (hz > 0) {
         const pulse = (st.t * 0.9) % 1
-        ctx.strokeStyle = `rgba(255,230,0,${(1 - pulse) * 0.8})`
+        ctx.strokeStyle = `rgba(124,255,196,${(1 - pulse) * 0.8})`
         ctx.lineWidth = 1.5
         ctx.beginPath()
         ctx.arc(hx, hy, 4 + pulse * 18, 0, Math.PI * 2)
         ctx.stroke()
-        ctx.fillStyle = '#FFE600'
-        ctx.shadowColor = '#FFE600'
+        ctx.fillStyle = '#7CFFC4'
+        ctx.shadowColor = '#7CFFC4'
         ctx.shadowBlur = 10
         ctx.beginPath()
         ctx.arc(hx, hy, 4, 0, Math.PI * 2)
         ctx.fill()
         ctx.shadowBlur = 0
         ctx.font = '600 11px "JetBrains Mono", monospace'
-        ctx.fillStyle = 'rgba(255,230,0,0.95)'
+        ctx.fillStyle = 'rgba(124,255,196,0.95)'
         ctx.fillText('RIO DE JANEIRO', hx + 10, hy - 6)
       }
     }

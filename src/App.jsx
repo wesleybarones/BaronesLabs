@@ -167,7 +167,7 @@ export default function App() {
             <S.Portfolio />
           </Deferred>
           <Deferred>
-            <S.Testimonials />
+            <S.Reach />
           </Deferred>
           <Deferred>
             <S.Audience />
@@ -188,7 +188,7 @@ export default function App() {
             <S.About />
           </Deferred>
           <Deferred>
-            <S.Reach />
+            <S.Testimonials />
           </Deferred>
           <Deferred>
             <S.FAQ />

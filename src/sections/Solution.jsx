@@ -160,7 +160,7 @@ function ChecklistVisual({ active }) {
               <motion.span
                 className="text-[14px] tracking-[0.04em]"
                 initial={{ color: '#55637A' }}
-                animate={{ color: active ? (last ? '#FFE600' : '#E8F7FA') : '#55637A' }}
+                animate={{ color: active ? (last ? '#7CFFC4' : '#E8F7FA') : '#55637A' }}
                 transition={{ delay: active ? 0.2 + i * 0.22 : 0 }}
               >
                 {it}
