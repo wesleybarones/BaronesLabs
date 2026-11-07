@@ -375,15 +375,14 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
   }
 
   // deploy: button press → progress bar fills → status ONLINE → photo frame pulses lime
-  async function deploy(cur) {
-    const btn = $('#btn-deploy')
+  async function deploy(cur, target = $('#btn-deploy')) {
+    const btn = target
     // the click lands with the photo's tap in the air (video ripple ≈ 4.0s)
     if (video && !mobile) await video.at(3.95).then(guard)
     if (cur && btn) await click(cur, btn)
     const bar = $('#deploy-progress')
     const st = $('#deploy-status')?.firstChild
     let toast
-    if (mobile) toast = deployToast()
     const work = []
     if (bar) {
       bar.style.scale = ''
@@ -423,6 +422,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
 
   // ── prepare: hide everything the cursors will build (instant, before the hero is seen) ──
   function prepare() {
+    if (mobile) layer.classList.add('ha-m')
     ;['#hero-status', '#hero-kicker', '#hero-sub', '#hero-ctas', '#hero-frame', '#slot-proof'].forEach((s) => hide($(s)))
     $$('#hero-proofs > li').forEach(hide)
     $$('[data-ha-chip]').forEach(hide)
@@ -433,13 +433,124 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     const st = $('#deploy-status')?.firstChild
     if (st) {
       statusFinal = st.nodeValue
-      st.nodeValue = L.waiting
+      st.nodeValue = mobile && L.waitingShort ? L.waitingShort : L.waiting
       $('#deploy-status-wrap')?.classList.add('ha-pending')
     }
   }
 
   // ── the choreography ───────────────────────────────────────
+  // ── phones: "the camera follows" ───────────────────────────
+  // Act 1 (top): headline, text and buttons. Act 2: the page glides down to the photo, which comes alive
+  // with the clip while the four cursors work on it (drag synced to the hand, deploy on the photo's own
+  // status, synced to the tap in the air). Act 3: glides back up to the main button.
+  const ease3 = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2)
+  const glide = (y, d) =>
+    new Promise((res) => {
+      const y0 = window.scrollY
+      const t0 = performance.now()
+      const step = () => {
+        if (cancelled) return res()
+        const p = Math.min(1, (performance.now() - t0) / (d * 1000))
+        window.scrollTo(0, y0 + (y - y0) * ease3(p))
+        if (p < 1) requestAnimationFrame(step)
+        else res()
+      }
+      requestAnimationFrame(step)
+    }).then(guard)
+  const vTop = () => -layer.getBoundingClientRect().top // viewport top, in layer coordinates
+
+  async function playMobile() {
+    const gate = { framed: defer(), snapped: defer() }
+    const W = layer.clientWidth
+    const title = $('#hero-title')
+    const frame = $('#hero-frame')
+    const proof = $('#proof-48h')
+    const slot = $('#slot-proof')
+    const lis = $$('#hero-proofs > li')
+    const below = () => vTop() + window.innerHeight + 40
+
+    // ACT 1 — the text
+    reveal($('#hero-status'), { d: 0.45 }).catch(() => {})
+    later(0.08, () => reveal($('#hero-kicker'), { d: 0.4, dy: 8 }).catch(() => {}))
+    const c = cursor('copy')
+    const t0 = title ? box(title) : { x: 20, y: 200, w: 0, h: 0 }
+    await enter(c, [-40, t0.y + 40], [t0.x + 8, t0.y + t0.h * 0.45], 0.3)
+    await type(c, title, 0.016)
+    const sub = $('#hero-sub')
+    if (sub) {
+      await move(c, pt(sub, 0.05, 0.5), 0.2)
+      reveal(sub, { d: 0.4 }).catch(() => {})
+    }
+    await wait(0.12)
+    reveal($('#hero-ctas'), { d: 0.4 }).catch(() => {})
+    const btn = $('#btn-deploy')
+    if (btn) move(c, pt(btn, 0.8, 0.7), 0.35).catch(() => {})
+    await wait(0.2)
+
+    // ACT 2 — the camera glides down: proofs on top, photo below
+    const anchor = lis[0] || frame
+    const targetY = anchor ? Math.max(0, anchor.getBoundingClientRect().top + window.scrollY - 86) : 0
+    lis.forEach((li, i) => reveal(li, { d: 0.35, dy: 6, delay: 0.25 + i * 0.07 }).catch(() => {}))
+    move(c, [c.x - 30, c.y + 260], 0.7).catch(() => {})
+    await glide(targetY, 0.7)
+
+    const uiTrack = async () => {
+      const u = cursor('ui')
+      const fb = frame ? box(frame) : { x: 20, y: below() - 300, w: 300, h: 380 }
+      // phones take a moment to start a clip: it starts (hidden in the frame) while the outline is drawn
+      video?.start(0.4)
+      await enter(u, [W + 30, fb.y + 60], [fb.x + 16, fb.y + 16], 0.35)
+      const outline = await draw(u, frame, 0.6)
+      await reveal(frame, { d: 0.45, dy: 0, scale: 0.97 })
+      gate.framed.resolve()
+      if (outline) fin(animate(outline, { opacity: 0 }, { duration: 0.35 })).then(() => outline.remove(), () => {})
+      for (const ch of $$('[data-ha-chip]')) {
+        await move(u, pt(ch, 0.5, 0.6), 0.22)
+        await click(u)
+        reveal(ch, { d: 0.3, dy: 0, scale: 0.6 }).catch(() => {})
+      }
+      move(u, [u.x - 40, u.y - 60], 0.4).catch(() => {})
+    }
+
+    const wesleyTrack = async () => {
+      const w = cursor('wesley')
+      const from = proof ? box(proof) : null
+      await enter(w, [-40, below()], from ? [from.x + from.w * 0.6, from.y + from.h + 40] : [W / 2, vTop() + 200], 0.45)
+      if (proof && slot) {
+        const sel = await select(w, proof)
+        await copy(w, sel)
+        await gate.framed
+        await drag(w, proof, slot, sel, 0.6)
+      } else if (slot) await reveal(slot)
+      gate.snapped.resolve()
+      move(w, [w.x - 60, w.y + 50], 0.4).catch(() => {})
+    }
+
+    const deployTrack = async () => {
+      await wait(0.5)
+      const d = cursor('deploy')
+      const st = $('#deploy-status-wrap')
+      await enter(d, [W * 0.6, below()], st ? pt(st, 0.3, 2.6) : [W * 0.7, vTop() + 500], 0.5)
+      await gate.snapped
+      if (st) await move(d, pt(st, 0.35, 0.6), 0.3)
+      await deploy(d, st)
+    }
+
+    try {
+      await Promise.all([uiTrack(), wesleyTrack(), deployTrack()])
+      // ACT 3 — back to the main button
+      await wait(0.25)
+      exit().catch(() => {})
+      await glide(0, 0.7)
+    } catch (e) {
+      if (e !== CANCEL) console.error(e)
+    }
+    finish()
+    return done
+  }
+
   async function play() {
+    if (mobile) return playMobile()
     const gate = { ctas: defer(), proofs: defer(), snapped: defer() }
     const W = layer.clientWidth
     const H = layer.clientHeight
@@ -581,7 +692,8 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     layer.replaceChildren()
     // skipped: the clip stops too; phones play it when the photo scrolls into view
     if (skipped) video?.stop()
-    else if (mobile) video?.playWhenVisible($('#hero-frame'))
+    if (skipped && mobile && window.scrollY > 0) window.scrollTo(0, 0)
+    layer.classList.remove('ha-m')
     done.resolve()
   }
 

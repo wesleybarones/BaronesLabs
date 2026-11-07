@@ -801,6 +801,9 @@ html { scrollbar-gutter: stable; }
   font: 600 9.5px/1 var(--font-mono); letter-spacing: 0.14em; padding: 4px 6px 3px;
 }
 .ha-flip .ha-tag { left: auto; right: 4px; }
+.ha-m .ha-cursor svg { width: 15px; height: 18px; }
+.ha-m .ha-tag { left: 11px; top: 16px; font-size: 8px; padding: 3px 5px 2px; }
+.ha-m .ha-measure, .ha-m .ha-kbd { font-size: 8.5px; }
 .ha-outline { position: absolute; overflow: visible; }
 .ha-outline rect { fill: none; stroke: #00f0ff; stroke-width: 1.5; filter: drop-shadow(0 0 6px #00f0ff); }
 .ha-caret { position: absolute; left: 0; top: 0; width: 3px; background: #e040d8; box-shadow: 0 0 10px #e040d8; animation: ha-blink 0.7s steps(1) infinite; }

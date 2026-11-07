@@ -59,7 +59,9 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 - Quatro cursores: **W.BARONES** (seleciona "Entrega 48h–7 dias", Ctrl+C e arrasta a cópia para a foto, com guias
   magenta e encaixe), **UI.BOT** (desenha o contorno neon da foto e solta os chips), **COPY.BOT** (digita o título
   letra por letra, traz texto, botões e provas) e **DEPLOY.BOT** (clica em "Quero meu site": "AGUARDANDO DEPLOY_"
-  vira ONLINE e a barra enche). Desktop ≈ 6s; celular ≈ 3,7s com 2 cursores, sem arraste e com painel DEPLOY.
+  vira ONLINE e a barra enche). Desktop ≈ 6s. Celular ≈ 7,5s em três atos ("câmera que acompanha"): 1) no topo, título, texto e botões;
+  2) a página desce sozinha até a foto, que ganha vida com o vídeo enquanto os 4 cursores (menores) trabalham nela:
+  arraste sincronizado com a mão e DEPLOY no status da própria foto, junto com o toque no ar; 3) volta ao topo.
 - "Pular animação →" ou Esc encerram; mudar o tamanho da janela ou o idioma também.
 - O estado final é o próprio HTML da página: a montagem só esconde/revela (visibility, opacity, transform) e devolve
   tudo no fim. Ela procura os IDs `hero-status`, `hero-kicker`, `hero-title`, `hero-sub`, `hero-ctas`, `hero-proofs`,
@@ -68,7 +70,7 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 - **Foto viva:** durante a montagem a foto vira vídeo (clipe do Google Flow/Veo, recortado em 4:5, sem som):
   `src/assets/hero-video/` (WebM VP9 + MP4 H.264, 720×900 no desktop e 480×600 no celular) e `src/hero-assembly/video.js`.
   No desktop o encaixe do card espera o "agarrar" do vídeo (3,4s) e o clique do DEPLOY espera o toque no ar (4,0s);
-  no celular o vídeo toca quando a foto aparece na tela. No fim ele se dissolve de volta na foto.
+  no celular ele começa (escondido na moldura) enquanto o contorno é desenhado, com os mesmos encontros. No fim ele se dissolve de volta na foto.
   Para trocar o clipe: recorte 864×1080 do centro do 1920×1080 e gere os 4 arquivos com os mesmos nomes.
 - **Sons** (`src/hero-assembly/sound.js`): efeitos sci-fi sintetizados por código (Web Audio, sem arquivos): teclado no título,
   "tic" na seleção, arraste, encaixe, cliques e acorde no ONLINE. Navegadores só tocam som depois de um clique, então

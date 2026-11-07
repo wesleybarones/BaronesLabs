@@ -391,8 +391,8 @@ export default function Hero() {
                 <div aria-hidden className="bg-scanlines pointer-events-none absolute inset-0 opacity-40" />
                 <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg via-bg/50 to-transparent" />
                 <figcaption className="hud absolute bottom-4 left-4 right-4 flex items-center justify-between text-[10px] text-cyan/80">
-                  <span>ID · W.BARONES</span>
-                  <span id="deploy-status-wrap" className="flex items-center gap-2">
+                  <span className="whitespace-nowrap">ID · W.BARONES</span>
+                  <span id="deploy-status-wrap" className="flex items-center gap-2 whitespace-nowrap">
                     <span className="live-dot scale-75" aria-hidden />
                     <span id="deploy-status">ONLINE</span>
                   </span>
