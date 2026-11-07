@@ -271,6 +271,7 @@ const pt = {
     label: '// GARANTIA',
     seal: '7 DIAS',
     sealSub: 'Garantia',
+    spin: 'Segure e gire',
     fine: 'pedido em até 7 dias · reembolso em até 90 dias',
     title: 'Satisfação ou seu dinheiro de volta.',
     text: 'Se em até 7 dias após a entrega você não estiver satisfeito, devolvo 100% do valor. Simples assim.',
@@ -617,6 +618,7 @@ const en = {
   guarantee: {
     label: '// GUARANTEE',
     seal: '7 DAYS',
+    spin: 'Press and twist',
     fine: 'request within 7 days · refund within 90 days',
     sealSub: 'Guarantee',
     title: 'Love it, or your money back.',
@@ -965,6 +967,7 @@ const es = {
   guarantee: {
     label: '// GARANTÍA',
     seal: '7 DÍAS',
+    spin: 'Mantén y gira',
     fine: 'solicitud en hasta 7 días · reembolso en hasta 90 días',
     sealSub: 'Garantía',
     title: 'Satisfacción o te devuelvo tu dinero.',

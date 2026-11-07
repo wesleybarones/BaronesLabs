@@ -22,9 +22,13 @@ const SYMBOL_HEX = 'M445.5 26 852 259v473L445.5 963 39 731V259Z'
 const LOGO_HEX = 'M133.7 8 251.3 77v142L133.7 287 14.4 219V77Z'
 
 /** Light running around the logo's hexagon (same effect as the guarantee seal). CSS-only, no JS per frame. */
-function HexShine({ d, w, h, sw }) {
+function HexShine({ d, w, h, sw, c, dash }) {
+  // c = hexagon centre; the dotted inner hexagon is the outline scaled to 85% and slowly rotating
   return (
     <svg aria-hidden viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMid meet" className="logo-shine pointer-events-none absolute inset-0 h-full w-full overflow-visible" style={{ '--shine-w': sw }}>
+      <g className="logo-inner" style={{ transformOrigin: `${c[0]}px ${c[1]}px` }}>
+        <path d={d} transform={`translate(${c[0]} ${c[1]}) scale(0.85) translate(${-c[0]} ${-c[1]})`} style={{ strokeWidth: sw * 0.35, strokeDasharray: `${dash} ${dash}` }} />
+      </g>
       <path d={d} pathLength="1" className="logo-shine-a" />
       <path d={d} pathLength="1" className="logo-shine-b" />
     </svg>
@@ -47,7 +51,7 @@ export function LogoSymbol({ className = '', title, style, loading = 'lazy', siz
         decoding="async"
         className="h-full w-full select-none object-contain"
       />
-      {shine && <HexShine d={SYMBOL_HEX} w={900} h={990} sw={9} />}
+      {shine && <HexShine d={SYMBOL_HEX} w={900} h={990} sw={9} c={[445.5, 494.5]} dash={14} />}
     </span>
   )
 }
@@ -67,7 +71,7 @@ export function LogoHorizontal({ className = '', bold = false, loading = 'eager'
         decoding="async"
         className={`h-full w-full select-none object-contain ${bold ? '[filter:drop-shadow(0_0_5px_rgba(0,240,255,0.55))]' : ''}`}
       />
-      {shine && <HexShine d={LOGO_HEX} w={720} h={296} sw={10} />}
+      {shine && <HexShine d={LOGO_HEX} w={720} h={296} sw={10} c={[133.7, 147.5]} dash={5} />}
     </span>
   )
 }

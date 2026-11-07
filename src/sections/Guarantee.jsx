@@ -1,4 +1,5 @@
-import { motion } from 'motion/react'
+import { motion, useMotionValue } from 'motion/react'
+import { useEffect, useRef } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { EASE } from '../lib/motion'
 import { HEX_PATH, HEX_INNER } from '../components/Logo'
@@ -9,6 +10,52 @@ export default function Guarantee() {
   const { t } = useLang()
   const g = t.guarantee
   const reduce = useReducedMotion()
+
+  // press and twist: the hexagon follows the pointer's angle around its centre, then keeps spinning
+  // with inertia when released
+  const sealRef = useRef(null)
+  const rot = useMotionValue(0)
+  const drag = useRef(null)
+  const vel = useRef(0)
+  const raf = useRef(0)
+  const angle = (e) => {
+    const r = sealRef.current.getBoundingClientRect()
+    return (Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180) / Math.PI
+  }
+  const onDown = (e) => {
+    cancelAnimationFrame(raf.current)
+    sealRef.current.setPointerCapture?.(e.pointerId)
+    drag.current = { a: angle(e), t: performance.now() }
+    vel.current = 0
+  }
+  const onMove = (e) => {
+    if (!drag.current) return
+    const a = angle(e)
+    let d = a - drag.current.a
+    if (d > 180) d -= 360
+    if (d < -180) d += 360
+    const now = performance.now()
+    vel.current = (d / Math.max(8, now - drag.current.t)) * 1000 // deg/s
+    rot.set(rot.get() + d)
+    drag.current = { a, t: now }
+  }
+  const onUp = () => {
+    if (!drag.current) return
+    drag.current = null
+    if (reduce) return
+    let v = Math.max(-1800, Math.min(1800, vel.current))
+    let last = performance.now()
+    const spin = (now) => {
+      const dt = Math.min(0.05, (now - last) / 1000)
+      last = now
+      v *= Math.pow(0.12, dt) // friction
+      rot.set(rot.get() + v * dt)
+      if (Math.abs(v) > 4) raf.current = requestAnimationFrame(spin)
+    }
+    raf.current = requestAnimationFrame(spin)
+  }
+  useEffect(() => () => cancelAnimationFrame(raf.current), [])
+
   return (
     <div className="relative flex h-full flex-col items-center justify-center border border-cyan/30 bg-surface/60 p-8 pb-12 text-center md:p-12 md:pb-14">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_30%,rgba(0,240,255,0.08),transparent)]" />
@@ -16,14 +63,23 @@ export default function Guarantee() {
         <Reveal once distance={14} className="hud mb-8">
           {g.label}
         </Reveal>
-        <div className="relative h-[190px] w-[190px] md:h-[220px] md:w-[220px]">
+        <div
+          ref={sealRef}
+          className="relative h-[190px] w-[190px] touch-none select-none md:h-[220px] md:w-[220px]"
+          onPointerDown={onDown}
+          onPointerMove={onMove}
+          onPointerUp={onUp}
+          onPointerCancel={onUp}
+          data-cursor
+          title={g.spin}
+        >
           <motion.div
             aria-hidden
             className="absolute inset-[15%] rounded-full bg-cyan/15 blur-3xl"
             animate={reduce ? {} : { opacity: [0.6, 1, 0.6], scale: [0.95, 1.08, 0.95] }}
             transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
+          <motion.svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden style={{ rotate: rot }}>
             <motion.path
               d={HEX_PATH}
               fill="none"
@@ -91,7 +147,7 @@ export default function Guarantee() {
                 />
               </>
             )}
-          </svg>
+          </motion.svg>
           <motion.div
             className="absolute inset-0 flex flex-col items-center justify-center"
             initial={{ opacity: 0, scale: 0.9 }}
