@@ -78,10 +78,14 @@ body {
   color: #fff;
 }
 
-/* custom cursor hides native one only when active */
-html.has-custom-cursor,
-html.has-custom-cursor * {
-  cursor: none !important;
+/* cursor: small cyan arrow with a magenta offset (native cursor = zero lag); filled on clickables */
+@media (hover: hover) and (pointer: fine) {
+  html {
+    cursor: url("./assets/cursor-arrow.svg") 3 3, auto;
+  }
+  a, button, [role="button"], summary, label, select, [data-cursor] {
+    cursor: url("./assets/cursor-arrow-hover.svg") 3 3, pointer;
+  }
 }
 
 /* ── Focus (keyboard) ─────────────────────── */
@@ -692,10 +696,6 @@ html.has-custom-cursor * {
   35%, 100% { transform: translateX(260%) skewX(-12deg); }
 }
 
-/* ---- custom cursor (hex reticle) ---- */
-.cursor-spin { animation: cursor-spin 9s linear infinite; }
-@keyframes cursor-spin { to { transform: rotate(360deg); } }
-
 /* Mission (money rain): soft edges into the sections above and below */
 .money-fade {
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 74%, transparent 100%);
@@ -722,4 +722,30 @@ html.has-custom-cursor * {
   background-clip: text;
   color: transparent;
   filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.25));
+}
+
+/* ---- live hero portrait ---- */
+.live-sway { animation: live-sway 7s ease-in-out infinite alternate; }
+@keyframes live-sway {
+  from { transform: rotateY(-2.2deg) rotateX(0.8deg) translateY(1px) scale(1); }
+  to { transform: rotateY(2.2deg) rotateX(-0.8deg) translateY(-2px) scale(1.012); }
+}
+.visor-data {
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 240, 255, 0.22) 0 1px, transparent 1px 4px),
+    linear-gradient(90deg, transparent 0%, rgba(0, 240, 255, 0.35) 45%, rgba(224, 64, 216, 0.25) 55%, transparent 100%);
+  background-size: 100% 8px, 220% 100%;
+  animation: visor-data 3.2s linear infinite;
+}
+@keyframes visor-data {
+  from { background-position: 0 0, 160% 0; }
+  to { background-position: 0 32px, -60% 0; }
+}
+.visor-glare {
+  mix-blend-mode: screen;
+  background: linear-gradient(100deg, transparent, rgba(220, 255, 255, 0.55) 45%, rgba(0, 240, 255, 0.35) 55%, transparent);
+  transform: skewX(-18deg);
+  filter: blur(2px);
 }

@@ -20,6 +20,7 @@ export const AVATAR_SIZES = '(min-width: 1280px) 560px, (min-width: 1024px) 40vw
 import { IconArrow, IconArrowDown } from '../components/Icons'
 import HudCorners from '../components/ui/HudCorners'
 import NeonSign from '../components/NeonSign'
+import LivePortrait from '../components/LivePortrait'
 
 function Chip({ children, className = '', style }) {
   return (
@@ -243,6 +244,8 @@ export default function Hero() {
                   fetchpriority="high"
                   decoding="async"
                 />
+                {/* live portrait: depth layers + light + visor reflections (code, no video file) */}
+                <LivePortrait sx={sx} sy={sy} reduce={reduce} />
                 {/* lens scan: a thin cyan line sweeps the glasses every few seconds */}
                 {!reduce && (
                   <span aria-hidden className="lens-scan pointer-events-none absolute inset-0 mix-blend-screen">

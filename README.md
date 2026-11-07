@@ -31,7 +31,7 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 - Dados estruturados (LocalBusiness/ProfessionalService, WebSite, WebPage, BreadcrumbList, Person, FAQPage): JSON-LD no `index.html`. Se mudar o FAQ, atualize também o FAQPage.
 - Search Console: arquivo `public/google9d5192b7753c9d3d.html` (verificação por arquivo) e espaço para a meta tag no `<head>`.
 - Prévias de link: robôs de redes sociais (WhatsApp, Facebook…) recebem `public/og.html` (só as tags), pela regra em `vercel.json`. Se mudar título/descrição/imagem, atualize também esse arquivo.
-- Imagem de compartilhamento: `public/og-baroneslabs-luz-1200x630.jpg` (1200×630), gerada de `design-refs/og/og-image.html`. Ao trocar, use um nome de arquivo novo (os apps guardam a prévia em cache) e atualize `src/config.js` e `index.html`.
+- Imagem de compartilhamento: `public/og-baroneslabs-v3-1200x630.jpg` (1200×630), gerada de `design-refs/og/og-image.html`. Ao trocar, use um nome de arquivo novo (os apps guardam a prévia em cache) e atualize `src/config.js` e `index.html`.
 - Fontes self-hosted via `@fontsource` (`src/fonts.js`), com preload da imagem do hero e das fontes principais (plugin em `vite.config.js`).
 
 ## Globo ("Do Rio de Janeiro para o mundo")
@@ -41,3 +41,12 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
   Natural Earth 110m (pacote `world-atlas`, domínio público) amostrando uma esfera de Fibonacci com
   30 000 pontos e mantendo os que caem em terra (sem a Antártida).
 - Os arcos marcam regiões atendidas em cada idioma (PT/EN/ES), não clientes. Edite `TARGETS` em `Reach.jsx`.
+
+## Hero "viva" (sem vídeo)
+
+- `src/components/LivePortrait.jsx`: a foto vira camadas (`src/assets/live/plate-780.webp` = fundo,
+  `person-780.webp` = recorte, `visor-mask.png` = máscara das lentes). Cursor/giroscópio movem as camadas,
+  uma luz ciano segue o ponteiro e as lentes têm reflexos animados.
+- O reflexo do notebook nas lentes mostra os pacotes atuais (Fast R$ 497, Profissional R$ 1.397,
+  Premium R$ 1.497 em destaque). Se os preços mudarem, refaça o reflexo e regere as camadas.
+- Cursor: seta SVG nativa (`src/assets/cursor-arrow*.svg`), sem atraso.

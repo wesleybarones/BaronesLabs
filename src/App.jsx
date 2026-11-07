@@ -98,12 +98,6 @@ export default function App() {
     }
   }, [])
 
-  // custom cursor only exists on desktops with a mouse: load its code only there
-  const [Cursor, setCursor] = useState(null)
-  useEffect(() => {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
-    import('./components/Cursor').then((m) => setCursor(() => m.default))
-  }, [])
 
   useLockScroll(booting, lenis)
 
@@ -209,7 +203,6 @@ export default function App() {
         <WhatsAppFloat />
           </>
         )}
-        {Cursor && <Cursor />}
         <AnimatePresence>{booting && <Boot onDone={endBoot} onMountSite={mountSite} onReveal={reveal} />}</AnimatePresence>
       </AppProvider>
     </MotionConfig>

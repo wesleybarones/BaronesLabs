@@ -320,7 +320,7 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
   }, [reduce, targets])
 
   return (
-    <div ref={wrapRef} className={`relative cursor-grab touch-pan-y select-none active:cursor-grabbing ${className}`} data-cursor>
+    <div ref={wrapRef} className={`relative touch-pan-y select-none ${className}`} data-cursor>
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden />
       {hint && (
         <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 text-center font-mono text-[10.5px] uppercase tracking-[0.24em] text-cyan/55">
