@@ -114,15 +114,18 @@ export default function MoneyRain() {
   return (
     <section id="goal" ref={ref} className={`relative ${inView && !reduce ? '' : 'money-paused'} ${reduce ? 'money-still' : ''}`}>
       <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden py-24" style={{ perspective: 900 }}>
-        {/* floor glow where the notes land */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] opacity-80 bg-[radial-gradient(60%_80%_at_50%_100%,rgba(0,240,255,0.14),transparent_70%)]"
-        />
-        <div aria-hidden className="pointer-events-none absolute inset-x-[10%] bottom-[6%] h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent" />
-
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          {notes.map((n, i) => (
+        {/* rain + floor glow fade out at the top and bottom, so the section blends into its neighbours */}
+        <div aria-hidden className="money-fade pointer-events-none absolute inset-0">
+          {/* floor glow where the notes land */}
+          <div className="absolute inset-x-0 bottom-[8%] h-[45%] opacity-80 bg-[radial-gradient(60%_80%_at_50%_100%,rgba(0,240,255,0.14),transparent_70%)]" />
+          <div className="absolute inset-x-[10%] bottom-[14%] h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent" />
+          {notes.filter((n) => !n.front).map((n, i) => (
+            <FallingNote key={i} n={n} />
+          ))}
+        </div>
+        {/* the few notes that pass in front of the text (desktop), same fade */}
+        <div aria-hidden className="money-fade pointer-events-none absolute inset-0 z-20">
+          {notes.filter((n) => n.front).map((n, i) => (
             <FallingNote key={i} n={n} />
           ))}
         </div>

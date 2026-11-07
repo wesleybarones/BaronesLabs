@@ -695,3 +695,9 @@ html.has-custom-cursor * {
 /* ---- custom cursor (hex reticle) ---- */
 .cursor-spin { animation: cursor-spin 9s linear infinite; }
 @keyframes cursor-spin { to { transform: rotate(360deg); } }
+
+/* Mission (money rain): soft edges into the sections above and below */
+.money-fade {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 74%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 74%, transparent 100%);
+}
