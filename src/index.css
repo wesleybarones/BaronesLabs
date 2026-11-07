@@ -691,3 +691,8 @@ html.has-custom-cursor * {
   0% { transform: translateX(-120%) skewX(-12deg); }
   35%, 100% { transform: translateX(260%) skewX(-12deg); }
 }
+
+/* ---- custom cursor (hex reticle) ---- */
+.cursor-spin { animation: cursor-spin 9s linear infinite; }
+.cursor-spin-fast { animation: cursor-spin 0.7s linear infinite; }
+@keyframes cursor-spin { to { transform: rotate(360deg); } }

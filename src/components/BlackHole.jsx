@@ -268,7 +268,7 @@ export default function BlackHole({ className = '', label, start = true }) {
   }, [reduce, start])
 
   return (
-    <div ref={wrapRef} className={`relative cursor-pointer touch-manipulation select-none ${className}`} role="img" aria-label={label}>
+    <div ref={wrapRef} data-cursor="singularity" className={`relative cursor-pointer touch-manipulation select-none ${className}`} role="img" aria-label={label}>
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       {label && (
         <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 text-center font-mono text-[10px] uppercase tracking-[0.24em] text-cyan/55">
