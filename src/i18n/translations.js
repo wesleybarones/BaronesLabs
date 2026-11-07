@@ -100,7 +100,7 @@ const pt = {
     checklist: ['Domínio', 'Hospedagem', 'Botão de WhatsApp', 'Formulário', 'Mapa', 'Site no ar'],
   },
   audience: {
-    label: '// 03_PARA_QUEM',
+    label: '// 05_PARA_QUEM',
     title: 'Feito para quem vende pelo *WhatsApp* e Instagram. E para quem quer existir além das redes sociais.',
     sub: 'Para quem já tem site e quer um melhor, e para quem nunca teve um.',
     tiles: [
@@ -111,7 +111,7 @@ const pt = {
     ],
   },
   portfolio: {
-    label: '// 04_PROJETOS',
+    label: '// 03_PROJETOS',
     title: 'Projetos *no ar*.',
     sub: 'Sites reais, de negócios reais. Arraste ou role para navegar.',
     view: 'Ver site',
@@ -140,7 +140,7 @@ const pt = {
     },
   },
   process: {
-    label: '// 05_PROCESSO',
+    label: '// 06_PROCESSO',
     title: 'Do primeiro contato ao *site no ar*',
     steps: [
       { title: 'Conversa no WhatsApp', text: 'Você me conta sobre o seu negócio, seus clientes e o que quer alcançar.' },
@@ -157,7 +157,7 @@ const pt = {
     cta: 'Quero vender mais',
   },
   pricing: {
-    label: '// 06_PACOTES',
+    label: '// 07_PACOTES',
     title: 'Escolha seu pacote.',
     sub: 'Preço fechado, sem surpresas. Tudo o que você precisa para estar online já está incluso.',
     popular: 'Mais escolhido',
@@ -276,7 +276,7 @@ const pt = {
     text: 'Se em até 7 dias após a entrega você não estiver satisfeito, devolvo 100% do valor. Simples assim.',
   },
   testimonials: {
-    label: '// 07_DEPOIMENTOS',
+    label: '// 04_DEPOIMENTOS',
     title: 'Quem já tem um site *Barones Labs*.',
     source: 'Avaliação no Google',
     reviews: 'avaliações no Google',
@@ -449,7 +449,7 @@ const en = {
     checklist: ['Domain', 'Hosting', 'WhatsApp button', 'Contact form', 'Map', 'Website live'],
   },
   audience: {
-    label: '// 03_WHO_ITS_FOR',
+    label: '// 05_WHO_ITS_FOR',
     title: 'Built for businesses that sell on *WhatsApp* and Instagram. And for those who want a presence beyond social media.',
     sub: "For those who already have a website and want a better one — and for those who've never had one.",
     tiles: [
@@ -460,7 +460,7 @@ const en = {
     ],
   },
   portfolio: {
-    label: '// 04_WORK',
+    label: '// 03_WORK',
     title: 'Projects *live*.',
     sub: 'Real websites for real businesses. Drag or scroll to browse.',
     view: 'Visit site',
@@ -489,7 +489,7 @@ const en = {
     },
   },
   process: {
-    label: '// 05_PROCESS',
+    label: '// 06_PROCESS',
     title: 'From first contact to *launch day*',
     steps: [
       { title: 'A chat on WhatsApp', text: 'Tell me about your business, your customers and what you want to achieve.' },
@@ -506,7 +506,7 @@ const en = {
     cta: 'I want to sell more',
   },
   pricing: {
-    label: '// 06_PACKAGES',
+    label: '// 07_PACKAGES',
     title: 'Choose your package.',
     sub: 'Clear scope, no surprises. Everything you need to get online is already included.',
     popular: 'Most popular',
@@ -623,7 +623,7 @@ const en = {
     text: "If you're not satisfied within 7 days of delivery, I'll refund 100% of what you paid. Simple as that.",
   },
   testimonials: {
-    label: '// 07_TESTIMONIALS',
+    label: '// 04_TESTIMONIALS',
     title: 'People who already have a *Barones Labs* site.',
     source: 'Google review',
     reviews: 'reviews on Google',
@@ -797,7 +797,7 @@ const es = {
     checklist: ['Dominio', 'Hosting', 'Botón de WhatsApp', 'Formulario', 'Mapa', 'Sitio en línea'],
   },
   audience: {
-    label: '// 03_PARA_QUIÉN',
+    label: '// 05_PARA_QUIÉN',
     title: 'Hecho para quien vende por *WhatsApp* e Instagram. Y para quien quiere existir más allá de las redes sociales.',
     sub: 'Para quien ya tiene sitio y quiere uno mejor, y para quien nunca tuvo uno.',
     tiles: [
@@ -808,7 +808,7 @@ const es = {
     ],
   },
   portfolio: {
-    label: '// 04_PROYECTOS',
+    label: '// 03_PROYECTOS',
     title: 'Proyectos *en línea*.',
     sub: 'Sitios reales de negocios reales. Arrastra o desliza para navegar.',
     view: 'Ver sitio',
@@ -837,7 +837,7 @@ const es = {
     },
   },
   process: {
-    label: '// 05_PROCESO',
+    label: '// 06_PROCESO',
     title: 'Del primer contacto al *sitio en línea*',
     steps: [
       { title: 'Charla por WhatsApp', text: 'Me cuentas sobre tu negocio, tus clientes y lo que quieres lograr.' },
@@ -854,7 +854,7 @@ const es = {
     cta: 'Quiero vender más',
   },
   pricing: {
-    label: '// 06_PAQUETES',
+    label: '// 07_PAQUETES',
     title: 'Elige tu paquete.',
     sub: 'Alcance claro, sin sorpresas. Todo lo que necesitas para estar en línea ya está incluido.',
     popular: 'Más elegido',
@@ -971,7 +971,7 @@ const es = {
     text: 'Si en los 7 días posteriores a la entrega no estás satisfecho, te devuelvo el 100% del valor. Así de simple.',
   },
   testimonials: {
-    label: '// 07_TESTIMONIOS',
+    label: '// 04_TESTIMONIOS',
     title: 'Quienes ya tienen un sitio *Barones Labs*.',
     source: 'Reseña en Google',
     reviews: 'reseñas en Google',

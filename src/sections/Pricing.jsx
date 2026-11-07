@@ -13,12 +13,14 @@ import HudCorners from '../components/ui/HudCorners'
 import { IconArrow, IconCheck } from '../components/Icons'
 
 const brl = (n) => Math.round(n).toLocaleString('pt-BR')
+const MOBILE_ORDER = { premium: 'order-1', pro: 'order-2', essential: 'order-3' }
 
 function PlanCard({ plan, i, showPrices }) {
   const { t } = useLang()
   const p = t.pricing
   const featured = !!plan.featured
-  const order = featured ? 'order-first md:order-none' : ''
+  // mobile: most expensive first (Premium → Profissional → Fast); desktop keeps the original order
+  const order = `${MOBILE_ORDER[plan.id] ?? ''} md:order-none`
 
   // 3D holographic card: tilts towards the cursor, a light sheen follows it
   const fine = useFinePointer()

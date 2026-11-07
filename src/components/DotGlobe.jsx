@@ -7,8 +7,8 @@ import LAND from '../assets/globe-land.json' // [lat*10, lon*10, …] land dots 
   - auto-rotates slowly; drag (mouse or finger) to spin it, with inertia;
   - "touch" effect: the land dots near the cursor are pushed away like sand and spring back
     (each dot has its own offset + velocity); displaced dots light up and grow;
-  - a pulsing "you are here" marker in Rio de Janeiro and light arcs travelling to the regions served
-    in each language (PT / EN / ES) — these mark languages, not clients;
+  - a pulsing "you are here" marker in Rio de Janeiro and light arcs travelling to cities on every
+    continent (reach of an online service — not client locations); labels only on the facing side;
   - runs only while visible and the tab is active; reduced motion = still frame.
 */
 
@@ -185,9 +185,9 @@ export default function DotGlobe({ targets = [], className = '', hint }) {
           ctx.beginPath()
           ctx.arc(ex, ey, 3, 0, Math.PI * 2)
           ctx.fill()
-          if (A.label) {
-            ctx.font = '600 11px "JetBrains Mono", monospace'
-            ctx.fillStyle = `rgba(232,247,250,${(0.45 + ez * 0.55).toFixed(2)})`
+          if (A.label && ez > 0.3) {
+            ctx.font = '600 10px "JetBrains Mono", monospace'
+            ctx.fillStyle = `rgba(232,247,250,${Math.min(1, (ez - 0.3) * 2.2).toFixed(2)})`
             ctx.fillText(A.label, ex + 7, A.below ? ey + 14 : ey - 6)
           }
         }

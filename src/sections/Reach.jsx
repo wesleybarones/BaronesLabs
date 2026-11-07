@@ -9,16 +9,37 @@ import { IconArrow } from '../components/Icons'
 import DotGlobe from '../components/DotGlobe'
 
 /*
-  "Do Rio de Janeiro para o mundo": interactive dotted globe. The arcs mark the regions served in each
-  language (PT / EN / ES) — not client locations.
+  "Do Rio de Janeiro para o mundo": interactive dotted globe. The arcs show the reach of a 100% online
+  service (every continent) — they are not client locations.
 */
 const TARGETS = [
-  { lat: -23.55, lon: -46.63, label: 'PT · BR', below: true }, // São Paulo (label below the home marker)
-  { lat: 38.72, lon: -9.14, label: 'PT · PT' }, // Lisboa
-  { lat: 40.71, lon: -74.0, label: 'EN · US', magenta: true }, // Nova York
-  { lat: 40.42, lon: -3.7, label: 'ES · ES', below: true }, // Madri (label below Lisbon's)
-  { lat: -34.6, lon: -58.38, label: 'ES · AR', magenta: true }, // Buenos Aires
-  { lat: 19.43, lon: -99.13, label: 'ES · MX' }, // Cidade do México
+  // South America
+  { lat: -23.55, lon: -46.63, label: 'SÃO PAULO', below: true },
+  { lat: -34.6, lon: -58.38, label: 'BUENOS AIRES', magenta: true, below: true },
+  { lat: -33.45, lon: -70.67, label: 'SANTIAGO' },
+  { lat: 4.71, lon: -74.07, label: 'BOGOTÁ' },
+  // North America
+  { lat: 40.71, lon: -74.0, label: 'NEW YORK', magenta: true },
+  { lat: 25.76, lon: -80.19, label: 'MIAMI', below: true },
+  { lat: 43.65, lon: -79.38, label: 'TORONTO' },
+  { lat: 19.43, lon: -99.13, label: 'CDMX' },
+  // Europe
+  { lat: 38.72, lon: -9.14, label: 'LISBOA' },
+  { lat: 40.42, lon: -3.7, label: 'MADRID', below: true },
+  { lat: 51.51, lon: -0.13, label: 'LONDON', magenta: true },
+  { lat: 48.86, lon: 2.35, label: 'PARIS', below: true },
+  // Africa
+  { lat: -8.84, lon: 13.23, label: 'LUANDA' },
+  { lat: -25.97, lon: 32.57, label: 'MAPUTO', magenta: true },
+  { lat: 6.52, lon: 3.38, label: 'LAGOS' },
+  // Asia
+  { lat: 35.68, lon: 139.69, label: 'TOKYO', magenta: true },
+  { lat: 25.2, lon: 55.27, label: 'DUBAI' },
+  { lat: 1.35, lon: 103.82, label: 'SINGAPORE' },
+  { lat: 19.08, lon: 72.88, label: 'MUMBAI', below: true },
+  // Oceania
+  { lat: -33.87, lon: 151.21, label: 'SYDNEY' },
+  { lat: -36.85, lon: 174.76, label: 'AUCKLAND', magenta: true },
 ]
 
 export default function Reach() {

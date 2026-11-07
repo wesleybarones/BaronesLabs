@@ -157,7 +157,7 @@ export default function App() {
         <main id="content" tabIndex={-1} className="relative outline-none">
           <Hero />
           <Marquee />
-<Deferred>
+          <Deferred>
             <S.Problem />
           </Deferred>
           <Deferred>
@@ -170,25 +170,25 @@ export default function App() {
             <S.TunnelTransition />
           </Deferred>
           <Deferred>
-            <S.Audience />
-          </Deferred>
-          <Deferred>
             <S.Portfolio />
           </Deferred>
           <Deferred>
-            <S.Process />
+            <S.Testimonials />
+          </Deferred>
+          <Deferred>
+            <S.Audience />
           </Deferred>
           <Deferred>
             <S.MoneyRain />
+          </Deferred>
+          <Deferred>
+            <S.Process />
           </Deferred>
           <Deferred>
             <S.Pricing />
           </Deferred>
           <Deferred>
             <S.GuaranteeBonus />
-          </Deferred>
-          <Deferred>
-            <S.Testimonials />
           </Deferred>
           <Deferred>
             <S.About />
