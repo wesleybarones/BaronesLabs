@@ -11,6 +11,7 @@ import Boot from './components/Boot'
 import Header from './components/Header'
 import ScrollProgress from './components/ScrollProgress'
 import WhatsAppFloat from './components/WhatsAppFloat'
+import ConsentBanner from './components/ConsentBanner'
 import Hero from './sections/Hero'
 import Marquee from './sections/Marquee'
 
@@ -212,6 +213,7 @@ export default function App() {
           )}
         </main>
         {siteMounted && <WhatsAppFloat />}
+        {siteMounted && <ConsentBanner />}
         <AnimatePresence>{booting && <Boot onDone={endBoot} onMountSite={mountSite} onReveal={reveal} />}</AnimatePresence>
       </AppProvider>
     </MotionConfig>

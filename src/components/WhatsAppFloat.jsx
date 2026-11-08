@@ -39,6 +39,7 @@ export default function WhatsAppFloat() {
     <AnimatePresence>
       {show && (
         <motion.div
+          data-track-section="whatsapp_float"
           className="fixed bottom-5 right-5 z-[65] md:bottom-8 md:right-8"
           initial={{ opacity: 0, scale: 0.6, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
