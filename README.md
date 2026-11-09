@@ -69,9 +69,10 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
   se algum faltar, aquele passo é pulado.
 - **Foto viva:** durante a montagem a foto vira vídeo (clipe do Google Flow/Veo, recortado em 4:5, sem som):
   `src/assets/hero-video/` (WebM VP9 + MP4 H.264, 720×900 no desktop e 480×600 no celular) e `src/hero-assembly/video.js`.
-  No desktop o encaixe do card espera o "agarrar" do vídeo (3,4s) e o clique do DEPLOY espera o toque no ar (4,0s);
-  no celular ele começa (escondido na moldura) enquanto o contorno é desenhado, com os mesmos encontros. No fim ele se dissolve de volta na foto.
-  Para trocar o clipe: recorte 864×1080 do centro do 1920×1080 e gere os 4 arquivos com os mesmos nomes.
+  O clipe atual: vira a cabeça (2–3,2s), levanta a mão aberta (4,2s), aponta (5,6s), toca no ar (6,1s) e o visor fica verde.
+  O clique do DEPLOY espera o toque no ar; no fim o vídeo se dissolve de volta na foto.
+  **Para trocar o clipe:** recorte 864×1080 do centro do 1920×1080, gere os 4 arquivos com os mesmos nomes e ajuste
+  os tempos em `BEATS` no topo de `video.js` (início no desktop e no celular, encaixe e toque).
 - **Sons** (`src/hero-assembly/sound.js`): premium e minimalista, só 4 momentos: brilho quando a foto aparece,
   "tink" de vidro no encaixe do card, toque grave e macio no clique do DEPLOY e acorde de sino (FM) no ONLINE.
   Sintetizados por código (Web Audio, sem arquivos), com um reverb de sala gerado. Navegadores só tocam som depois

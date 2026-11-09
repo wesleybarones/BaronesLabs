@@ -324,8 +324,8 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     const nearY = ty - gy + 6
     fin(animate(ghost, { x: nearX, y: nearY, rotate: [0, -4, -2] }, { duration: d, ease: EASE })).catch(() => {})
     await move(cur, [gx + nearX + offX, gy + nearY + offY], d)
-    // snap in sync with the photo's "catch" (video spark ≈ 3.4s)
-    if (video && !mobile) await video.at(3.3).then(guard)
+    // snap in sync with the photo's "catch", when the clip has one (video.js → BEATS.snap)
+    if (video && !mobile && video.beats?.snap) await video.at(video.beats.snap).then(guard)
     fin(animate(ghost, { x: tx - gx, y: ty - gy, rotate: 0, scale: s.w / g.w }, { type: 'spring', stiffness: 600, damping: 20 })).catch(() => {})
     move(cur, [tx + offX, ty + offY], 0.18).catch(() => {})
     await wait(0.16)
@@ -373,8 +373,8 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
   // deploy: button press → progress bar fills → status ONLINE → photo frame pulses lime
   async function deploy(cur, target = $('#btn-deploy')) {
     const btn = target
-    // the click lands with the photo's tap in the air (video ripple ≈ 4.0s)
-    if (video && !mobile) await video.at(3.95).then(guard)
+    // the click lands with the photo's tap in the air (video.js → BEATS.tap)
+    if (video?.beats?.tap) await video.at(video.beats.tap, 1.6).then(guard)
     if (cur && btn) await click(cur, btn)
     const bar = $('#deploy-progress')
     const st = $('#deploy-status')?.firstChild
@@ -493,7 +493,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
       const u = cursor('ui')
       const fb = frame ? box(frame) : { x: 20, y: below() - 300, w: 300, h: 380 }
       // phones take a moment to start a clip: it starts (hidden in the frame) while the outline is drawn
-      video?.start(0.4)
+      video?.start(video.beats.mobileStart)
       await enter(u, [W + 30, fb.y + 60], [fb.x + 16, fb.y + 16], 0.35)
       const outline = await draw(u, frame, 0.6)
       await reveal(frame, { d: 0.45, dy: 0, scale: 0.97 })
@@ -596,9 +596,9 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
         await enter(u, [W + 40, fb.y + 120], [fb.x + 30, fb.y + 30], 0.45)
         outline = await draw(u, frame, 0.95)
       }
-      // desktop: the photo comes alive as the frame appears (clip starts at 0.7s so its beats meet the cursors')
-      if (!mobile) video?.start(0.7)
       await reveal(frame, { d: 0.5, dy: 0, scale: 0.97 })
+      // desktop: the photo comes alive right after it appears (video.js → BEATS.desktopStart)
+      if (!mobile) video?.start(video.beats.desktopStart)
       if (outline) fin(animate(outline, { opacity: 0 }, { duration: 0.4 })).then(() => outline.remove(), () => {})
       const chips = $$('[data-ha-chip]')
       if (mobile) {

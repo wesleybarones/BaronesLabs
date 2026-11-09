@@ -5,11 +5,19 @@ import hero480webm from '../assets/hero-video/hero-480.webm'
 
 /*
   The hero photo coming alive during the assembly (Google Flow / Veo clip, cropped to the photo's 4:5):
-    ~2.0s raises a hand   ~3.4s "catches" the copied card (spark)   ~4.0s taps the air (ripple)
-    ~4.8s visor LED turns lime   then settles back into the photo's pose.
+    2.0–3.2s turns his head to the side · 3.6s back to the camera · 4.2s raises an open hand
+    5.6s points · 6.1s taps the air (spark + ripple) · 6.2s visor LED turns lime · 7.4s back to the photo's pose.
   It plays over the photo inside the frame and dissolves back into the live photo when it ends.
   Silent, muted, inline; if the browser refuses to play it, the photo simply stays.
 */
+// Where the clip starts and which beat the cursors wait for. A new clip only needs these numbers updated.
+export const BEATS = {
+  desktopStart: 3.5, // desktop: starts right after the frame appears, already facing the camera
+  mobileStart: 2.7, // phones: starts (hidden) while the outline is drawn
+  snap: null, // no "catch" gesture in this clip: the card snaps in on the cursors' own timing
+  tap: 6.05, // the DEPLOY click lands on the tap in the air
+}
+
 export function createHeroVideo(el, { mobile = false } = {}) {
   if (!el) return null
   let stopped = false
@@ -34,6 +42,7 @@ export function createHeroVideo(el, { mobile = false } = {}) {
   })
 
   const api = {
+    beats: BEATS,
     // show + play from `offset` seconds (the frame reveal hides the cut)
     start(offset = 0) {
       if (stopped) return
