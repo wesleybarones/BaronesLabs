@@ -99,8 +99,11 @@ export default function Hero() {
   const readyRef = useRef(ready)
   readyRef.current = ready
   const loadAssembly = () => import('../hero-assembly/assembly.js')
+  const calmFirst = assembly === 'calm'
+  const calmRun = useRef(false)
   const build = (m, { replay = false } = {}) => {
     const mobile = window.innerWidth < 1024
+    calmRun.current = calmFirst || reduce // reduced motion: calm version, the page stays put
     const video = m.createHeroVideo(videoRef.current, { mobile })
     const sound = (soundRef.current ||= m.createSound())
     const pref = m.soundPref()
@@ -115,7 +118,7 @@ export default function Hero() {
       window.addEventListener('pointerdown', go, { once: true })
       window.addEventListener('keydown', go, { once: true })
     }
-    return m.createAssembly({ root: ref.current, layer: layerRef.current, mobile, labels: t.hero.assembly, video, sound })
+    return m.createAssembly({ root: ref.current, layer: layerRef.current, mobile, labels: t.hero.assembly, video, sound, calm: calmRun.current })
   }
   // unlock audio inside the click itself (iPhone only allows it synchronously in the gesture)
   const unlockAudio = () => {
@@ -152,9 +155,11 @@ export default function Hero() {
     let alive = true
     loadAssembly()
       .then((m) => {
-        if (!alive || readyRef.current) return // too late: the hero is already on screen
+        if (!alive || (readyRef.current && !calmFirst)) return // too late: the hero is already on screen
         ctrl.current = build(m)
         ctrl.current.prepare()
+        // calm version: nothing to wait for (no intro), it plays over the page as soon as it is loaded
+        if (calmFirst) requestAnimationFrame(run)
       })
       .catch(() => setPhase('done'))
     return () => {
@@ -162,7 +167,7 @@ export default function Hero() {
     }
   }, []) // eslint-disable-line
   useEffect(() => {
-    if (ready && phase === 'planned') run()
+    if (ready && phase === 'planned' && !calmFirst) run()
   }, [ready, phase]) // eslint-disable-line
   // skip: button, Esc, a real resize or a language switch
   useEffect(() => {
@@ -178,7 +183,8 @@ export default function Hero() {
     }
   }, [phase])
   useEffect(() => () => ctrl.current?.skip(), [lang])
-  useEffect(() => setHeroBusy(phase === 'running'), [phase]) // eslint-disable-line
+  // the full version keeps the page still; the calm one never locks scrolling
+  useEffect(() => setHeroBusy(phase === 'running' && !calmRun.current), [phase]) // eslint-disable-line
   const replay = async () => {
     if (phase === 'running' || phase === 'planned') return
     unlockAudio()
@@ -307,7 +313,7 @@ export default function Hero() {
 
           {/* replay the live assembly */}
           <div id="replay-slot" className="mt-5 h-6">
-            {!reduce && !building && (
+            {!building && (
               <button
                 type="button"
                 onClick={replay}

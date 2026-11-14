@@ -32,7 +32,7 @@ const defer = () => {
   return p
 }
 
-export function createAssembly({ root, layer, mobile = false, labels = {}, video = null, sound = null }) {
+export function createAssembly({ root, layer, mobile = false, labels = {}, video = null, sound = null, calm = false }) {
   const $ = (sel) => root.querySelector(sel)
   const $$ = (sel) => [...root.querySelectorAll(sel)]
   const L = {
@@ -151,13 +151,15 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
   }
   const click = (cur, target) => {
     if (target) sound?.press() // only the DEPLOY click makes a sound
-    const ring = mk('ha-ring')
-    ring.style.setProperty('--c', cur.color)
-    animate(ring, { x: cur.x, y: cur.y }, { duration: 0 })
-    fin(animate(ring, { scale: [0.2, 2.4], opacity: [0.9, 0] }, { duration: 0.55, ease: OUT })).then(
-      () => ring.remove(),
-      () => {},
-    )
+    if (!calm) {
+      const ring = mk('ha-ring')
+      ring.style.setProperty('--c', cur.color)
+      animate(ring, { x: cur.x, y: cur.y }, { duration: 0 })
+      fin(animate(ring, { scale: [0.2, 2.4], opacity: [0.9, 0] }, { duration: 0.55, ease: OUT })).then(
+        () => ring.remove(),
+        () => {},
+      )
+    }
     fin(animate(cur.el.firstChild, { scale: [1, 0.78, 1] }, { duration: 0.28 })).catch(() => {})
     if (target) {
       target.classList.add('ha-pressed')
@@ -272,7 +274,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     const sel = mk('ha-sel')
     setBox(sel, b, pad)
     sel.innerHTML = `<i></i><i></i><i></i><i></i><span class="ha-measure">${Math.round(b.w)} × ${Math.round(b.h)}</span>`
-    fin(animate(sel, { scaleX: [0, 1], scaleY: [0, 1] }, { duration: 0.32, ease: EASE })).catch(() => {})
+    fin(animate(sel, calm ? { opacity: [0, 1] } : { scaleX: [0, 1], scaleY: [0, 1] }, { duration: 0.32, ease: EASE })).catch(() => {})
     await move(cur, [b.x + b.w + pad, b.y + b.h + pad], 0.32)
     return sel
   }
@@ -283,10 +285,10 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     const kbd = mk('ha-kbd')
     kbd.textContent = mac ? '⌘C' : 'Ctrl+C'
     animate(kbd, { x: cur.x + 16, y: cur.y - 30 }, { duration: 0 })
-    await fin(animate(kbd, { opacity: [0, 1], scale: [0.6, 1] }, { type: 'spring', stiffness: 520, damping: 22 }))
+    await fin(calm ? animate(kbd, { opacity: [0, 1] }, { duration: 0.3 }) : animate(kbd, { opacity: [0, 1], scale: [0.6, 1] }, { type: 'spring', stiffness: 520, damping: 22 }))
     if (sel) fin(animate(sel, { opacity: [1, 0.5, 1] }, { duration: 0.3 })).catch(() => {})
     await wait(0.2)
-    fin(animate(kbd, { opacity: 0, y: cur.y - 42 }, { duration: 0.25 })).then(() => kbd.remove(), () => {})
+    fin(animate(kbd, calm ? { opacity: 0 } : { opacity: 0, y: cur.y - 42 }, { duration: 0.25 })).then(() => kbd.remove(), () => {})
   }
 
   // drag: the copy follows the cursor to the slot; magenta guides appear as it lines up; spring snap + flash
@@ -341,7 +343,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     if (!el) return
     const f = mk(cls)
     setBox(f, box(el), 2)
-    fin(animate(f, { opacity: [0.95, 0], scale: [1, 1.18] }, { duration: 0.55, ease: OUT })).then(() => f.remove(), () => {})
+    fin(animate(f, calm ? { opacity: [0.8, 0] } : { opacity: [0.95, 0], scale: [1, 1.18] }, { duration: calm ? 0.7 : 0.55, ease: OUT })).then(() => f.remove(), () => {})
   }
 
   // status: "AGUARDANDO DEPLOY_" scrambles into the real text
@@ -397,7 +399,7 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
   async function deployToast() {
     const t = mk('ha-toast')
     t.innerHTML = `<div class="ha-toast-row"><span>▸ ${L.deploying}</span><span>baroneslabs.com.br</span></div><div class="ha-toast-bar"><i></i></div><div class="ha-toast-st">${L.waiting}</div>`
-    await fin(animate(t, { opacity: [0, 1], y: [16, 0] }, { duration: 0.22, ease: OUT }))
+    await fin(animate(t, calm ? { opacity: [0, 1] } : { opacity: [0, 1], y: [16, 0] }, { duration: 0.22, ease: OUT }))
     await fin(t.querySelector('i').animate([{ scale: '0 1' }, { scale: '1 1' }], { duration: 520, easing: 'cubic-bezier(0.65,0,0.35,1)', fill: 'forwards' }))
     const st = t.querySelector('.ha-toast-st')
     st.textContent = L.online
@@ -418,11 +420,13 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
   // ── prepare: hide everything the cursors will build (instant, before the hero is seen) ──
   function prepare() {
     if (mobile) layer.classList.add('ha-m')
-    ;['#hero-status', '#hero-kicker', '#hero-sub', '#hero-ctas', '#hero-frame', '#slot-proof'].forEach((s) => hide($(s)))
-    $$('#hero-proofs > li').forEach(hide)
-    $$('[data-ha-chip]').forEach(hide)
-    const h1 = $('#hero-title')
-    if (h1) prepareTitle(h1)
+    if (!calm) {
+      ;['#hero-status', '#hero-kicker', '#hero-sub', '#hero-ctas', '#hero-frame', '#slot-proof'].forEach((s) => hide($(s)))
+      $$('#hero-proofs > li').forEach(hide)
+      $$('[data-ha-chip]').forEach(hide)
+      const h1 = $('#hero-title')
+      if (h1) prepareTitle(h1)
+    }
     const bar = $('#deploy-progress')
     if (bar) bar.style.scale = '0 1'
     const st = $('#deploy-status')?.firstChild
@@ -544,7 +548,75 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     return done
   }
 
+  // ── calm mode ("reduzir movimento" on): the page is already there; the cursors only appear, act and fade.
+  // No hiding and rebuilding, no ripple rings, no zooms, no long trips or page glides. About 4 seconds.
+  async function playCalm() {
+    const title = $('#hero-title')
+    const proof = $('#proof-48h')
+    const slot = $('#slot-proof')
+    const btn = $('#btn-deploy')
+    const chips = $$('[data-ha-chip]')
+    const fadeIn = async (cur, el, ax, ay) => {
+      const [x, y] = pt(el, ax, ay)
+      place(cur, [x + 18, y + 14])
+      await move(cur, [x, y], 0.5, OUT)
+    }
+    if (!mobile) later(0.3, () => video?.start(video.beats.desktopStart))
+
+    const copyT = async () => {
+      if (!title) return
+      const c = cursor('copy')
+      await fadeIn(c, title.querySelector('.hl') || title, 1, 0.85)
+      title.classList.add('ha-hl-in')
+      later(0.8, () => title.classList.remove('ha-hl-in'))
+    }
+    const uiT = async () => {
+      if (mobile || !chips.length) return
+      await wait(0.3)
+      const u = cursor('ui')
+      await fadeIn(u, chips[0], 0.5, 0.6)
+      for (let i = 0; i < chips.length; i++) {
+        if (i) await move(u, pt(chips[i], 0.5, 0.6), 0.4)
+        await click(u)
+        flash(chips[i])
+      }
+    }
+    const wesleyT = async () => {
+      if (!proof) return
+      await wait(0.5)
+      const w = cursor('wesley')
+      await fadeIn(w, proof, 0, 0)
+      const sel = await select(w, proof)
+      await copy(w, sel)
+      fin(animate(sel, { opacity: 0 }, { duration: 0.3 })).then(() => sel.remove(), () => {})
+      if (slot && !mobile) {
+        flash(slot)
+        sound?.snap()
+      }
+    }
+    const deployT = async () => {
+      await wait(0.9)
+      const d = cursor('deploy')
+      if (btn) await fadeIn(d, btn, 0.62, 0.62)
+      if (mobile) {
+        const toast = deployToast()
+        if (btn) await click(d, btn)
+        await toast
+      } else await deploy(d)
+    }
+    try {
+      await Promise.all([copyT(), uiT(), wesleyT(), deployT()])
+      await wait(0.3)
+      await Promise.all(Object.values(cursors).map((c) => fin(animate(c.el, { opacity: 0 }, { duration: 0.4 }))))
+    } catch (e) {
+      if (e !== CANCEL) console.error(e)
+    }
+    finish()
+    return done
+  }
+
   async function play() {
+    if (calm) return playCalm()
     if (mobile) return playMobile()
     const gate = { ctas: defer(), proofs: defer(), snapped: defer() }
     const W = layer.clientWidth
@@ -686,7 +758,8 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
     layer.replaceChildren()
     // skipped: the clip stops too; phones play it when the photo scrolls into view
     if (skipped) video?.stop()
-    if (skipped && mobile && window.scrollY > 0) window.scrollTo(0, 0)
+    else if (calm && mobile) video?.playWhenVisible($('#hero-frame'), video.beats.desktopStart)
+    if (skipped && mobile && !calm && window.scrollY > 0) window.scrollTo(0, 0)
     layer.classList.remove('ha-m')
     done.resolve()
   }

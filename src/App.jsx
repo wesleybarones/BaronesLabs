@@ -64,6 +64,19 @@ function shouldBoot() {
   }
 }
 
+// first visit with "reduzir movimento" on: no intro, but a calm version of the hero assembly
+function firstVisitCalm() {
+  if (BOT.test(navigator.userAgent) || deepTarget()) return false
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+  try {
+    return !sessionStorage.getItem(BOOT_KEY)
+  } catch {
+    return false
+  }
+}
+// lab tools such as PageSpeed keep the plain entrance, so their numbers measure the page, not the show
+const LAB = /Chrome-Lighthouse|PTST|GTmetrix/i
+
 export default function App() {
   const { t } = useLang()
   const [booting, setBooting] = useState(shouldBoot)
@@ -71,8 +84,14 @@ export default function App() {
   const [siteMounted, setSiteMounted] = useState(() => !booting)
   const [ready, setReady] = useState(() => !booting)
   // first visit (with the LED intro): the hero is then assembled live by cursors (src/hero-assembly)
-  // (lab tools such as PageSpeed keep the plain entrance, so their numbers measure the page, not the show)
-  const [assembly] = useState(() => booting && !/Chrome-Lighthouse|PTST|GTmetrix/i.test(navigator.userAgent))
+  // 'full' after the LED intro, 'calm' for reduced motion (no intro, nothing hidden), false otherwise
+  const [assembly] = useState(() => (LAB.test(navigator.userAgent) ? false : booting ? 'full' : firstVisitCalm() ? 'calm' : false))
+  useEffect(() => {
+    if (assembly !== 'calm') return
+    try {
+      sessionStorage.setItem(BOOT_KEY, '1')
+    } catch {}
+  }, []) // eslint-disable-line
   const [heroBusy, setHeroBusy] = useState(false) // assembly playing: keep the page still
   const [lenis, setLenis] = useState(null)
 

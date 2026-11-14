@@ -62,7 +62,7 @@ function preloadCritical() {
           // first visit: a dark cover (the intro's own background) hides the shell until the intro starts
           const cover =
             '<div id="bl-cover" style="position:fixed;inset:0;z-index:250;background:#07080D"></div>' +
-            '<script>try{var s=sessionStorage.getItem("bl-booted"),b=/bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegram|linkedin|embedly|preview/i.test(navigator.userAgent),r=matchMedia("(prefers-reduced-motion: reduce)").matches;if(s||b||r)document.getElementById("bl-cover").remove()}catch(e){}</script>'
+            '<script>try{var s=sessionStorage.getItem("bl-booted"),b=/(bot|crawl|spider|slurp|facebookexternalhit|embedly|preview)|^whatsapp\\//i.test(navigator.userAgent),r=matchMedia("(prefers-reduced-motion: reduce)").matches;if(s||b||r)document.getElementById("bl-cover").remove()}catch(e){}</script>'
           out = out.replace('<div id="root"></div>', () => `<div id="root">${shell}${cover}</div>`)
         }
         return { html: out, tags }

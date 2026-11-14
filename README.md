@@ -56,6 +56,11 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 - `src/hero-assembly/assembly.js` (chunk separado, carregado só quando vai rodar) + estilos `ha-*` em `src/index.css`.
 - Roda na **primeira visita**, logo depois da explosão de LEDs, e no botão **↻ Rever montagem** (abaixo das provas).
   Robôs, PageSpeed/Lighthouse e quem usa "reduzir movimento" veem o hero normal.
+- **Reduzir movimento:** quem tem essa opção ligada no aparelho não vê a abertura de LEDs, mas vê uma versão calma
+  da montagem (≈4s, uma vez por visita): nada some, os cursores só aparecem e somem, sem ondas, zoom ou rolagem
+  automática; a foto ganha vida e o status vira ONLINE. Não trava a rolagem. "↻ Rever montagem" também roda a versão calma.
+- Robôs reconhecidos pelo nome do rastreador (`src/lib/bot.js` e o script da capa em `vite.config.js`); navegadores
+  internos de apps (LinkedIn, Telegram) são pessoas e veem o site completo.
 - Quatro cursores: **W.BARONES** (seleciona "Entrega 48h–7 dias", Ctrl+C e arrasta a cópia para a foto, com guias
   magenta e encaixe), **UI.BOT** (desenha o contorno neon da foto e solta os chips), **COPY.BOT** (digita o título
   letra por letra, traz texto, botões e provas) e **DEPLOY.BOT** (clica em "Quero meu site": "AGUARDANDO DEPLOY_"
