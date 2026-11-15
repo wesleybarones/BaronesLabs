@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-creme: #fbf6ef;
+  --color-papel: #fffdf9;
+  --color-vinho: #7a1f3d;
+  --color-vinho-escuro: #5a1229;
+  --color-rosa: #e8b4b8;
+  --color-rosa-claro: #f6e3e4;
+  --color-tinta: #3b2a2f;
+  --color-suave: #8a767b;
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+html { background: var(--color-creme); color: var(--color-tinta); -webkit-tap-highlight-color: transparent; }
+body { min-height: 100dvh; font-family: var(--font-sans); }
+
+@keyframes surgir { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.surgir { animation: surgir .6s ease-out both; }
+
+@keyframes bater { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(1); } 45% { transform: scale(1.12); } }
+.coracao { display: inline-block; animation: bater 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) { .surgir, .coracao { animation: none; } }
+
+.campo { @apply w-full rounded-xl border border-rosa bg-papel px-4 py-3 text-tinta outline-none focus:border-vinho focus:ring-2 focus:ring-rosa-claro; }
+.botao { @apply inline-flex items-center justify-center gap-2 rounded-full bg-vinho px-5 py-3 font-medium text-creme transition active:scale-[.98] hover:bg-vinho-escuro disabled:opacity-50; }
+.botao-leve { @apply inline-flex items-center justify-center gap-2 rounded-full border border-vinho/30 px-5 py-3 font-medium text-vinho transition hover:bg-rosa-claro active:scale-[.98]; }
+.titulo { @apply font-serif text-4xl font-semibold text-vinho; }

@@ -128,3 +128,17 @@ Por isso este app, esta música, este verso:
 não é presente, é só um jeito de dizer
 que, se eu pudesse escolher o universo,
 eu escolheria, de novo, você.$poema$, 'Wesley', now() - interval '1 minutes');
+
+-- "Neste dia": fotos do mesmo dia/mês em anos anteriores (respeita RLS)
+create or replace function public.photos_on_this_day(m int, d int, y int)
+returns setof public.photos
+language sql stable
+as $$
+  select * from public.photos
+  where extract(month from taken_at at time zone 'America/Sao_Paulo') = m
+    and extract(day from taken_at at time zone 'America/Sao_Paulo') = d
+    and extract(year from taken_at at time zone 'America/Sao_Paulo') < y
+  order by taken_at desc
+  limit 12;
+$$;
+grant execute on function public.photos_on_this_day(int, int, int) to authenticated;

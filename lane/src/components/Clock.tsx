@@ -1,0 +1,75 @@
+"use client";
+import { useEffect, useState } from "react";
+import { elapsed, wallClock, type Parts } from "@/lib/elapsed";
+import { NAMORO, CASAMENTO, anniversaryToday } from "@/lib/couple";
+
+const plural = (n: number, um: string, varios: string) => `${n} ${n === 1 ? um : varios}`;
+const two = (n: number) => String(n).padStart(2, "0");
+
+function useNow(): Parts | null {
+  const [now, setNow] = useState<Parts | null>(null);
+  useEffect(() => {
+    const tick = () => setNow(wallClock(new Date()));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
+}
+
+function Digits({ e, big }: { e: Parts | null; big?: boolean }) {
+  const cls = big ? "text-5xl sm:text-6xl" : "text-2xl";
+  return (
+    <div className={`flex items-baseline justify-center gap-1 font-serif font-semibold text-vinho [font-variant-numeric:lining-nums_tabular-nums] ${cls}`} aria-live="off">
+      <span>{e ? two(e.hour) : "--"}</span><span className="opacity-40">:</span>
+      <span>{e ? two(e.minute) : "--"}</span><span className="opacity-40">:</span>
+      <span key={e?.second} className={e ? "surgir [animation-duration:.35s]" : ""}>{e ? two(e.second) : "--"}</span>
+    </div>
+  );
+}
+
+function Calendar({ e, big }: { e: Parts | null; big?: boolean }) {
+  if (!e) return <p className="h-8" />;
+  const parts = [plural(e.year, "ano", "anos"), plural(e.month, "mês", "meses"), plural(e.day, "dia", "dias")];
+  return (
+    <p className={`font-serif [font-variant-numeric:lining-nums] ${big ? "text-2xl sm:text-3xl" : "text-lg"} text-tinta`}>
+      {parts.join(" · ")}
+    </p>
+  );
+}
+
+export function Clock() {
+  const now = useNow();
+  const juntos = now && elapsed(NAMORO, now);
+  const casados = now && elapsed(CASAMENTO, now);
+  const festas = now ? anniversaryToday(now) : [];
+
+  return (
+    <section className="space-y-8 text-center">
+      {festas.map((f) => (
+        <div key={f.kind} className="surgir mx-auto max-w-sm rounded-3xl bg-vinho px-6 py-4 text-creme shadow-lg">
+          <p className="text-sm uppercase tracking-[.25em] text-rosa">hoje é dia</p>
+          <p className="font-serif text-3xl [font-variant-numeric:lining-nums]">
+            {plural(f.years, "ano", "anos")} de {f.kind === "casamento" ? "casados 💍" : "namoro ♥"}
+          </p>
+        </div>
+      ))}
+
+      <div className="space-y-2">
+        <p className="text-xs uppercase tracking-[.3em] text-suave">juntos há</p>
+        <Calendar e={juntos} big />
+        <Digits e={juntos} big />
+        <p className="text-xs text-suave">desde 30 de dezembro de 2014</p>
+      </div>
+
+      <div className="mx-auto h-px w-16 bg-rosa" />
+
+      <div className="space-y-1">
+        <p className="text-xs uppercase tracking-[.3em] text-suave">casados há</p>
+        <Calendar e={casados} />
+        <Digits e={casados} />
+        <p className="text-xs text-suave">desde 15 de novembro de 2017</p>
+      </div>
+    </section>
+  );
+}
