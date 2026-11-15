@@ -3,7 +3,6 @@ import { Clock } from "@/components/Clock";
 import { PlayButton } from "@/components/Player";
 import { Thumb } from "@/components/Thumb";
 import { Tilt } from "@/components/Tilt";
-import { Hearts } from "@/components/Hearts";
 import { supabaseServer, signedUrls } from "@/lib/supabase/server";
 import { wallClock } from "@/lib/elapsed";
 import type { Photo, Song } from "@/lib/types";
@@ -23,7 +22,6 @@ export default async function Inicio() {
 
   return (
     <main className="relative space-y-12">
-      <Hearts />
       <header className="surgir relative space-y-1 text-center">
         <p className="text-xs uppercase tracking-[.3em] text-suave">para a mulher da minha vida</p>
         <h1 className="texto-3d font-serif text-7xl font-semibold">Lane</h1>

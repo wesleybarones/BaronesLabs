@@ -71,12 +71,14 @@ body { min-height: 100dvh; font-family: var(--font-sans); }
 
 /* corações flutuando em profundidade */
 .ceu { position: fixed; inset: 0; pointer-events: none; perspective: 500px; overflow: hidden; z-index: -1; }
-@keyframes subir {
-  from { transform: translate3d(0, 110vh, var(--z)) rotateY(0); opacity: 0; }
-  10% { opacity: var(--o); } 90% { opacity: var(--o); }
-  to { transform: translate3d(var(--dx), -15vh, var(--z)) rotateY(360deg); opacity: 0; }
+@keyframes cair {
+  0%   { transform: translate3d(0, -10vh, var(--z)) rotate(-15deg); opacity: 0; }
+  10%  { opacity: var(--o); }
+  50%  { transform: translate3d(var(--dx), 50vh, var(--z)) rotate(15deg); }
+  90%  { opacity: var(--o); }
+  100% { transform: translate3d(0, 110vh, var(--z)) rotate(-15deg); opacity: 0; }
 }
-.ceu span { position: absolute; bottom: 0; color: var(--color-rosa); animation: subir var(--t) linear infinite; animation-delay: var(--d); }
+.ceu span { position: absolute; top: 0; line-height: 1; animation: cair var(--t) ease-in-out infinite; animation-delay: var(--d); }
 
 /* vinil */
 .vinil {
