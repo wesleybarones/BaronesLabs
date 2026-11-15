@@ -66,19 +66,19 @@ export function Clock() {
       ))}
 
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-[.3em] text-suave">juntos há</p>
-        <Calendar e={juntos} big />
-        <Digits e={juntos} big />
-        <p className="text-xs text-suave">desde 30 de dezembro de 2014</p>
+        <p className="text-xs uppercase tracking-[.3em] text-suave">casados há</p>
+        <Calendar e={casados} big />
+        <Digits e={casados} big />
+        <p className="text-xs text-suave">desde 15 de novembro de 2017</p>
       </div>
 
       <div className="mx-auto h-px w-16 bg-rosa" />
 
       <div className="space-y-1">
-        <p className="text-xs uppercase tracking-[.3em] text-suave">casados há</p>
-        <Calendar e={casados} />
-        <Digits e={casados} />
-        <p className="text-xs text-suave">desde 15 de novembro de 2017</p>
+        <p className="text-xs uppercase tracking-[.3em] text-suave">juntos há</p>
+        <Calendar e={juntos} />
+        <Digits e={juntos} />
+        <p className="text-xs text-suave">desde 30 de dezembro de 2014</p>
       </div>
     </section>
   );
