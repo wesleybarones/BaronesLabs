@@ -17,7 +17,12 @@ export default async function Entrar({ searchParams }: { searchParams: Promise<{
       <div className="surgir relative flex w-full justify-center [animation-delay:.3s]">
         <GoogleButton next={safeNext(next)} />
       </div>
-      {erro && <p className="text-sm text-vinho">Não deu certo dessa vez. Tenta de novo?</p>}
+      {erro && (
+        <div className="relative max-w-sm space-y-1 text-sm text-vinho">
+          <p>Não deu certo dessa vez. Tenta de novo?</p>
+          {erro !== "1" && <p className="text-xs text-suave">Detalhe: {erro}</p>}
+        </div>
+      )}
       <p className="fixed bottom-6 text-xs text-suave">feito com amor por Wesley · Barones Labs</p>
     </main>
   );

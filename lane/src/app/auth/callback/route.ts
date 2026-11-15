@@ -7,11 +7,20 @@ export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const next = safeNext(url.searchParams.get("next"));
   const code = url.searchParams.get("code");
-  if (!code) return NextResponse.redirect(new URL("/entrar?erro=1", url));
+  const fail = (motivo: string) => {
+    console.error("[auth/callback] login falhou:", motivo);
+    const to = new URL("/entrar", url);
+    to.searchParams.set("erro", motivo.slice(0, 300));
+    return NextResponse.redirect(to);
+  };
+  if (!code) {
+    const motivo = url.searchParams.get("error_description") || url.searchParams.get("error") || "sem código de login";
+    return fail(motivo);
+  }
 
   const sb = await supabaseServer();
   const { data, error } = await sb.auth.exchangeCodeForSession(code);
-  if (error) return NextResponse.redirect(new URL("/entrar?erro=1", url));
+  if (error) return fail(error.message);
 
   const res = NextResponse.redirect(new URL(next, url));
   const token = data.session?.provider_token;
