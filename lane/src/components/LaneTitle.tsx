@@ -5,13 +5,21 @@ import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from 
 const LETRAS = ["L", "a", "n", "e"];
 const CORES = ["#e8b4b8", "#b83a55", "#e9d8bf", "#7a1f3d"];
 const FRASES = [
-  "eu te amo",
-  "minha Lane",
-  "9 anos de sim",
-  "o meu lugar no mundo",
-  "você é linda, forte e delicada",
-  "pra sempre nós",
+  "Eu te amo",
+  "Eu e você pra sempre",
+  "9 anos de nós",
+  "Mulher da minha vida",
+  "Linda, forte e delicada",
+  "Meu lugar no mundo",
 ];
+
+/** Sorteia uma frase diferente da atual. */
+export function sortearFrase(atual: number, total = FRASES.length, rand = Math.random): number {
+  if (total <= 1) return 0;
+  if (atual < 0) return Math.floor(rand() * total);
+  const n = Math.floor(rand() * (total - 1));
+  return n >= atual ? n + 1 : n;
+}
 
 type Coracao = { id: number; x: number; y: number; dx: number; dy: number; giro: number; cor: string; tam: number };
 
@@ -27,7 +35,7 @@ export function LaneTitle({ className = "text-7xl" }: { className?: string }) {
 
   function tocar(e: React.PointerEvent) {
     navigator.vibrate?.(12);
-    setFrase((f) => (f + 1) % FRASES.length);
+    setFrase((f) => sortearFrase(f));
     if (reduzir) return;
 
     letras.start((i: number) => ({

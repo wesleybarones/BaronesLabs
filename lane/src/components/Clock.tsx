@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { elapsed, wallClock, type Parts } from "@/lib/elapsed";
 import { NAMORO, CASAMENTO, anniversaryToday } from "@/lib/couple";
+import { AnniversaryBanner } from "./AnniversaryBanner";
 
 const plural = (n: number, um: string, varios: string) => `${n} ${n === 1 ? um : varios}`;
 const two = (n: number) => String(n).padStart(2, "0");
@@ -57,12 +58,8 @@ export function Clock() {
   return (
     <section className="space-y-8 text-center">
       {festas.map((f) => (
-        <div key={f.kind} className="surgir mx-auto max-w-sm rounded-3xl bg-gradient-to-b from-[#8d2a4b] to-vinho-escuro px-6 py-4 text-creme shadow-[0_6px_0_#3f0c1d,0_18px_30px_-8px_rgb(63_12_29/.5)]">
-          <p className="text-sm uppercase tracking-[.25em] text-rosa">hoje é dia</p>
-          <p className="font-serif text-3xl [font-variant-numeric:lining-nums]">
-            {plural(f.years, "ano", "anos")} de {f.kind === "casamento" ? "casados 💍" : "namoro ♥"}
-          </p>
-        </div>
+        <AnniversaryBanner key={f.kind}
+          texto={`${plural(f.years, "ano", "anos")} de ${f.kind === "casamento" ? "casados 💍" : "namoro ♥"}`} />
       ))}
 
       <div className="space-y-2">
