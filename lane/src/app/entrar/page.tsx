@@ -1,6 +1,7 @@
 import { GoogleButton } from "@/components/GoogleButton";
 import { safeNext } from "@/lib/safe-next";
 import { Hearts } from "@/components/Hearts";
+import { LaneTitle } from "@/components/LaneTitle";
 
 export default async function Entrar({ searchParams }: { searchParams: Promise<{ next?: string; erro?: string }> }) {
   const { next, erro } = await searchParams;
@@ -9,7 +10,7 @@ export default async function Entrar({ searchParams }: { searchParams: Promise<{
       <Hearts />
       <div className="surgir relative space-y-3">
         <p className="text-sm uppercase tracking-[.3em] text-suave">um lugar só nosso</p>
-        <h1 className="texto-3d font-serif text-8xl font-semibold">Lane</h1>
+        <h1><LaneTitle className="text-8xl" /></h1>
         <p className="font-serif text-xl italic text-tinta/80">
           desde 30 de dezembro de 2014 <span className="coracao text-vinho">♥</span>
         </p>

@@ -95,3 +95,10 @@ body { min-height: 100dvh; font-family: var(--font-sans); }
   .ceu { display: none; }
   .tilt { transform: none !important; }
 }
+
+/* brilho que passa devagar sobre o nome "Lane" */
+@keyframes varrer { 0%, 70% { transform: translateX(-120%) skewX(-20deg); } 100% { transform: translateX(220%) skewX(-20deg); } }
+.brilho-nome { position: absolute; inset: 0; overflow: hidden; pointer-events: none; mix-blend-mode: soft-light; }
+.brilho-nome::before { content: ""; position: absolute; inset: -10% auto -10% 0; width: 40%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / .9), transparent); animation: varrer 6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .brilho-nome { display: none; } }

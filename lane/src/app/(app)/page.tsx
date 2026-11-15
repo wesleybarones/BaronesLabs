@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Clock } from "@/components/Clock";
 import { PlayButton } from "@/components/Player";
 import { Thumb } from "@/components/Thumb";
+import { LaneTitle } from "@/components/LaneTitle";
 import { Tilt } from "@/components/Tilt";
 import { supabaseServer, signedUrls } from "@/lib/supabase/server";
 import { wallClock } from "@/lib/elapsed";
@@ -24,7 +25,7 @@ export default async function Inicio() {
     <main className="relative space-y-12">
       <header className="surgir relative space-y-1 text-center">
         <p className="text-xs uppercase tracking-[.3em] text-suave">para a mulher da minha vida</p>
-        <h1 className="texto-3d font-serif text-7xl font-semibold">Lane</h1>
+        <h1><LaneTitle className="text-7xl" /></h1>
       </header>
 
       <div className="relative"><Clock /></div>
