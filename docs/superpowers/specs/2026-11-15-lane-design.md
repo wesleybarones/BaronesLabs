@@ -70,7 +70,7 @@ O Lane é um presente do Wesley para a esposa, Lane. É um lugar só do casal, q
 ## Conteúdo inicial
 - **Datas do casal:** início do namoro em 30/12/2014; casamento em 15/11/2017.
 - **Lembranças pré-cadastradas:** "Começo de tudo" (30/12/2014) e "Nosso casamento" (15/11/2017).
-- **Início:** contador "juntos há X dias" a partir de 30/12/2014 e destaque nos aniversários de namoro e de casamento (decisão do Claude).
+- **Início:** relógio em tempo real, atualizado a cada segundo, mostrando quanto tempo estão juntos desde 30/12/2014 00:00 (horário de Brasília), em anos, meses, dias, horas, minutos e segundos. Abaixo dele, "casados há..." desde 15/11/2017, no mesmo formato (pedido do Wesley). Nos aniversários de namoro e de casamento, um destaque especial (decisão do Claude).
 - **Poemas iniciais:** os de `lane/content/poemas.md`, carregados no banco como autoria do Wesley e editáveis.
 
 ## Deixado para quem construir
