@@ -67,10 +67,17 @@ O Lane é um presente do Wesley para a esposa, Lane. É um lugar só do casal, q
 - **Visual:** romântico e quente, com tons creme e vinho, um título serifado e o texto sem serifa. Animações suaves e sem exageros. A interface é em português. O crédito "feito por Wesley · Barones Labs" fica discreto no rodapé.
 - **Música:** o arquivo enviado pelo Wesley vai para o Storage. Também existe a opção de trocar o arquivo por upload no app.
 
+## Conteúdo inicial
+- **Datas do casal:** início do namoro em 30/12/2014; casamento em 15/11/2017.
+- **Lembranças pré-cadastradas:** "Começo de tudo" (30/12/2014) e "Nosso casamento" (15/11/2017).
+- **Início:** contador "juntos há X dias" a partir de 30/12/2014 e destaque nos aniversários de namoro e de casamento (decisão do Claude).
+- **Poemas iniciais:** os de `lane/content/poemas.md`, carregados no banco como autoria do Wesley e editáveis.
+
 ## Deixado para quem construir
 Detalhes de layout, ícone e splash do PWA, e textos de estados vazios, sempre no tom de presente.
 
 ## Pendências do Wesley (para o setup, não bloqueiam o código)
 - O e-mail Google da Lane.
+- Revisar os poemas iniciais.
 - Criar o projeto no Google Cloud (passo a passo será fornecido).
 - O arquivo da música.
