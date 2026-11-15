@@ -66,11 +66,14 @@ export async function deletePoem(id: string) {
 }
 
 /** Chamado depois que o navegador já enviou o arquivo de áudio para o Storage. */
-export async function setSong(path: string, title: string) {
+export async function setSong(path: string, title: string, lyrics: string | null = null) {
   if (!/^music\/[A-Za-z0-9._-]+$/.test(path)) throw new Error("caminho inválido");
   const sb = await supabaseServer();
   const { data: old } = await sb.from("song").select("path").eq("id", 1).maybeSingle();
-  const { error } = await sb.from("song").upsert({ id: 1, path, title: title.trim().slice(0, 120) || "Nossa música", updated_at: new Date().toISOString() });
+  const { error } = await sb.from("song").upsert({
+    id: 1, path, title: title.trim().slice(0, 120) || "Nossa música",
+    lyrics: lyrics?.trim().slice(0, 20000) || null, updated_at: new Date().toISOString(),
+  });
   if (error) throw error;
   if (old?.path && old.path !== path) await sb.storage.from("lane").remove([old.path]);
   revalidatePath("/", "layout");

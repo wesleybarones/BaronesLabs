@@ -57,6 +57,7 @@ create table public.song (
   id int primary key default 1 check (id = 1),
   path text not null,
   title text not null default 'Nossa música',
+  lyrics text,
   updated_at timestamptz not null default now()
 );
 

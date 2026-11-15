@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PlayButton, fmtTime, usePlayer } from "./Player";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { setSong } from "@/app/actions";
+import { readId3 } from "@/lib/id3";
 
 export function MusicPlayer({ title }: { title: string | null }) {
   const p = usePlayer();
@@ -16,11 +17,12 @@ export function MusicPlayer({ title }: { title: string | null }) {
     if (!file || !file.size) return;
     if (!file.type.startsWith("audio/")) return setBusy("Esse arquivo não parece ser de áudio.");
     setBusy("Enviando a música…");
+    const tags = readId3(await file.slice(0, 1024 * 1024).arrayBuffer());
     const ext = (file.name.split(".").pop() || "mp3").replace(/[^a-z0-9]/gi, "").toLowerCase();
     const path = `music/${Date.now()}.${ext}`;
     const { error } = await supabaseBrowser().storage.from("lane").upload(path, file, { contentType: file.type });
     if (error) return setBusy("Não consegui enviar. Tenta de novo?");
-    await setSong(path, String(data.get("title") ?? ""));
+    await setSong(path, String(data.get("title") ?? "") || tags.title || "", tags.lyrics ?? null);
     setBusy(null);
     form.reset();
     router.refresh();
@@ -57,7 +59,15 @@ export function MusicPlayer({ title }: { title: string | null }) {
         <summary className="cursor-pointer text-sm text-suave">{p?.src ? "Trocar o arquivo da música" : "Enviar a música"}</summary>
         <form className="mt-4 space-y-3" onSubmit={(e) => { e.preventDefault(); upload(e.currentTarget); }}>
           <input name="title" defaultValue={title ?? ""} placeholder="Nome da música" className="campo" />
-          <input name="file" type="file" accept="audio/*" required className="block w-full text-sm" />
+          <input name="file" type="file" accept="audio/*" required className="block w-full text-sm"
+            onChange={async (e) => {
+              const f = e.currentTarget.files?.[0];
+              const titleInput = e.currentTarget.form?.elements.namedItem("title") as HTMLInputElement | null;
+              if (!f || !titleInput) return;
+              const t = readId3(await f.slice(0, 1024 * 1024).arrayBuffer());
+              if (t.title && !titleInput.value) titleInput.value = t.title;
+            }} />
+          <p className="text-xs text-suave">Se o arquivo tiver a letra gravada, ela aparece aqui embaixo do player.</p>
           <button className="botao" disabled={!!busy}>Enviar</button>
           {busy && <p className="text-sm text-suave">{busy}</p>}
         </form>

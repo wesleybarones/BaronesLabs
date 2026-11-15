@@ -4,4 +4,4 @@ export type Photo = {
 };
 export type Memory = { id: string; date: string; title: string; body: string; added_by: string | null };
 export type Poem = { id: string; title: string; body: string; author: string; created_at: string; updated_at: string };
-export type Song = { path: string; title: string };
+export type Song = { path: string; title: string; lyrics?: string | null };
