@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { deletePhoto } from "@/app/actions";
+import { Tilt } from "./Tilt";
 
 type Item = { id: string; thumb?: string; full?: string; taken_at: string };
 const dateFmt = new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long", year: "numeric", timeZone: "America/Sao_Paulo" });
@@ -37,11 +38,13 @@ export function Gallery({ groups, openId }: { groups: { label: string; items: It
         {groups.map((g) => (
           <section key={g.label} className="space-y-2">
             <h2 className="font-serif text-xl text-vinho first-letter:uppercase">{g.label}</h2>
-            <div className="grid grid-cols-3 gap-1 sm:grid-cols-4">
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
               {g.items.map((p) => (
-                <button key={p.id} onClick={() => setOpen(flat.indexOf(p))} className="aspect-square overflow-hidden rounded-lg bg-rosa-claro">
-                  {p.thumb && <img src={p.thumb} alt="" loading="lazy" className="h-full w-full object-cover transition hover:scale-105" />}
-                </button>
+                <Tilt key={p.id} className="rounded-lg" max={14}>
+                  <button onClick={() => setOpen(flat.indexOf(p))} className="relevo block aspect-square w-full overflow-hidden rounded-lg bg-rosa-claro">
+                    {p.thumb && <img src={p.thumb} alt="" loading="lazy" className="h-full w-full object-cover" />}
+                  </button>
+                </Tilt>
               ))}
             </div>
           </section>

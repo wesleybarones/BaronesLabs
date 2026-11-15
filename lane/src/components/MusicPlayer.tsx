@@ -29,9 +29,13 @@ export function MusicPlayer({ title }: { title: string | null }) {
   return (
     <div className="space-y-10">
       {p?.src ? (
-        <section className="surgir space-y-6 rounded-[2rem] bg-papel px-6 py-10 text-center shadow-sm ring-1 ring-rosa/60">
-          <div className={`mx-auto grid h-40 w-40 place-items-center rounded-full bg-gradient-to-br from-vinho to-rosa shadow-xl ${p.playing ? "animate-[spin_8s_linear_infinite]" : ""}`}>
-            <div className="h-10 w-10 rounded-full bg-creme" />
+        <section className="relevo surgir space-y-6 rounded-[2rem] bg-papel px-6 py-10 text-center ring-1 ring-rosa/60">
+          <div className="mx-auto w-fit [perspective:700px]">
+            <div className="[transform:rotateX(28deg)] [transform-style:preserve-3d]">
+              <div className={`vinil relative grid h-48 w-48 place-items-center rounded-full ${p.playing ? "animate-[spin_6s_linear_infinite]" : ""}`}>
+                <div className="relative z-10 h-3 w-3 rounded-full bg-creme" />
+              </div>
+            </div>
           </div>
           <div>
             <p className="font-serif text-3xl text-vinho">{title}</p>

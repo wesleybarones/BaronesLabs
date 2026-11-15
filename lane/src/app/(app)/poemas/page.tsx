@@ -2,6 +2,7 @@ import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase/server";
 import { plainPreview } from "@/components/PoemText";
 import type { Poem } from "@/lib/types";
+import { Tilt } from "@/components/Tilt";
 
 export const dynamic = "force-dynamic";
 
@@ -20,11 +21,11 @@ export default async function Poemas() {
       <ul className="space-y-3">
         {(data ?? []).map((p, i) => (
           <li key={p.id} className="surgir" style={{ animationDelay: `${i * 80}ms` }}>
-            <Link href={`/poemas/${p.id}`} className="block rounded-3xl bg-papel p-5 shadow-sm ring-1 ring-rosa/60 transition hover:ring-vinho/40">
-              <h2 className="font-serif text-2xl text-vinho">{p.title}</h2>
+            <Tilt className="rounded-3xl" max={5}><Link href={`/poemas/${p.id}`} className="relevo block rounded-3xl bg-papel p-5 ring-1 ring-rosa/60">
+              <h2 className="flutua font-serif text-2xl text-vinho">{p.title}</h2>
               <p className="mt-1 line-clamp-2 font-serif italic text-tinta/70">{plainPreview(p.body)}</p>
               <p className="mt-2 text-xs text-suave">por {p.author}</p>
-            </Link>
+            </Link></Tilt>
           </li>
         ))}
       </ul>

@@ -17,13 +17,23 @@ function useNow(): Parts | null {
   return now;
 }
 
+function Placas({ v }: { v: string }) {
+  return (
+    <span className="placas inline-flex gap-[.08em]">
+      {v.split("").map((c, i) => (
+        <span key={`${i}-${c}`} className="placa placa-virando">{c}</span>
+      ))}
+    </span>
+  );
+}
+
 function Digits({ e, big }: { e: Parts | null; big?: boolean }) {
   const cls = big ? "text-5xl sm:text-6xl" : "text-2xl";
   return (
-    <div className={`flex items-baseline justify-center gap-1 font-serif font-semibold text-vinho [font-variant-numeric:lining-nums_tabular-nums] ${cls}`} aria-live="off">
-      <span>{e ? two(e.hour) : "--"}</span><span className="opacity-40">:</span>
-      <span>{e ? two(e.minute) : "--"}</span><span className="opacity-40">:</span>
-      <span key={e?.second} className={e ? "surgir [animation-duration:.35s]" : ""}>{e ? two(e.second) : "--"}</span>
+    <div className={`flex items-center justify-center gap-1.5 font-serif font-semibold [font-variant-numeric:lining-nums_tabular-nums] ${cls}`} aria-live="off">
+      <Placas v={e ? two(e.hour) : "--"} /><span className="text-vinho/40">:</span>
+      <Placas v={e ? two(e.minute) : "--"} /><span className="text-vinho/40">:</span>
+      <Placas v={e ? two(e.second) : "--"} />
     </div>
   );
 }
@@ -47,7 +57,7 @@ export function Clock() {
   return (
     <section className="space-y-8 text-center">
       {festas.map((f) => (
-        <div key={f.kind} className="surgir mx-auto max-w-sm rounded-3xl bg-vinho px-6 py-4 text-creme shadow-lg">
+        <div key={f.kind} className="surgir mx-auto max-w-sm rounded-3xl bg-gradient-to-b from-[#8d2a4b] to-vinho-escuro px-6 py-4 text-creme shadow-[0_6px_0_#3f0c1d,0_18px_30px_-8px_rgb(63_12_29/.5)]">
           <p className="text-sm uppercase tracking-[.25em] text-rosa">hoje é dia</p>
           <p className="font-serif text-3xl [font-variant-numeric:lining-nums]">
             {plural(f.years, "ano", "anos")} de {f.kind === "casamento" ? "casados 💍" : "namoro ♥"}

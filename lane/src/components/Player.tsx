@@ -57,7 +57,7 @@ export function PlayButton({ big = false }: { big?: boolean }) {
   const size = big ? "h-20 w-20" : "h-10 w-10";
   return (
     <button onClick={p.toggle} aria-label={p.playing ? "Pausar" : "Tocar"}
-      className={`${size} grid shrink-0 place-items-center rounded-full bg-vinho text-creme shadow-md transition active:scale-95`}>
+      className={`${size} grid shrink-0 place-items-center rounded-full bg-gradient-to-b from-[#8d2a4b] to-vinho-escuro text-creme shadow-[0_3px_0_#3f0c1d,0_8px_16px_-4px_rgb(63_12_29/.5)] transition active:translate-y-[2px] active:shadow-[0_1px_0_#3f0c1d]`}>
       {p.playing ? (
         <svg viewBox="0 0 24 24" className={big ? "h-8 w-8" : "h-4 w-4"} fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
       ) : (
@@ -74,7 +74,7 @@ export function MiniPlayer() {
   if (!p?.src || path.startsWith("/musica") || (!p.playing && p.time === 0)) return null;
   const pct = p.duration ? (p.time / p.duration) * 100 : 0;
   return (
-    <div className="fixed inset-x-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-md overflow-hidden rounded-2xl bg-papel/95 shadow-lg ring-1 ring-rosa backdrop-blur">
+    <div className="relevo fixed inset-x-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 mx-auto max-w-md overflow-hidden rounded-2xl bg-papel/95 ring-1 ring-rosa backdrop-blur">
       <div className="flex items-center gap-3 px-3 py-2">
         <PlayButton />
         <div className="min-w-0 flex-1">

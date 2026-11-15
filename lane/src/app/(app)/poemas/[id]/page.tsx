@@ -15,8 +15,8 @@ export default async function Poema({ params }: { params: Promise<{ id: string }
         <Link href="/poemas" className="text-suave">← Poemas</Link>
         <Link href={`/poemas/${p.id}/editar`} className="text-suave underline">editar</Link>
       </div>
-      <article className="surgir space-y-8 rounded-[2rem] bg-papel px-6 py-10 shadow-sm ring-1 ring-rosa/60 sm:px-12">
-        <h1 className="text-center font-serif text-4xl font-semibold text-vinho">{p.title}</h1>
+      <article className="surgir relevo space-y-8 rounded-[2rem] bg-papel px-6 py-10 ring-1 ring-rosa/60 sm:px-12">
+        <h1 className="texto-3d text-center font-serif text-4xl font-semibold">{p.title}</h1>
         <div className="mx-auto h-px w-12 bg-rosa" />
         <PoemText body={p.body} />
         <p className="text-right font-serif italic text-suave">— {p.author}</p>

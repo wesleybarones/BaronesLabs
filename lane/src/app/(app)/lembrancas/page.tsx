@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { supabaseServer, signedUrls } from "@/lib/supabase/server";
 import type { Memory } from "@/lib/types";
+import { Tilt } from "@/components/Tilt";
 
 export const dynamic = "force-dynamic";
 
@@ -31,9 +32,9 @@ export default async function Lembrancas() {
           const year = m.date.slice(0, 4);
           return (
             <li key={m.id} id={`m-${m.id}`} className="surgir relative scroll-mt-6">
-              <span className="absolute -left-[33px] top-1.5 grid h-4 w-4 place-items-center rounded-full bg-vinho ring-4 ring-creme" />
+              <span className="absolute -left-[33px] top-1.5 grid h-4 w-4 place-items-center rounded-full bg-gradient-to-br from-rosa to-vinho shadow-[0_2px_4px_rgb(90_18_41/.5)] ring-4 ring-creme" />
               <p className="text-xs uppercase tracking-[.2em] text-suave">{fmt.format(new Date(m.date))}</p>
-              <div className="mt-1 rounded-3xl bg-papel p-5 shadow-sm ring-1 ring-rosa/60">
+              <Tilt className="mt-1 rounded-3xl" max={4}><div className="relevo rounded-3xl bg-papel p-5 ring-1 ring-rosa/60">
                 <div className="flex items-start justify-between gap-3">
                   <h2 className="font-serif text-2xl text-vinho">{m.title}</h2>
                   <Link href={`/lembrancas/${m.id}/editar`} className="shrink-0 text-xs text-suave underline">editar</Link>
@@ -48,7 +49,7 @@ export default async function Lembrancas() {
                     ))}
                   </div>
                 )}
-              </div>
+              </div></Tilt>
               <span className="sr-only">{year}</span>
             </li>
           );

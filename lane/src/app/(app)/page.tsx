@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Clock } from "@/components/Clock";
 import { PlayButton } from "@/components/Player";
 import { Thumb } from "@/components/Thumb";
+import { Tilt } from "@/components/Tilt";
+import { Hearts } from "@/components/Hearts";
 import { supabaseServer, signedUrls } from "@/lib/supabase/server";
 import { wallClock } from "@/lib/elapsed";
 import type { Photo, Song } from "@/lib/types";
@@ -20,31 +22,32 @@ export default async function Inicio() {
   const urls = await signedUrls(onThisDay.map((p) => p.thumb_path));
 
   return (
-    <main className="space-y-12">
-      <header className="surgir space-y-1 text-center">
+    <main className="relative space-y-12">
+      <Hearts />
+      <header className="surgir relative space-y-1 text-center">
         <p className="text-xs uppercase tracking-[.3em] text-suave">para a mulher da minha vida</p>
-        <h1 className="font-serif text-7xl font-semibold text-vinho">Lane</h1>
+        <h1 className="texto-3d font-serif text-7xl font-semibold">Lane</h1>
       </header>
 
-      <Clock />
+      <div className="relative"><Clock /></div>
 
       {song && (
-        <section className="surgir flex items-center gap-4 rounded-3xl bg-papel p-4 shadow-sm ring-1 ring-rosa/60">
+        <Tilt className="surgir rounded-3xl"><section className="relevo flex items-center gap-4 rounded-3xl bg-papel p-4 ring-1 ring-rosa/60">
           <PlayButton />
           <div className="min-w-0">
             <p className="text-xs uppercase tracking-[.2em] text-suave">a música que eu fiz pra você</p>
             <p className="truncate font-serif text-xl text-vinho">{song.title}</p>
           </div>
-        </section>
+        </section></Tilt>
       )}
 
       {onThisDay.length > 0 && (
         <section className="space-y-3">
           <h2 className="font-serif text-2xl text-vinho">Neste dia, em outros anos</h2>
-          <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2">
+          <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-8 pt-2">
             {onThisDay.map((p) => (
               <Link key={p.id} href={`/fotos?foto=${p.id}`} className="snap-start shrink-0">
-                <Thumb src={urls[p.thumb_path]} className="h-40 w-32 rounded-2xl" />
+                <Tilt className="rounded-2xl" max={12}><Thumb src={urls[p.thumb_path]} className="relevo h-40 w-32 rounded-2xl" /></Tilt>
                 <p className="mt-1 text-center text-xs text-suave">{new Date(p.taken_at).getFullYear()}</p>
               </Link>
             ))}
@@ -52,7 +55,7 @@ export default async function Inicio() {
         </section>
       )}
 
-      <section className="grid grid-cols-2 gap-3">
+      <section className="relative grid grid-cols-2 gap-3">
         <Card href="/fotos" title="Nossas fotos" sub={fotos ? `${fotos} momentos` : "importe do Google Fotos"} />
         <Card href="/lembrancas" title="Lembranças" sub="nossa linha do tempo" />
         <Card href="/poemas" title="Poemas" sub="escritos pra você" />
@@ -66,9 +69,11 @@ export default async function Inicio() {
 
 function Card({ href, title, sub }: { href: string; title: string; sub: string }) {
   return (
-    <Link href={href} className="rounded-3xl bg-papel p-5 shadow-sm ring-1 ring-rosa/60 transition hover:ring-vinho/40 active:scale-[.98]">
-      <p className="font-serif text-2xl text-vinho">{title}</p>
-      <p className="text-sm text-suave">{sub}</p>
-    </Link>
+    <Tilt className="rounded-3xl" max={10}>
+      <Link href={href} className="relevo block h-full rounded-3xl bg-gradient-to-br from-papel to-rosa-claro/60 p-5 ring-1 ring-rosa/60">
+        <p className="flutua font-serif text-2xl text-vinho">{title}</p>
+        <p className="text-sm text-suave">{sub}</p>
+      </Link>
+    </Tilt>
   );
 }
