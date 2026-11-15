@@ -65,6 +65,21 @@ export async function deletePoem(id: string) {
   redirect("/poemas");
 }
 
+const AUDIO_EXT = ["mp3", "m4a", "aac", "wav", "ogg", "opus", "flac"];
+
+/** Gera um endereço de envio assinado para o arquivo da música (só membros). */
+export async function songUploadUrl(ext: string): Promise<{ path: string; token: string }> {
+  const clean = ext.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (!AUDIO_EXT.includes(clean)) throw new Error("formato de áudio não suportado");
+  const sb = await supabaseServer();
+  const { data: ok } = await sb.rpc("is_member");
+  if (!ok) throw new Error("sem permissão");
+  const path = `music/${Date.now()}.${clean}`;
+  const { data, error } = await sb.storage.from("lane").createSignedUploadUrl(path);
+  if (error || !data) throw new Error(error?.message ?? "não consegui preparar o envio");
+  return { path, token: data.token };
+}
+
 /** Chamado depois que o navegador já enviou o arquivo de áudio para o Storage. */
 export async function setSong(path: string, title: string, lyrics: string | null = null) {
   if (!/^music\/[A-Za-z0-9._-]+$/.test(path)) throw new Error("caminho inválido");

@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PlayButton, fmtTime, usePlayer } from "./Player";
 import { supabaseBrowser } from "@/lib/supabase/client";
-import { setSong } from "@/app/actions";
+import { setSong, songUploadUrl } from "@/app/actions";
 import { readId3 } from "@/lib/id3";
 
 export function MusicPlayer({ title }: { title: string | null }) {
@@ -14,18 +14,24 @@ export function MusicPlayer({ title }: { title: string | null }) {
   async function upload(form: HTMLFormElement) {
     const data = new FormData(form);
     const file = data.get("file") as File | null;
-    if (!file || !file.size) return;
-    if (!file.type.startsWith("audio/")) return setBusy("Esse arquivo não parece ser de áudio.");
-    setBusy("Enviando a música…");
-    const tags = readId3(await file.slice(0, 1024 * 1024).arrayBuffer());
-    const ext = (file.name.split(".").pop() || "mp3").replace(/[^a-z0-9]/gi, "").toLowerCase();
-    const path = `music/${Date.now()}.${ext}`;
-    const { error } = await supabaseBrowser().storage.from("lane").upload(path, file, { contentType: file.type });
-    if (error) return setBusy("Não consegui enviar. Tenta de novo?");
-    await setSong(path, String(data.get("title") ?? "") || tags.title || "", tags.lyrics ?? null);
-    setBusy(null);
-    form.reset();
-    router.refresh();
+    if (!file || !file.size) return setBusy("Escolha o arquivo da música primeiro.");
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    const isAudio = file.type.startsWith("audio/") || ["mp3", "m4a", "aac", "wav", "ogg", "opus", "flac"].includes(ext);
+    if (!isAudio) return setBusy(`Esse arquivo não parece ser de áudio (${file.name}).`);
+    try {
+      setBusy("Enviando a música…");
+      const tags = readId3(await file.slice(0, 1024 * 1024).arrayBuffer());
+      const { path, token } = await songUploadUrl(ext || "mp3");
+      const { error } = await supabaseBrowser().storage.from("lane")
+        .uploadToSignedUrl(path, token, file, { contentType: file.type || "audio/mpeg" });
+      if (error) throw error;
+      await setSong(path, String(data.get("title") ?? "") || tags.title || "", tags.lyrics ?? null);
+      setBusy(null);
+      form.reset();
+      router.refresh();
+    } catch (e) {
+      setBusy(`Não consegui enviar: ${(e as Error).message || "erro desconhecido"}. Tenta de novo?`);
+    }
   }
 
   return (
@@ -59,7 +65,7 @@ export function MusicPlayer({ title }: { title: string | null }) {
         <summary className="cursor-pointer text-sm text-suave">{p?.src ? "Trocar o arquivo da música" : "Enviar a música"}</summary>
         <form className="mt-4 space-y-3" onSubmit={(e) => { e.preventDefault(); upload(e.currentTarget); }}>
           <input name="title" defaultValue={title ?? ""} placeholder="Nome da música" className="campo" />
-          <input name="file" type="file" accept="audio/*" required className="block w-full text-sm"
+          <input name="file" type="file" accept="audio/*,.mp3,.m4a,.wav,.aac,.ogg,.opus,.flac" required className="block w-full text-sm"
             onChange={async (e) => {
               const f = e.currentTarget.files?.[0];
               const titleInput = e.currentTarget.form?.elements.namedItem("title") as HTMLInputElement | null;
@@ -67,7 +73,7 @@ export function MusicPlayer({ title }: { title: string | null }) {
               const t = readId3(await f.slice(0, 1024 * 1024).arrayBuffer());
               if (t.title && !titleInput.value) titleInput.value = t.title;
             }} />
-          <p className="text-xs text-suave">Se o arquivo tiver a letra gravada, ela aparece aqui embaixo do player.</p>
+          <p className="text-xs text-suave">No iPhone, toque em “Escolher arquivo” → <b>Arquivos</b> (ou “Procurar”) e ache o MP3. Se o arquivo tiver a letra gravada, ela aparece embaixo do player.</p>
           <button className="botao" disabled={!!busy}>Enviar</button>
           {busy && <p className="text-sm text-suave">{busy}</p>}
         </form>
