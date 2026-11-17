@@ -26,7 +26,7 @@ export const ABOUT_PHOTO = wesleyPhoto
   Só entram avaliações com comentário (as só de estrelas ficam de fora).
 */
 export const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps?cid=14365799348690095596'
-export const GOOGLE_RATING = { score: '5,0', count: 7 }
+export const GOOGLE_RATING = { score: '5,0', count: 10 }
 export const REVIEWS = [
   {
     name: 'Iury Ferreira',
@@ -40,6 +40,18 @@ export const REVIEWS = [
     stars: 5,
     when: 'nov. 2026',
     text: 'Excelente profissional! O Wesley realiza um trabalho impecável, com muita dedicação, competência e compromisso. É nítido o cuidado e a qualidade em cada detalhe. Além de ser atencioso, demonstra muito profissionalismo e respeito pelos clientes. Recomendo de olhos fechados! Sucesso sempre, Wesley!',
+  },
+  {
+    name: 'Rafael Azeredo Cardoso',
+    stars: 5,
+    when: 'nov. 2026',
+    text: 'Saiu melhor que a encomenda, excelente resultado. Estou super satisfeito e meu negócio agradece, ficou incrível. Obg ❤️',
+  },
+  {
+    name: 'Adriano De Cesar Maciel',
+    stars: 5,
+    when: 'nov. 2026',
+    text: 'Muito top , trabalho impecável,  ficou melhor do que eu imaginava.  Pode fechar sem medo .',
   },
   {
     name: 'Isabelle Senna',
