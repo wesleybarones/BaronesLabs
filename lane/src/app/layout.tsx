@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond } from "next/font/google";
 import "./globals.css";
-import { SCRIPT_ABERTURA } from "@/lib/abertura";
 
 const garamond = EB_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal"], variable: "--font-garamond" });
 // itálico só baixa quando aparece na tela (poemas, frases), sem atrasar a abertura
@@ -19,7 +18,6 @@ export const viewport: Viewport = { themeColor: "#fbf6ef", width: "device-width"
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning className={`${garamond.variable} ${garamondItalico.variable}`}>
-      <head><script dangerouslySetInnerHTML={{ __html: SCRIPT_ABERTURA }} /></head>
       <body>{children}</body>
     </html>
   );

@@ -1,6 +1,5 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 
 /** Portão da abertura já desenhado na primeira pintura (antes de qualquer JavaScript). */
 function PortaoEstatico() {
@@ -16,13 +15,5 @@ function PortaoEstatico() {
 
 const Intro = dynamic(() => import("./Intro").then((m) => m.Intro), { ssr: false, loading: () => <PortaoEstatico /> });
 
-/** Mostra a abertura só na primeira vez do dia; nas outras, o app abre direto (sem baixar a animação). */
-export function IntroLazy() {
-  const [modo, setModo] = useState<"decidindo" | "mostrar" | "pular">("decidindo");
-  useEffect(() => {
-    setModo(document.documentElement.hasAttribute("data-sem-abertura") ? "pular" : "mostrar");
-  }, []);
-  if (modo === "pular") return null;
-  if (modo === "decidindo") return <PortaoEstatico />;
-  return <Intro />;
-}
+/** A abertura aparece toda vez que o app é aberto; o portão estático cobre a tela enquanto a animação carrega. */
+export const IntroLazy = Intro;
