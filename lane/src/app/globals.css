@@ -110,3 +110,13 @@ body { min-height: 100dvh; font-family: var(--font-sans); }
 .entra-da-esquerda { animation: da-esquerda .38s cubic-bezier(.2,.8,.2,1) backwards; }
 @media (prefers-reduced-motion: reduce) { .entra-da-direita, .entra-da-esquerda { animation: none; } }
 html, body { overflow-x: hidden; }
+
+/* nome dourado metálico com reflexo passando (abertura) */
+.nome-dourado {
+  background: linear-gradient(100deg, #b8862e 0%, #f5d78e 22%, #fff6dc 30%, #f0c766 40%, #a8741f 55%, #f5d78e 72%, #fff6dc 80%, #c99a3c 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: reflexo 3.2s ease-in-out 3.6s infinite;
+}
+@keyframes reflexo { 0% { background-position: 100% 0; } 100% { background-position: -150% 0; } }
+@media (prefers-reduced-motion: reduce) { .nome-dourado { animation: none; } }

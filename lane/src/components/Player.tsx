@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 type Ctx = {
   src: string | null; title: string; playing: boolean; time: number; duration: number;
-  toggle: () => void; seek: (t: number) => void; stop: () => void;
+  toggle: () => void; seek: (t: number) => void; stop: () => void; fadeIn: () => void;
 };
 const PlayerCtx = createContext<Ctx | null>(null);
 export const usePlayer = () => useContext(PlayerCtx);
@@ -39,6 +39,15 @@ export function PlayerProvider({ src, title, children }: { src: string | null; t
     toggle: () => { const a = audio.current; if (a) (a.paused ? a.play() : a.pause()); },
     seek: (s) => { if (audio.current) audio.current.currentTime = s; },
     stop: () => { const a = audio.current; if (a) { a.pause(); a.currentTime = 0; setTime(0); } },
+    // começa a tocar subindo o volume aos poucos (no iPhone o volume é fixo; ela só começa a tocar)
+    fadeIn: () => {
+      const a = audio.current;
+      if (!a || !a.paused) return;
+      a.volume = 0;
+      a.play().catch(() => {});
+      let v = 0;
+      const id = setInterval(() => { v = Math.min(1, v + 0.05); a.volume = v; if (v >= 1) clearInterval(id); }, 100);
+    },
   };
 
   return (
