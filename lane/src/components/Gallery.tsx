@@ -52,7 +52,7 @@ export function Gallery({ groups, openId }: { groups: { label: string; items: It
       </div>
 
       {cur && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-black/95 text-creme"
+        <div data-noswipe className="fixed inset-0 z-50 flex flex-col bg-black/95 text-creme"
           onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
           onTouchEnd={(e) => {
             if (touchX.current === null) return;

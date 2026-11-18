@@ -43,7 +43,7 @@ export default async function Inicio() {
       {onThisDay.length > 0 && (
         <section className="space-y-3">
           <h2 className="font-serif text-2xl text-vinho">Neste dia, em outros anos</h2>
-          <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-8 pt-2">
+          <div data-noswipe className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-8 pt-2">
             {onThisDay.map((p) => (
               <Link key={p.id} href={`/fotos?foto=${p.id}`} className="snap-start shrink-0">
                 <Tilt className="rounded-2xl" max={12}><Thumb src={urls[p.thumb_path]} className="relevo h-40 w-32 rounded-2xl" /></Tilt>
@@ -61,7 +61,7 @@ export default async function Inicio() {
         <Card href="/musica" title="Nossa música" sub="ouvir de novo" />
       </section>
 
-      <footer className="text-center text-xs text-suave">feito com amor por Wesley · Barones Labs</footer>
+      <footer className="text-center text-xs text-suave">feito com amor por Wesley</footer>
     </main>
   );
 }

@@ -1,5 +1,7 @@
 import { Nav } from "@/components/Nav";
 import { Hearts } from "@/components/Hearts";
+import { Intro } from "@/components/Intro";
+import { SwipeNav } from "@/components/SwipeNav";
 import { MiniPlayer, PlayerProvider } from "@/components/Player";
 import { supabaseServer, signedUrls } from "@/lib/supabase/server";
 import type { Song } from "@/lib/types";
@@ -14,6 +16,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <div className="mx-auto min-h-dvh max-w-2xl px-4 pb-44 pt-[calc(1.5rem+env(safe-area-inset-top))]">{children}</div>
       <MiniPlayer />
       <Nav />
+      <SwipeNav />
+      <Intro />
     </PlayerProvider>
   );
 }

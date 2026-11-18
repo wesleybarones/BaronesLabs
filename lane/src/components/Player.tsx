@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 type Ctx = {
   src: string | null; title: string; playing: boolean; time: number; duration: number;
-  toggle: () => void; seek: (t: number) => void;
+  toggle: () => void; seek: (t: number) => void; stop: () => void;
 };
 const PlayerCtx = createContext<Ctx | null>(null);
 export const usePlayer = () => useContext(PlayerCtx);
@@ -38,6 +38,7 @@ export function PlayerProvider({ src, title, children }: { src: string | null; t
     src, title, playing, time, duration,
     toggle: () => { const a = audio.current; if (a) (a.paused ? a.play() : a.pause()); },
     seek: (s) => { if (audio.current) audio.current.currentTime = s; },
+    stop: () => { const a = audio.current; if (a) { a.pause(); a.currentTime = 0; setTime(0); } },
   };
 
   return (
@@ -82,6 +83,10 @@ export function MiniPlayer() {
           <p className="text-xs text-suave">Wesley para Lane</p>
         </div>
         <span className="text-xs tabular-nums text-suave">{fmtTime(p.time)}</span>
+        <button onClick={p.stop} aria-label="Encerrar a música"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-suave transition hover:bg-rosa-claro hover:text-vinho active:scale-90">
+          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
       </div>
       <div className="h-0.5 bg-rosa-claro"><div className="h-full bg-vinho transition-[width]" style={{ width: `${pct}%` }} /></div>
     </div>

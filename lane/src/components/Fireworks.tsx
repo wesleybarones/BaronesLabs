@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const PALETAS = [
   ["#f5c96b", "#fff3d6", "#e8b4b8"], // dourado
@@ -109,12 +110,15 @@ export function useFireworks() {
     if (fimNoite.current) clearTimeout(fimNoite.current);
   }, []);
 
-  const tela = (
+  const [montado, setMontado] = useState(false);
+  useEffect(() => setMontado(true), []);
+  const tela = !montado ? null : createPortal(
     <>
       {/* céu de noite: escurece o fundo para os fogos brilharem */}
       <div aria-hidden className={`pointer-events-none fixed inset-0 z-40 bg-[radial-gradient(ellipse_at_50%_20%,rgb(58_14_30/.55),rgb(26_6_14/.78))] transition-opacity duration-700 ${noite ? "opacity-100" : "opacity-0"}`} />
       <canvas ref={canvas} aria-hidden className="pointer-events-none fixed inset-0 z-50 h-full w-full" />
-    </>
+    </>,
+    document.body,
   );
   return { tela, soltar };
 }

@@ -24,7 +24,7 @@ export default async function Entrar({ searchParams }: { searchParams: Promise<{
           {erro !== "1" && <p className="text-xs text-suave">Detalhe: {erro}</p>}
         </div>
       )}
-      <p className="fixed bottom-6 text-xs text-suave">feito com amor por Wesley · Barones Labs</p>
+      <p className="fixed bottom-6 text-xs text-suave">feito com amor por Wesley</p>
     </main>
   );
 }
