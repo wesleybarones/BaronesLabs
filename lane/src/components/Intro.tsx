@@ -6,6 +6,7 @@ import { diasJuntos } from "@/lib/days";
 import { NAMORO } from "@/lib/couple";
 import { wallClock } from "@/lib/elapsed";
 import { Sons } from "@/lib/sons";
+import { marcarAberturaVista } from "@/lib/abertura";
 
 const CORACAO = "M12 21s-7.5-4.6-9.2-9.3C1.6 8.4 3.7 5 7 5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.3 0 5.4 3.4 4.2 6.7C19.5 16.4 12 21 12 21z";
 const LETRAS = [
@@ -144,6 +145,7 @@ export function Intro() {
   /** Toque de abertura: libera o som (só funciona dentro do toque) e agenda a trilha da cena. */
   const abrir = (comSom: boolean) => {
     if (fase !== "portao") return;
+    marcarAberturaVista();
     if (comSom) {
       try {
         const s = new Sons(); sons.current = s; s.liberar();

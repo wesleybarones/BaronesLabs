@@ -5,7 +5,7 @@ import { groupByMonth } from "@/lib/group";
 import type { Photo } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
-const PAGE = 240;
+const PAGE = 90;
 
 export default async function Fotos({ searchParams }: { searchParams: Promise<{ antes?: string; foto?: string }> }) {
   const { antes, foto } = await searchParams;

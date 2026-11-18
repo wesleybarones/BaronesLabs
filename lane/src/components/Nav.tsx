@@ -13,7 +13,7 @@ export function Nav() {
           const active = it.href === "/" ? path === "/" : path.startsWith(it.href);
           return (
             <li key={it.href}>
-              <Link href={it.href} prefetch={true} className={`flex flex-col items-center gap-0.5 px-2 py-2.5 text-[11px] ${active ? "text-vinho" : "text-suave"}`}>
+              <Link href={it.href} prefetch={false} className={`flex flex-col items-center gap-0.5 px-2 py-2.5 text-[11px] ${active ? "text-vinho" : "text-suave"}`}>
                 <svg viewBox="0 0 24 24" className={`h-6 w-6 transition ${active ? "-translate-y-0.5 drop-shadow-[0_3px_2px_rgb(90_18_41/.35)]" : ""}`} fill={active ? "currentColor" : "none"} fillOpacity={active ? 0.15 : 0} stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round"><path d={it.d} /></svg>
                 {it.label}
               </Link>

@@ -15,11 +15,19 @@ export function SwipeNav() {
     if (c) { c.style.transition = ""; c.style.transform = ""; c.style.opacity = ""; c.style.willChange = ""; }
   }, [path]);
 
+  // pré-carrega só as abas vizinhas, alguns segundos depois (sem disputar a internet com a abertura)
   useEffect(() => {
-    for (const lado of ["esquerda", "direita"] as const) {
-      const alvo = swipeTarget(path, lado);
-      if (alvo) router.prefetch(alvo);
-    }
+    const t = setTimeout(() => {
+      const ir = () => {
+        for (const lado of ["esquerda", "direita"] as const) {
+          const alvo = swipeTarget(path, lado);
+          if (alvo) router.prefetch(alvo);
+        }
+      };
+      const w = window as Window & { requestIdleCallback?: (f: () => void) => void };
+      if (w.requestIdleCallback) w.requestIdleCallback(ir); else ir();
+    }, 3000);
+    return () => clearTimeout(t);
   }, [path, router]);
 
   useEffect(() => {

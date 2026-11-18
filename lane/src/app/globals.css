@@ -125,3 +125,8 @@ html, body { overflow-x: hidden; }
 @keyframes barra { 0%, 100% { height: 30%; } 50% { height: 100%; } }
 .barra { height: 30%; animation: barra .9s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .barra { animation: none; height: 60%; } }
+
+/* abertura já vista hoje: nem desenha o portão */
+html[data-sem-abertura] .abertura-fundo { display: none; }
+@keyframes pulsar { 0%, 100% { transform: scale(1); opacity: .7; } 50% { transform: scale(1.5); opacity: 1; } }
+.ponto-pulsando { animation: pulsar 1.6s ease-in-out infinite; }
