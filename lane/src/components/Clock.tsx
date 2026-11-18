@@ -66,7 +66,7 @@ export function Clock() {
         <p className="text-xs uppercase tracking-[.3em] text-suave">casados há</p>
         <Calendar e={casados} big />
         <Digits e={casados} big />
-        <p className="text-xs text-suave">desde 15 de novembro de 2017, às 15h</p>
+        <p className="text-xs text-suave">desde 15 de novembro de 2017</p>
       </div>
 
       <div className="mx-auto h-px w-16 bg-rosa" />
@@ -75,7 +75,7 @@ export function Clock() {
         <p className="text-xs uppercase tracking-[.3em] text-suave">juntos há</p>
         <Calendar e={juntos} />
         <Digits e={juntos} />
-        <p className="text-xs text-suave">desde 30 de dezembro de 2014, à 1h da manhã</p>
+        <p className="text-xs text-suave">desde 30 de dezembro de 2014</p>
       </div>
     </section>
   );
