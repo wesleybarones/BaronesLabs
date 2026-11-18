@@ -1,6 +1,9 @@
 /** Letra da música; linhas com o nome dela ganham destaque. */
 export function Lyrics({ text }: { text: string }) {
-  const lines = text.normalize("NFC").split("\n").map((l) => l.trim());
+  const lines = text.normalize("NFC").split("\n").map((l) => l.trim())
+    .filter((l) => !/^\[title:/i.test(l))
+    .map((l) => (/^\[.*\]$/.test(l) ? "" : l))
+    .filter((l, i, arr) => !(l === "" && (i === 0 || arr[i - 1] === "")));
   return (
     <details open className="relevo rounded-[2rem] bg-papel px-6 py-6 ring-1 ring-rosa/60">
       <summary className="cursor-pointer text-center text-xs uppercase tracking-[.3em] text-suave">letra</summary>

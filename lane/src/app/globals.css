@@ -120,3 +120,8 @@ html, body { overflow-x: hidden; }
 }
 @keyframes reflexo { 0% { background-position: 100% 0; } 100% { background-position: -150% 0; } }
 @media (prefers-reduced-motion: reduce) { .nome-dourado { animation: none; } }
+
+/* barrinhas de "tocando agora" */
+@keyframes barra { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+.barra { height: 30%; animation: barra .9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .barra { animation: none; height: 60%; } }

@@ -80,16 +80,15 @@ export async function songUploadUrl(ext: string): Promise<{ path: string; token:
   return { path, token: data.token };
 }
 
-/** Chamado depois que o navegador já enviou o arquivo de áudio para o Storage. */
-export async function setSong(path: string, title: string, lyrics: string | null = null) {
+/** Chamado depois que o navegador já enviou o arquivo de áudio: entra no fim da playlist. */
+export async function addSong(path: string, title: string, lyrics: string | null = null) {
   if (!/^music\/[A-Za-z0-9._-]+$/.test(path)) throw new Error("caminho inválido");
   const sb = await supabaseServer();
-  const { data: old } = await sb.from("song").select("path").eq("id", 1).maybeSingle();
-  const { error } = await sb.from("song").upsert({
-    id: 1, path, title: title.trim().slice(0, 120) || "Nossa música",
-    lyrics: lyrics?.trim().slice(0, 20000) || null, updated_at: new Date().toISOString(),
+  const { data: ultima } = await sb.from("songs").select("position").order("position", { ascending: false }).limit(1).maybeSingle();
+  const { error } = await sb.from("songs").insert({
+    path, title: title.trim().slice(0, 120) || "Nossa música",
+    lyrics: lyrics?.trim().slice(0, 20000) || null, position: (ultima?.position ?? -1) + 1,
   });
   if (error) throw error;
-  if (old?.path && old.path !== path) await sb.storage.from("lane").remove([old.path]);
   revalidatePath("/", "layout");
 }

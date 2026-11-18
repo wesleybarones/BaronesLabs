@@ -1,21 +1,20 @@
 import Link from "next/link";
 import { Clock } from "@/components/Clock";
-import { PlayButton } from "@/components/Player";
+import { SongCard } from "@/components/SongCard";
 import { Thumb } from "@/components/Thumb";
 import { LaneTitleLazy as LaneTitle } from "@/components/LaneTitleLazy";
 import { Tilt } from "@/components/Tilt";
 import { supabaseServer, signedUrls } from "@/lib/supabase/server";
 import { wallClock } from "@/lib/elapsed";
-import type { Photo, Song } from "@/lib/types";
+import type { Photo } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function Inicio() {
   const sb = await supabaseServer();
   const today = wallClock(new Date());
-  const [otd, { data: song }, { count: fotos }] = await Promise.all([
+  const [otd, { count: fotos }] = await Promise.all([
     sb.rpc("photos_on_this_day", { m: today.month, d: today.day, y: today.year }),
-    sb.from("song").select("path,title").eq("id", 1).maybeSingle<Song>(),
     sb.from("photos").select("id", { count: "exact", head: true }),
   ]);
   const onThisDay = (otd.data ?? []) as Photo[];
@@ -30,15 +29,7 @@ export default async function Inicio() {
 
       <div className="relative"><Clock /></div>
 
-      {song && (
-        <Tilt className="surgir rounded-3xl"><section className="relevo flex items-center gap-4 rounded-3xl bg-papel p-4 ring-1 ring-rosa/60">
-          <PlayButton />
-          <div className="min-w-0">
-            <p className="text-xs uppercase tracking-[.2em] text-suave">a música que eu fiz pra você</p>
-            <p className="truncate font-serif text-xl text-vinho">{song.title}</p>
-          </div>
-        </section></Tilt>
-      )}
+      <SongCard />
 
       {onThisDay.length > 0 && (
         <section className="space-y-3">
