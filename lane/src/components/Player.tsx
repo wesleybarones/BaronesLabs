@@ -7,7 +7,7 @@ export type Track = { id: string; title: string; src: string; cover: string | nu
 type Ctx = {
   tracks: Track[]; idx: number; current: Track | null;
   src: string | null; title: string; playing: boolean; time: number; duration: number;
-  toggle: () => void; seek: (t: number) => void; stop: () => void; fadeIn: () => void;
+  toggle: () => void; seek: (t: number) => void; stop: () => void; fadeIn: (inicio?: number) => void; prime: () => void;
   playTrack: (i: number) => void; next: () => void; prev: () => void;
 };
 const PlayerCtx = createContext<Ctx | null>(null);
@@ -74,12 +74,22 @@ export function PlayerProvider({ tracks, children }: { tracks: Track[]; children
       if (a && a.currentTime > 4) { a.currentTime = 0; return; } // como nos players: volta ao começo antes
       playTrack((idx - 1 + tracks.length) % Math.max(1, tracks.length));
     },
-    // a primeira música começa subindo o volume aos poucos (no iPhone o volume é fixo; ela só começa a tocar)
-    fadeIn: () => {
+    // destrava o áudio dentro de um toque: começa a tocar MUDO, para poder soltar o som depois sem novo toque
+    prime: () => {
       const a = audio.current;
       if (!a || !a.paused) return;
+      a.muted = true;
+      a.play().catch(() => { a.muted = false; });
+    },
+    // a música entra subindo o volume aos poucos, a partir de `inicio` segundos da faixa
+    // (no iPhone o volume é fixo; ela só começa a tocar)
+    fadeIn: (inicio = 0) => {
+      const a = audio.current;
+      if (!a) return;
+      if (a.muted) { a.currentTime = inicio; a.muted = false; }
+      else if (a.paused) { a.currentTime = inicio; a.play().catch(() => {}); }
+      else return;
       a.volume = 0;
-      a.play().catch(() => {});
       let v = 0;
       const id = setInterval(() => { v = Math.min(1, v + 0.05); a.volume = v; if (v >= 1) clearInterval(id); }, 100);
     },

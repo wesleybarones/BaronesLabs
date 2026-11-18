@@ -5,6 +5,7 @@ import { usePlayer } from "./Player";
 import { diasJuntos } from "@/lib/days";
 import { NAMORO } from "@/lib/couple";
 import { wallClock } from "@/lib/elapsed";
+import { Sons } from "@/lib/sons";
 
 const CORACAO = "M12 21s-7.5-4.6-9.2-9.3C1.6 8.4 3.7 5 7 5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.3 0 5.4 3.4 4.2 6.7C19.5 16.4 12 21 12 21z";
 const LETRAS = [
@@ -13,7 +14,8 @@ const LETRAS = [
   { l: "n", x: -120, y: 170, r: 60 },
   { l: "e", x: 170, y: 140, r: -90 },
 ];
-const T = { cometa: 0.9, cheio: 2.2, batida: 2.95, nome: 3.2, dias: 4.25, convite: 5.4, auto: 9 }; // segundos
+const T = { cometa: 0.9, cheio: 2.2, batida: 2.95, nome: 3.2, dias: 4.25, auto: 6.7 }; // segundos depois do toque
+const INICIO_MUSICA = 3; // a música começa no segundo 3 da faixa (pula o silêncio inicial)
 
 type Faisca = { x: number; y: number; z: number; vx: number; vy: number; vida: number; max: number; cor: string; r: number };
 
@@ -72,8 +74,8 @@ function useCeu(canvas: React.RefObject<HTMLCanvasElement | null>, ativo: boolea
 export function Intro() {
   const reduzir = useReducedMotion();
   const player = usePlayer();
-  const [fase, setFase] = useState<"cena" | "mergulho" | "fim">("cena");
-  const [convite, setConvite] = useState(false);
+  const [fase, setFase] = useState<"portao" | "cena" | "mergulho" | "fim">("portao");
+  const sons = useRef<Sons | null>(null);
   const [dias, setDias] = useState(0);
   const [tremer, setTremer] = useState(0);
   const tela = useAnimationControls();
@@ -88,13 +90,20 @@ export function Intro() {
   const explosao = useCeu(canvas, fase !== "fim" && !reduzir);
   const totalDias = useRef(diasJuntos(NAMORO, wallClock(new Date())));
 
-  // linha do tempo
+  // trava a rolagem enquanto a abertura está na tela
   useEffect(() => {
     document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  // linha do tempo (começa no toque de abertura)
+  const comecou = fase !== "portao";
+  useEffect(() => {
+    if (!comecou) return;
     if (reduzir) {
-      setDias(totalDias.current); setConvite(true);
-      const t = setTimeout(() => setFase("fim"), 1800);
-      return () => { clearTimeout(t); document.body.style.overflow = ""; };
+      setDias(totalDias.current);
+      const t = setTimeout(() => setFase((f) => (f === "cena" ? "mergulho" : f)), 1800);
+      return () => clearTimeout(t);
     }
     const tl: Array<ReturnType<typeof setTimeout>> = [];
     const em = (s: number, f: () => void) => tl.push(setTimeout(f, s * 1000));
@@ -110,10 +119,9 @@ export function Intro() {
       navigator.vibrate?.([20, 60, 30]);
     });
     em(T.dias, () => ctrl.push(animate(0, totalDias.current, { duration: 1.3, ease: [0.2, 0.7, 0.2, 1], onUpdate: (v) => setDias(Math.round(v)) })));
-    em(T.convite, () => setConvite(true));
-    em(T.auto, () => setFase((f) => (f === "cena" ? "mergulho" : f)));
-    return () => { tl.forEach(clearTimeout); ctrl.forEach((c) => c.stop()); document.body.style.overflow = ""; };
-  }, [reduzir, progresso, cheio, explosao, tela, batida]);
+    em(T.auto, () => entrarRef.current());
+    return () => { tl.forEach(clearTimeout); ctrl.forEach((c) => c.stop()); };
+  }, [comecou, reduzir, progresso, cheio, explosao, tela, batida]);
 
   // o líquido sobe junto com o valor animado
   useEffect(() => cheio.on("change", (v) => liquido.current?.setAttribute("y", String(v))), [cheio]);
@@ -129,15 +137,44 @@ export function Intro() {
   // mergulho: o coração cresce até virar a tela do app
   useEffect(() => {
     if (fase !== "mergulho") return;
-    const t = setTimeout(() => { setFase("fim"); document.body.style.overflow = ""; }, 1100);
+    const t = setTimeout(() => { setFase("fim"); document.body.style.overflow = ""; sons.current?.fechar(); }, 1100);
     return () => clearTimeout(t);
   }, [fase]);
 
-  const entrar = (comMusica: boolean) => {
-    if (fase !== "cena") return;
-    if (comMusica) player?.fadeIn();
+  /** Toque de abertura: libera o som (só funciona dentro do toque) e agenda a trilha da cena. */
+  const abrir = (comSom: boolean) => {
+    if (fase !== "portao") return;
+    if (comSom) {
+      try {
+        const s = new Sons(); sons.current = s; s.liberar();
+        player?.prime();
+        const t0 = s.agora + 0.05;
+        if (!reduzir) {
+          s.brilho(t0 + 0.1);
+          s.cometa(t0 + T.cometa, 1.25);
+          s.liquido(t0 + T.cheio, 0.75);
+          s.batida(t0 + T.batida);
+          s.faiscas(t0 + T.batida + 0.03);
+          s.sino(t0 + T.nome + 0.25);
+          s.tiques(t0 + T.dias, 1.3);
+        }
+      } catch { sons.current = null; }
+    }
+    setFase("cena");
+  };
+
+  /** Fim da abertura: mergulho no coração e a música entra (a partir do segundo 3). */
+  const faseAtual = useRef(fase);
+  faseAtual.current = fase;
+  const entrar = () => {
+    if (faseAtual.current !== "cena") return;
+    faseAtual.current = "mergulho";
+    const s = sons.current;
+    if (s) { s.mergulho(s.agora + 0.02); player?.fadeIn(INICIO_MUSICA); }
     setFase("mergulho");
   };
+  const entrarRef = useRef(entrar);
+  entrarRef.current = entrar;
 
   const traco = useTransform(progresso, (v) => v);
   const ondaY = useTransform(cheio, (v) => v - 0.6);
@@ -152,14 +189,15 @@ export function Intro() {
           role="button"
           tabIndex={0}
           aria-label="Abertura do Lane — toque para entrar"
-          onClick={() => entrar(true)}
-          onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && entrar(true)}
+          onClick={() => (fase === "portao" ? abrir(true) : entrar())}
+          onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (fase === "portao" ? abrir(true) : entrar())}
           className="fixed inset-0 z-[70] cursor-pointer overflow-hidden bg-[radial-gradient(ellipse_at_50%_40%,#4a1022_0%,#22060f_55%,#0d0206_100%)] text-creme"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35 }}
         >
           <canvas ref={canvas} aria-hidden className="pointer-events-none absolute inset-0 h-full w-full" />
 
+          {comecou && (<>
           {/* luz de fundo que respira */}
           <motion.div aria-hidden className="pointer-events-none absolute left-1/2 top-[40%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgb(184_58_85/.45),transparent_65%)]"
             initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: [0, 0.6, 1, 0.8], scale: [0.6, 0.9, 1.15, 1] }}
@@ -234,22 +272,30 @@ export function Intro() {
             </motion.div>
           </motion.div>
 
-          {/* convite */}
+          </>)}
+
+          {/* portão: o toque que libera o som */}
           <AnimatePresence>
-            {convite && fase === "cena" && (
-              <motion.div className="absolute inset-x-0 bottom-[calc(2.5rem+env(safe-area-inset-bottom))] flex flex-col items-center gap-2"
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }}>
+            {fase === "portao" && (
+              <motion.div className="absolute inset-0 flex flex-col items-center justify-center"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+                <motion.span aria-hidden className="mb-[4.5rem] h-3 w-3 rounded-full bg-white shadow-[0_0_24px_8px_rgb(245_201_107/.8)]"
+                  animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }} />
                 <motion.span className="text-sm uppercase tracking-[.35em] text-creme/90"
-                  animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
-                  toque para entrar <span className="text-rosa">♥</span>
+                  animate={{ opacity: [0.55, 1, 0.55] }} transition={{ duration: 2, repeat: Infinity }}>
+                  toque para abrir <span className="text-rosa">♥</span>
                 </motion.span>
-                <span className="text-[11px] text-creme/50">com a nossa música</span>
+                <span className="mt-2 text-[11px] text-creme/50">com som</span>
+                <button onClick={(e) => { e.stopPropagation(); abrir(false); }}
+                  className="absolute bottom-[calc(2rem+env(safe-area-inset-bottom))] rounded-full px-4 py-2 text-xs text-creme/40">
+                  abrir sem som
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {fase === "cena" && !convite && (
-            <button onClick={(e) => { e.stopPropagation(); entrar(false); }}
+          {fase === "cena" && (
+            <button onClick={(e) => { e.stopPropagation(); entrar(); }}
               className="absolute right-4 top-[calc(1rem+env(safe-area-inset-top))] rounded-full px-3 py-1 text-xs text-creme/40">
               pular
             </button>
