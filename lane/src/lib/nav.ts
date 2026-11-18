@@ -19,8 +19,8 @@ export function swipeTarget(path: string, lado: Lado): string | null {
   return next >= 0 && next < NAV_ITEMS.length ? NAV_ITEMS[next].href : null;
 }
 
-/** Gesto horizontal claro (≥ 70px, mais horizontal que vertical) e rápido (< 700ms). */
+/** Gesto horizontal claro (≥ 60px, mais horizontal que vertical) e não muito lento (< 1s). */
 export function isSwipe(dx: number, dy: number, ms: number): Lado | null {
-  if (Math.abs(dx) < 70 || Math.abs(dy) > Math.abs(dx) * 0.6 || ms > 700) return null;
+  if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx) * 0.7 || ms > 1000) return null;
   return dx < 0 ? "esquerda" : "direita";
 }

@@ -13,7 +13,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <PlayerProvider src={song ? urls[song.path] ?? null : null} title={song?.title ?? ""}>
       <Hearts />
-      <div className="mx-auto min-h-dvh max-w-2xl px-4 pb-44 pt-[calc(1.5rem+env(safe-area-inset-top))]">{children}</div>
+      <div id="conteudo" className="mx-auto min-h-dvh max-w-2xl touch-pan-y px-4 pb-44 pt-[calc(1.5rem+env(safe-area-inset-top))]">{children}</div>
       <MiniPlayer />
       <Nav />
       <SwipeNav />

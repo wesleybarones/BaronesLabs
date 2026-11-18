@@ -22,7 +22,8 @@ describe("nav", () => {
     expect(isSwipe(-90, 10, 300)).toBe("esquerda");
     expect(isSwipe(90, -20, 300)).toBe("direita");
     expect(isSwipe(40, 0, 300)).toBeNull();      // curto demais
+    expect(isSwipe(-65, 20, 850)).toBe("esquerda"); // dedo mais lento e curto ainda vale
     expect(isSwipe(-90, 80, 300)).toBeNull();    // mais vertical (rolagem)
-    expect(isSwipe(-90, 10, 1200)).toBeNull();   // lento demais
+    expect(isSwipe(-90, 10, 1300)).toBeNull();   // lento demais
   });
 });
