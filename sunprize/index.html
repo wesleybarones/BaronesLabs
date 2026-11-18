@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sun Prize — Calcule seu sistema de energia solar</title>
+<meta name="description" content="Informe suas contas de luz dos últimos 6 meses e veja, em 3D, quantos kWp e quantas placas solares você precisa. Sun Prize, energia solar em Niterói e região.">
+<meta name="theme-color" content="#0F2A44">
+<link rel="icon" href="https://sunprize.com.br/wp-content/uploads/2021/09/cropped-Logo-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#E8F0F3;
+  --sky-2:#D7E5EB;
+  --paper:#FFFFFF;
+  --cell:#0F2A44;
+  --cell-2:#1C4266;
+  --lime:#93D929;
+  --lime-ink:#3D6A0C;
+  --sun:#FFB21E;
+  --mute:#536676;
+  --line:#C5D4DC;
+  --radius-s:6px;
+  --radius-l:18px;
+  --wrap:1240px;
+  --ff:"Archivo", system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--sky);color:var(--cell);font-family:var(--ff);font-size:17px;line-height:1.55;font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px;border-radius:4px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+.display{font-weight:800;font-variation-settings:"wdth" 118;letter-spacing:-.02em;line-height:.98}
+h1,h2,h3{margin:0}
+h2{font-size:clamp(2rem,4.2vw,3.4rem)}
+p{margin:0}
+.lead{font-size:1.15rem;color:var(--mute);max-width:60ch}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6em;min-height:52px;padding:0 1.5em;border-radius:999px;border:0;font:inherit;font-weight:700;font-variation-settings:"wdth" 110;text-decoration:none;cursor:pointer;transition:transform .15s ease, background-color .15s ease}
+.btn:active{transform:scale(.98)}
+.btn-lime{background:var(--lime);color:var(--cell)}
+.btn-lime:hover{background:#A6E844}
+.btn-ghost{background:transparent;color:var(--cell);box-shadow:inset 0 0 0 2px var(--cell)}
+.btn-ghost:hover{background:var(--cell);color:#fff}
+.btn svg{width:20px;height:20px;flex:none}
+
+/* Cabeçalho */
+header.top{position:sticky;top:0;z-index:20;background:rgba(232,240,243,.86);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
+header.top.scrolled{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{height:44px;width:auto}
+.brand .wordmark{font-weight:800;font-variation-settings:"wdth" 120;font-size:1.35rem;letter-spacing:-.02em}
+.brand .wordmark b{color:var(--lime-ink)}
+nav.main{display:flex;gap:28px;font-weight:600;font-size:.95rem}
+nav.main a{text-decoration:none;opacity:.8}
+nav.main a:hover{opacity:1;text-decoration:underline;text-decoration-color:var(--lime);text-decoration-thickness:3px;text-underline-offset:6px}
+.top .btn{min-height:44px;padding:0 1.1em;font-size:.95rem}
+@media (max-width:980px){nav.main{display:none}}
+@media (max-width:520px){.top .btn span{display:none}.top .btn{width:44px;padding:0}}
+
+/* Calculadora (hero) */
+.calc{padding:32px 0 56px}
+.calc-grid{display:grid;grid-template-columns:minmax(360px,450px) 1fr;gap:32px;align-items:stretch}
+.calc h1{font-size:clamp(2.3rem,3.6vw,3.3rem);margin-bottom:20px}
+.calc h1 .sub{display:block;font-weight:500;font-variation-settings:"wdth" 100;font-size:.42em;letter-spacing:0;line-height:1.35;color:var(--mute);margin-top:14px}
+.panel{background:var(--paper);border-radius:var(--radius-l);padding:22px;border:1px solid var(--line)}
+.panel + .panel{margin-top:14px}
+.seg{display:inline-flex;background:var(--sky);border-radius:999px;padding:4px;margin-bottom:16px}
+.seg button{border:0;background:transparent;font:inherit;font-weight:600;font-size:.9rem;padding:8px 14px;border-radius:999px;cursor:pointer;color:var(--mute)}
+.seg button[aria-pressed="true"]{background:var(--cell);color:#fff}
+.months{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.field label{display:block;font-size:.8rem;font-weight:600;color:var(--mute);margin-bottom:4px}
+.field .in{position:relative}
+.field .in span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.85rem;color:var(--mute);pointer-events:none}
+.field .in span.suf{left:auto;right:12px}
+.field input,.field select{width:100%;height:48px;border:1.5px solid var(--line);border-radius:var(--radius-s);background:#fff;font:inherit;font-variant-numeric:tabular-nums;color:var(--cell);padding:0 12px}
+.field input.pre{padding-left:34px}
+.field input.has-suf{padding-right:44px}
+.field input:focus,.field select:focus{border-color:var(--cell);outline:none;box-shadow:0 0 0 3px rgba(147,217,41,.45)}
+.settings{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.avg-line{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);font-size:.95rem;color:var(--mute)}
+.avg-line strong{color:var(--cell);font-size:1.05rem}
+
+.stage{position:sticky;top:88px;align-self:start;height:calc(100vh - 112px);min-height:560px;max-height:860px;border-radius:var(--radius-l);overflow:hidden;background:
+  radial-gradient(120% 80% at 85% 0%, #FFF4D6 0%, rgba(255,244,214,0) 45%),
+  linear-gradient(180deg,#CFE3EE 0%, #E8F0F3 70%)}
+.stage canvas{display:block;width:100%;height:100%;position:absolute;inset:0;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.hud{position:absolute;left:20px;right:20px;bottom:20px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:end;pointer-events:none}
+.result{pointer-events:auto;background:var(--cell);color:#fff;border-radius:var(--radius-l);padding:20px 24px;display:grid;grid-template-columns:auto auto;gap:4px 28px;align-items:end}
+.result .big{font-size:clamp(3rem,6vw,5.2rem);font-weight:800;font-variation-settings:"wdth" 125;letter-spacing:-.03em;line-height:.9;color:var(--lime)}
+.result .unit{font-size:1rem;color:#C9D6E2;font-weight:500}
+.result .kwp .big{color:#fff}
+.facts{pointer-events:auto;justify-self:end;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-radius:var(--radius-l);padding:14px 18px;display:grid;grid-template-columns:repeat(3,auto);gap:4px 22px;font-size:.85rem;color:var(--mute)}
+.facts strong{display:block;font-size:1.2rem;color:var(--cell);font-variant-numeric:tabular-nums}
+.stage .hint{position:absolute;top:16px;left:20px;font-size:.85rem;color:var(--mute);background:rgba(255,255,255,.75);padding:6px 12px;border-radius:999px}
+.compass{position:absolute;top:16px;right:20px;font-size:.8rem;font-weight:700;color:var(--cell);background:rgba(255,255,255,.75);padding:6px 12px;border-radius:999px}
+.nowebgl{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:40px;color:var(--mute)}
+
+.savings{margin-top:14px;display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+.savings p{font-size:.95rem;color:var(--mute)}
+.savings p strong{display:block;font-size:1.6rem;color:var(--lime-ink);font-weight:800;font-variation-settings:"wdth" 115}
+.calc-cta{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.fine{font-size:.78rem;color:var(--mute);line-height:1.45}
+
+@media (max-width:1020px){
+  .calc-grid{grid-template-columns:1fr;gap:20px}
+  .calc-left{display:contents}
+  .calc-intro{order:0}
+  .stage{order:1;position:relative;top:auto;height:auto;min-height:540px}
+  .calc-form{order:2}
+}
+@media (max-width:640px){
+  .stage{min-height:600px;margin:0 -24px;border-radius:0}
+  .facts{margin-right:72px}
+  .stage .hint{display:none}
+  .facts{grid-template-columns:repeat(3,1fr);gap:4px 12px;padding:12px 14px}
+  .hud{grid-template-columns:1fr;left:12px;right:12px;bottom:12px}
+  .facts{justify-self:stretch}
+  .result{padding:16px 18px}
+  .months{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Seções */
+section{padding:96px 0}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end;margin-bottom:48px}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr}}
+
+/* Como calculamos */
+.how{background:var(--paper)}
+.formula{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:f;border-top:2px solid var(--cell)}
+.formula li{list-style:none;padding:24px 24px 0 0;position:relative}
+.formula li + li{padding-left:24px;border-left:1px solid var(--line)}
+.formula .n{font-weight:800;font-variation-settings:"wdth" 125;color:var(--lime-ink);font-size:.95rem}
+.formula h3{font-size:1.15rem;margin:6px 0 8px;font-variation-settings:"wdth" 110}
+.formula p{font-size:.95rem;color:var(--mute)}
+.formula .val{display:block;margin-top:14px;font-size:2rem;font-weight:800;font-variation-settings:"wdth" 120;color:var(--cell);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.formula ol{margin:0;padding:0}
+@media (max-width:900px){.formula{grid-template-columns:1fr 1fr}.formula li:nth-child(3){padding-left:0;border-left:0}.formula li{padding-bottom:24px}}
+@media (max-width:520px){.formula{grid-template-columns:1fr}.formula li,.formula li + li{padding-left:0;border-left:0;border-bottom:1px solid var(--line)}}
+.assume{margin-top:36px;font-size:.88rem;color:var(--mute);max-width:90ch}
+
+/* Vantagens */
+.adv{background:var(--cell);color:#fff}
+.adv h2{color:#fff}
+.adv .lead{color:#B8C8D6}
+.adv-list{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.18)}
+.adv-list li{padding:28px 28px 28px 0;border-bottom:1px solid rgba(255,255,255,.18);display:flex;gap:16px;align-items:flex-start;font-size:1.2rem;font-weight:600;font-variation-settings:"wdth" 108;line-height:1.3}
+.adv-list svg{flex:none;width:30px;height:30px;color:var(--lime)}
+@media (max-width:900px){.adv-list{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.adv-list{grid-template-columns:1fr}}
+
+/* Razões */
+.reasons dl{display:grid;grid-template-columns:1fr 1fr;gap:0 56px;margin:0}
+.reasons .r{padding:22px 0;border-top:1px solid var(--line)}
+.reasons dt{font-weight:700;font-size:1.15rem;font-variation-settings:"wdth" 110;margin-bottom:6px;display:flex;gap:10px;align-items:center}
+.reasons dt::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--lime);flex:none}
+.reasons dd{margin:0;color:var(--mute);max-width:56ch}
+.reasons .r.wide{grid-column:1/-1;background:var(--paper);border:0;border-radius:var(--radius-l);padding:28px;margin-top:22px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.reasons .r.wide dt{font-size:1.4rem}
+@media (max-width:760px){.reasons dl{grid-template-columns:1fr}.reasons .r.wide{grid-template-columns:1fr}}
+
+/* Passo a passo */
+.steps{background:var(--paper)}
+.steps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.steps li{position:relative;padding-top:88px}
+.steps .big-n{position:absolute;top:0;left:0;font-size:5.5rem;line-height:1;font-weight:900;font-variation-settings:"wdth" 125;color:transparent;-webkit-text-stroke:2px var(--cell)}
+.steps li:last-child .big-n{color:var(--lime);-webkit-text-stroke:0}
+.steps h3{font-size:1.5rem;font-variation-settings:"wdth" 112;margin-bottom:8px}
+.steps p{color:var(--mute)}
+@media (max-width:820px){.steps ol{grid-template-columns:1fr}}
+
+/* Projetos */
+.gallery{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:180px;gap:12px}
+.gallery figure{margin:0;border-radius:var(--radius-s);overflow:hidden;background:var(--sky-2);position:relative}
+.gallery figure img{width:100%;height:100%;object-fit:cover}
+.gallery figure.missing::after{content:"Foto do projeto";position:absolute;inset:0;display:grid;place-items:center;color:var(--mute);font-size:.85rem}
+.gallery .g1{grid-column:span 3;grid-row:span 2}
+.gallery .g2{grid-column:span 3}
+.gallery .g3{grid-column:span 2}
+.gallery .g4{grid-column:span 1}
+.gallery .g5{grid-column:span 2}
+.gallery .g6{grid-column:span 2}
+.gallery .g7{grid-column:span 2}
+@media (max-width:760px){.gallery{grid-template-columns:1fr 1fr;grid-auto-rows:150px}.gallery figure{grid-column:span 1 !important;grid-row:span 1 !important}.gallery .g1{grid-column:span 2 !important;grid-row:span 2 !important}}
+
+/* Prêmio */
+.award .box{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center;background:linear-gradient(135deg,#FFF6DD 0%,#FFFFFF 70%);border-radius:var(--radius-l);padding:56px;border:1px solid #F1E2B5}
+.award h2{font-size:clamp(1.8rem,3.4vw,2.8rem)}
+.award p{color:var(--mute);margin-top:16px;max-width:52ch}
+.award .seal{justify-self:center;width:min(260px,70vw);aspect-ratio:1;border-radius:50%;background:var(--cell);color:#fff;display:grid;place-items:center;text-align:center;padding:30px;box-shadow:0 0 0 10px #fff,0 0 0 12px var(--sun)}
+.award .seal strong{display:block;font-size:2rem;font-variation-settings:"wdth" 120;font-weight:800;color:var(--sun);line-height:1}
+.award .seal span{font-size:.95rem;color:#C9D6E2}
+@media (max-width:820px){.award .box{grid-template-columns:1fr;padding:32px}}
+
+/* Contato */
+.contact{background:var(--cell);color:#fff}
+.contact h2{color:#fff}
+.contact .lead{color:#B8C8D6}
+.contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:start}
+.contact form{background:#fff;color:var(--cell);border-radius:var(--radius-l);padding:28px;display:grid;gap:14px}
+.contact form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.contact form textarea{width:100%;border:1.5px solid var(--line);border-radius:var(--radius-s);font:inherit;padding:12px;min-height:96px;resize:vertical}
+.channels{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:2px}
+.channels li{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.15);flex-wrap:wrap}
+.channels span{color:#B8C8D6}
+.channels a{font-weight:600;text-decoration:none}
+.channels a:hover{color:var(--lime)}
+@media (max-width:860px){.contact-grid{grid-template-columns:1fr}.contact form .row{grid-template-columns:1fr}}
+
+footer{background:#0A1F33;color:#9FB2C3;padding:40px 0;font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+footer a{color:#fff}
+.social{display:flex;gap:16px}
+
+/* WhatsApp flutuante */
+.wa-float{position:fixed;right:20px;bottom:20px;z-index:30;width:60px;height:60px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px rgba(15,42,68,.3);transition:transform .2s}
+.wa-float:hover{transform:scale(1.06)}
+.wa-float svg{width:30px;height:30px}
+
+/* Revelação única ao carregar */
+@media (prefers-reduced-motion:no-preference){
+  .calc-intro > *{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .calc-intro > *:nth-child(2){animation-delay:.08s}
+  .stage{animation:fade 1s .15s both}
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.pulse{animation:none}
+@media (prefers-reduced-motion:no-preference){.pulse{animation:pop .45s ease}}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+</style>
+<script type="importmap">
+{"imports":{"three":"./vendor/three.module.min.js","three/addons/controls/OrbitControls.js":"./vendor/OrbitControls.js"}}
+</script>
+</head>
+<body>
+
+<header class="top" id="topo">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Sun Prize, início">
+      <img src="https://sunprize.com.br/wp-content/uploads/2021/09/cropped-Logo-otz.png" alt="Sun Prize" onerror="this.remove();document.querySelector('.brand .wordmark').hidden=false">
+      <span class="wordmark" hidden>Sun <b>Prize</b></span>
+    </a>
+    <nav class="main" aria-label="Navegação principal">
+      <a href="#calculadora">Calculadora</a>
+      <a href="#como-calculamos">Como calculamos</a>
+      <a href="#vantagens">Vantagens</a>
+      <a href="#passo-a-passo">Como funciona</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn btn-lime" data-wa href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3Z"/></svg>
+      <span>Falar no WhatsApp</span>
+    </a>
+  </div>
+</header>
+
+<main id="inicio">
+
+<!-- CALCULADORA -->
+<section class="calc" id="calculadora" aria-labelledby="calc-title">
+  <div class="wrap calc-grid">
+    <div class="calc-left">
+      <div class="calc-intro">
+        <h1 class="display" id="calc-title">Quantas placas a sua conta de luz paga?
+          <span class="sub">Digite as contas dos últimos 6 meses. A gente calcula a potência e monta o seu telhado solar em 3D, na hora.</span>
+        </h1>
+      </div>
+
+      <form class="calc-form" id="calcForm" novalidate>
+        <div class="panel">
+          <div class="seg" role="group" aria-label="Como você quer informar o consumo">
+            <button type="button" data-mode="brl" aria-pressed="true">Em reais (R$)</button>
+            <button type="button" data-mode="kwh" aria-pressed="false">Em kWh</button>
+          </div>
+          <div class="months" id="months"></div>
+          <div class="avg-line"><span>Média dos 6 meses</span><strong class="num" id="avgOut">—</strong></div>
+        </div>
+
+        <div class="panel">
+          <div class="settings">
+            <div class="field">
+              <label for="tarifa">Tarifa com impostos</label>
+              <div class="in"><span>R$</span><input class="pre has-suf" id="tarifa" inputmode="decimal" value="1,10" aria-describedby="tarifaHelp"><span class="suf">/kWh</span></div>
+            </div>
+            <div class="field">
+              <label for="ligacao">Tipo de ligação</label>
+              <select id="ligacao">
+                <option value="30">Monofásica</option>
+                <option value="50" selected>Bifásica</option>
+                <option value="100">Trifásica</option>
+              </select>
+            </div>
+          </div>
+          <p class="fine" id="tarifaHelp" style="margin-top:10px">A tarifa e o tipo de ligação aparecem na sua conta de luz. Os valores já preenchidos são uma média para o Rio de Janeiro.</p>
+
+          <div class="savings">
+            <p>Economia estimada por ano<strong class="num" id="saveYear">—</strong></p>
+            <p>Conta mínima estimada<strong class="num" id="billAfter" style="color:var(--cell)">—</strong></p>
+          </div>
+          <div class="calc-cta">
+            <a class="btn btn-lime" id="sendResult" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3Z"/></svg>
+              Enviar meu resultado e pedir proposta
+            </a>
+            <p class="fine">Estimativa para orientação. O projeto final é definido na visita técnica gratuita, considerando orientação do telhado, sombreamento e as regras da Lei 14.300.</p>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="stage" id="stage" aria-label="Simulação 3D do telhado com as placas solares calculadas">
+      <span class="hint">Arraste para girar · role para aproximar</span>
+      <span class="compass" title="No Brasil, as placas rendem mais voltadas para o norte">Placas voltadas para o norte</span>
+      <div class="nowebgl" id="nowebgl">Seu navegador não exibiu a simulação 3D, mas o cálculo abaixo continua valendo.</div>
+      <div class="hud">
+        <div class="result" aria-live="polite">
+          <div><div class="big num" id="panelsOut">0</div></div>
+          <div class="kwp"><div class="big num" id="kwpOut" style="font-size:clamp(2rem,3.6vw,3rem)">0</div></div>
+          <div class="unit">placas de 550 W</div>
+          <div class="unit">kWp de potência</div>
+        </div>
+        <div class="facts">
+          <div>Geração<strong id="genOut">—</strong>kWh/mês</div>
+          <div>Área<strong id="areaOut">—</strong>m² de telhado</div>
+          <div>Cobertura<strong id="covOut">—</strong>do consumo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO CALCULAMOS -->
+<section class="how" id="como-calculamos" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display" id="how-title">Sem mágica: a conta é esta.</h2>
+      <p class="lead">Cada número da calculadora vem de uma etapa que você pode conferir. Os valores abaixo acompanham o que você digitou.</p>
+    </div>
+    <ol class="formula">
+      <li><span class="n">1</span><h3>Consumo médio</h3><p>Média dos seus 6 meses, convertida em kWh pela tarifa.</p><span class="val" id="f1">—</span></li>
+      <li><span class="n">2</span><h3>Energia a compensar</h3><p>Descontamos a taxa mínima que a distribuidora cobra de qualquer imóvel conectado.</p><span class="val" id="f2">—</span></li>
+      <li><span class="n">3</span><h3>Potência do sistema</h3><p>Dividimos pela geração de 1 kWp em Niterói: 4,7 horas de sol pleno × 30 dias × 80% de rendimento.</p><span class="val" id="f3">—</span></li>
+      <li><span class="n">4</span><h3>Número de placas</h3><p>Potência dividida por módulos de 550 W, arredondando para cima.</p><span class="val" id="f4">—</span></li>
+    </ol>
+    <p class="assume">Premissas: irradiação média de 4,7 kWh/m²/dia para a região de Niterói (referência: atlas solarimétrico CRESESB), rendimento global de 80% e módulos de 550 W com cerca de 2,6 m² cada. A conta mínima considera a taxa de disponibilidade da sua ligação. Encargos de distribuição sobre a energia injetada (Lei 14.300) não estão incluídos.</p>
+  </div>
+</section>
+
+<!-- VANTAGENS -->
+<section class="adv" id="vantagens" aria-labelledby="adv-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display" id="adv-title">O que muda quando o sol paga a conta.</h2>
+      <p class="lead">O sistema se paga com a própria economia e segue gerando por até 25 anos, com manutenção simples.</p>
+    </div>
+    <ul class="adv-list">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Economia de até 95% na conta de energia</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Valorização do seu imóvel</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Proteção contra os aumentos da tarifa</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>25 anos de vida útil</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Investimento com alto retorno</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 21c0-9 6-15 15-16-1 9-7 15-15 16zM5 21l7-7"/></svg>Energia limpa e sustentável</li>
+    </ul>
+  </div>
+</section>
+
+<!-- RAZÕES -->
+<section class="reasons" aria-labelledby="reasons-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display" id="reasons-title">Sete razões para fazer com a Sun Prize.</h2>
+      <p class="lead">Do primeiro cálculo ao aplicativo no seu celular, uma só equipe cuida de tudo.</p>
+    </div>
+    <dl>
+      <div class="r"><dt>Avaliação de viabilidade gratuita</dt><dd>Não cobramos nada para avaliar o seu projeto.</dd></div>
+      <div class="r"><dt>Projeto personalizado</dt><dd>Um projeto sob medida, com o melhor custo-benefício para a sua necessidade.</dd></div>
+      <div class="r"><dt>Garantia da instalação</dt><dd>Seu sistema fica coberto pela garantia de instalação da Sun Prize.</dd></div>
+      <div class="r"><dt>Equipamentos com garantia completa</dt><dd>Equipamentos de primeira linha, com garantia e certificação do INMETRO.</dd></div>
+      <div class="r"><dt>Experiência no setor solar</dt><dd>Profissionais qualificados para elaborar e executar o seu projeto.</dd></div>
+      <div class="r"><dt>Homologação na concessionária</dt><dd>Entregamos o sistema instalado e homologado pela distribuidora da sua cidade.</dd></div>
+      <div class="r wide"><dt>Monitoramento em tempo real</dt><dd>Acompanhamos a sua usina 24 horas por dia, e você também vê a geração pelo aplicativo no celular.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- PASSO A PASSO -->
+<section class="steps" id="passo-a-passo" aria-labelledby="steps-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display" id="steps-title">Da conta de luz ao sistema ligado.</h2>
+      <p class="lead">Três etapas. Você só precisa começar pela primeira, e ela já está quase pronta na calculadora.</p>
+    </div>
+    <ol>
+      <li><span class="big-n" aria-hidden="true">1</span><h3>Proposta</h3><p>Reunimos as informações do seu consumo e montamos uma proposta personalizada.</p></li>
+      <li><span class="big-n" aria-hidden="true">2</span><h3>Visita técnica</h3><p>Com a proposta aprovada, agendamos a visita para confirmar a viabilidade no seu telhado.</p></li>
+      <li><span class="big-n" aria-hidden="true">3</span><h3>Instalação</h3><p>Contrato, compra dos equipamentos, instalação e legalização do sistema. A partir daí, você economiza.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section class="projects" id="projetos" aria-labelledby="proj-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="display" id="proj-title">Telhados que já geram energia.</h2>
+      <p class="lead">Alguns projetos residenciais e comerciais instalados pela Sun Prize.</p>
+    </div>
+    <div class="gallery">
+      <figure class="g1"><img loading="lazy" src="https://sunprize.com.br/wp-content/uploads/2022/03/04.jpg" alt="Projeto de energia solar instalado pela Sun Prize"></figure>
+      <figure class="g2"><img loading="lazy" src="https://sunprize.com.br/wp-content/uploads/2022/03/03-1.jpg" alt="Projeto de energia solar instalado pela Sun Prize"></figure>
+      <figure class="g3"><img loading="lazy" src="https://sunprize.com.br/wp-content/uploads/2022/03/05-1.jpg" alt="Projeto de energia solar instalado pela Sun Prize"></figure>
+      <figure class="g4"><img loading="lazy" src="https://sunprize.com.br/wp-content/uploads/2022/05/WhatsApp-Image-2022-05-02-at-15.05.13-1-1.jpeg" alt="Projeto de energia solar instalado pela Sun Prize"></figure>
+      <figure class="g5"><img loading="lazy" src="https://sunprize.com.br/wp-content/uploads/2023/01/1.png" alt="Projeto de energia solar instalado pela Sun Prize"></figure>
+      <figure class="g6"><img loading="lazy" src="https://sunprize.com.br/wp-content/uploads/2023/01/3.png" alt="Projeto de energia solar instalado pela Sun Prize"></figure>
+      <figure class="g7"><img loading="lazy" src="https://sunprize.com.br/wp-content/uploads/2023/01/4.png" alt="Projeto de energia solar instalado pela Sun Prize"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- PRÊMIO -->
+<section class="award" aria-labelledby="award-title">
+  <div class="wrap">
+    <div class="box">
+      <div>
+        <h2 class="display" id="award-title">Escolhida para o Prêmio Quality Brasil no segmento de energia solar.</h2>
+        <p>Uma indicação feita por clientes, fornecedores e parceiros, a quem agradecemos pela confiança.</p>
+      </div>
+      <div class="seal" aria-hidden="true"><div><strong>Quality Brasil</strong><span>Energia solar</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contact" id="contato" aria-labelledby="contact-title">
+  <div class="wrap contact-grid">
+    <div>
+      <h2 class="display" id="contact-title">Peça sua proposta.</h2>
+      <p class="lead" style="margin-top:16px">Preencha ao lado e a conversa abre no WhatsApp com os dados do seu cálculo. A avaliação é gratuita.</p>
+      <ul class="channels">
+        <li><span>WhatsApp</span><a href="#" data-wa target="_blank" rel="noopener">(21) 97103-5601</a></li>
+        <li><span>Telefones</span><span style="color:#fff"><a href="tel:+5521970852636">(21) 97085-2636</a> · <a href="tel:+552136457007">(21) 3645-7007</a></span></li>
+        <li><span>Projetos</span><a href="mailto:projetos@sunprize.com.br">projetos@sunprize.com.br</a></li>
+        <li><span>Comercial</span><a href="mailto:comercial@sunprize.com.br">comercial@sunprize.com.br</a></li>
+        <li><span>Escritório</span><a href="https://www.google.com/maps/search/?api=1&query=Rua+da+Concei%C3%A7%C3%A3o+95+Centro+Niter%C3%B3i+RJ" target="_blank" rel="noopener">Rua da Conceição, 95, sala 701 · Centro, Niterói/RJ</a></li>
+      </ul>
+    </div>
+    <form id="leadForm" novalidate>
+      <div class="row">
+        <div class="field"><label for="nome">Nome</label><input id="nome" autocomplete="name" required></div>
+        <div class="field"><label for="cidade">Cidade</label><input id="cidade" autocomplete="address-level2"></div>
+      </div>
+      <div class="field"><label for="tipo">Tipo de imóvel</label>
+        <select id="tipo"><option>Residência</option><option>Comércio</option><option>Indústria</option><option>Propriedade rural</option></select>
+      </div>
+      <div class="field"><label for="msg">Mensagem</label><textarea id="msg" placeholder="Opcional"></textarea></div>
+      <p class="fine" id="leadSummary"></p>
+      <button class="btn btn-lime" type="submit">Abrir conversa no WhatsApp</button>
+      <p class="fine" id="leadErr" role="alert" style="color:#B3261E"></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Sun Prize · Energia solar fotovoltaica · Niterói/RJ</span>
+    <div class="social">
+      <a href="https://www.instagram.com/sunprize_oficial/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/Sunprize-111986954316324" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://www.youtube.com/channel/UC_2zrAZErrGKhxILLfB8r1Q/featured" target="_blank" rel="noopener">YouTube</a>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" data-wa href="#" target="_blank" rel="noopener" aria-label="Falar com a Sun Prize no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3Z"/></svg>
+</a>
+
+<!-- Cálculo (independente do 3D) -->
+<script>
+(() => {
+  const WA = '5521971035601';
+  const HSP = 4.7, PR = 0.80, DAYS = 30, PANEL_W = 550, PANEL_AREA = 2.6;
+  const KWH_PER_KWP = HSP * DAYS * PR; // ≈ 112,8 kWh/mês por kWp
+
+  const brl = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+  const n0 = v => Math.round(v).toLocaleString('pt-BR');
+  const n1 = v => v.toLocaleString('pt-BR', {minimumFractionDigits:1, maximumFractionDigits:2});
+  const parse = s => { const v = parseFloat(String(s).replace(/\./g,'').replace(',', '.')); return isFinite(v) ? v : NaN; };
+  const parseDec = s => { const v = parseFloat(String(s).replace(',', '.')); return isFinite(v) ? v : NaN; };
+
+  // Últimos 6 meses fechados
+  const monthsEl = document.getElementById('months');
+  const now = new Date();
+  const names = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const sample = [520, 480, 455, 470, 510, 565];
+  const inputs = [];
+  for (let i = 6; i >= 1; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const id = 'm' + i;
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    wrap.innerHTML = `<label for="${id}">${names[d.getMonth()]}/${String(d.getFullYear()).slice(2)}</label><div class="in"><span class="pfx">R$</span><input class="pre" id="${id}" inputmode="decimal" autocomplete="off"></div>`;
+    monthsEl.appendChild(wrap);
+    const inp = wrap.querySelector('input');
+    inp.value = sample[6 - i];
+    inputs.push(inp);
+  }
+
+  let mode = 'brl';
+  const segBtns = document.querySelectorAll('.seg button');
+  segBtns.forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.mode === mode) return;
+    const tarifa = parseDec(document.getElementById('tarifa').value) || 1.1;
+    inputs.forEach(inp => {
+      const v = parse(inp.value);
+      if (!isNaN(v)) inp.value = Math.round(b.dataset.mode === 'kwh' ? v / tarifa : v * tarifa);
+    });
+    mode = b.dataset.mode;
+    segBtns.forEach(x => x.setAttribute('aria-pressed', x === b));
+    document.querySelectorAll('.months .in').forEach(el => {
+      const s = el.querySelector('span'), i = el.querySelector('input');
+      if (mode === 'kwh') { s.textContent = 'kWh'; s.className = 'suf'; i.className = 'has-suf'; }
+      else { s.textContent = 'R$'; s.className = 'pfx'; i.className = 'pre'; }
+    });
+    update();
+  }));
+
+  const $ = id => document.getElementById(id);
+  window.SunCalc = { last: null, listeners: [] };
+
+  function update() {
+    const tarifa = parseDec($('tarifa').value);
+    const disp = +$('ligacao').value;
+    const vals = inputs.map(i => parse(i.value)).filter(v => !isNaN(v) && v > 0);
+    const ok = vals.length > 0 && tarifa > 0;
+    if (!ok) {
+      ['avgOut','saveYear','billAfter','genOut','areaOut','covOut','f1','f2','f3','f4'].forEach(k => $(k).textContent = '—');
+      $('panelsOut').textContent = '0'; $('kwpOut').textContent = '0';
+      SunCalc.last = null; SunCalc.listeners.forEach(f => f(0)); return;
+    }
+    const avg = vals.reduce((a,b) => a + b, 0) / vals.length;
+    const kwh = mode === 'brl' ? avg / tarifa : avg;
+    const billR = mode === 'brl' ? avg : avg * tarifa;
+    const comp = Math.max(kwh - disp, 0);
+    const kwpNeed = comp / KWH_PER_KWP;
+    const panels = comp > 0 ? Math.ceil(kwpNeed * 1000 / PANEL_W) : 0;
+    const kwp = panels * PANEL_W / 1000;
+    const gen = kwp * KWH_PER_KWP;
+    const minBill = disp * tarifa;
+    const save = Math.max(billR - minBill, 0) * 12;
+
+    $('avgOut').textContent = mode === 'brl' ? `${brl(avg)} · ${n0(kwh)} kWh` : `${n0(avg)} kWh · ${brl(billR)}`;
+    const p = $('panelsOut');
+    if (p.textContent !== String(panels)) { p.textContent = panels; p.classList.remove('pulse'); void p.offsetWidth; p.classList.add('pulse'); }
+    $('kwpOut').textContent = n1(kwp);
+    $('genOut').textContent = n0(gen);
+    $('areaOut').textContent = n0(panels * PANEL_AREA);
+    $('covOut').textContent = comp > 0 ? Math.min(100, Math.round(gen / comp * 100)) + '%' : '—';
+    $('saveYear').textContent = brl(save);
+    $('billAfter').textContent = brl(minBill) + '/mês';
+    $('f1').textContent = n0(kwh) + ' kWh';
+    $('f2').textContent = n0(comp) + ' kWh';
+    $('f3').textContent = n1(kwpNeed) + ' kWp';
+    $('f4').textContent = panels + (panels === 1 ? ' placa' : ' placas');
+
+    SunCalc.last = { avg, billR, kwh, panels, kwp, gen, save, mode };
+    SunCalc.listeners.forEach(f => f(panels));
+    $('sendResult').href = waLink(resultText());
+    $('leadSummary').textContent = `Seu cálculo vai junto: ${panels} placas, ${n1(kwp)} kWp, conta média de ${brl(billR)}.`;
+  }
+
+  function resultText() {
+    const r = SunCalc.last;
+    if (!r) return 'Olá! Gostaria de fazer um orçamento de energia solar.';
+    return `Olá! Fiz a simulação no site da Sun Prize.\n` +
+      `• Conta média (6 meses): ${brl(r.billR)} (${n0(r.kwh)} kWh)\n` +
+      `• Sistema estimado: ${n1(r.kwp)} kWp com ${r.panels} placas de 550 W\n` +
+      `• Economia estimada: ${brl(r.save)} por ano\n` +
+      `Gostaria de receber uma proposta.`;
+  }
+  const waLink = t => `https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+  document.querySelectorAll('[data-wa]').forEach(a => a.href = waLink('Olá! Gostaria de fazer um orçamento de energia solar.'));
+
+  [...inputs, $('tarifa')].forEach(i => i.addEventListener('input', update));
+  $('ligacao').addEventListener('change', update);
+  document.getElementById('calcForm').addEventListener('submit', e => e.preventDefault());
+
+  $('leadForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const nome = $('nome').value.trim();
+    if (!nome) { $('leadErr').textContent = 'Informe seu nome para abrir a conversa.'; $('nome').focus(); return; }
+    $('leadErr').textContent = '';
+    let t = resultText().replace('Olá!', `Olá! Meu nome é ${nome}.`);
+    const cidade = $('cidade').value.trim();
+    t += `\n• Imóvel: ${$('tipo').value}${cidade ? ' em ' + cidade : ''}`;
+    if ($('msg').value.trim()) t += `\n${$('msg').value.trim()}`;
+    window.open(waLink(t), '_blank', 'noopener');
+  });
+
+  const header = document.querySelector('header.top');
+  addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 8), {passive:true});
+
+  // Fotos indisponíveis viram espaço reservado
+  document.querySelectorAll('.gallery img').forEach(img => img.addEventListener('error', () => { img.parentElement.classList.add('missing'); img.remove(); }));
+
+  window.SunCalc.update = update;
+  update();
+})();
+</script>
+
+<!-- Cena 3D -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const stage = document.getElementById('stage');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+} catch (e) {
+  document.getElementById('nowebgl').style.display = 'grid';
+  throw e;
+}
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+stage.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 500);
+camera.position.set(14, 10, 18);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minPolarAngle = 0.25;
+controls.maxPolarAngle = Math.PI / 2.15;
+controls.minDistance = 8;
+controls.maxDistance = 90;
+controls.autoRotate = !reduce;
+controls.autoRotateSpeed = 0.35;
+renderer.domElement.addEventListener('pointerdown', () => controls.autoRotate = false);
+
+// Luz
+scene.add(new THREE.HemisphereLight(0xdfefff, 0x9fb59a, 0.9));
+const sun = new THREE.DirectionalLight(0xfff1d6, 2.6);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.bias = -0.0004;
+scene.add(sun, sun.target);
+const sunBall = new THREE.Mesh(new THREE.SphereGeometry(1.4, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffc34d }));
+const halo = new THREE.Mesh(new THREE.SphereGeometry(2.6, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd98a, transparent: true, opacity: 0.25 }));
+sunBall.add(halo);
+scene.add(sunBall);
+
+// Chão
+const ground = new THREE.Mesh(new THREE.CircleGeometry(60, 64), new THREE.MeshStandardMaterial({ color: 0xc9dcc0, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Textura da placa (células de silício)
+function panelTexture() {
+  const c = document.createElement('canvas'); c.width = 256; c.height = 512;
+  const g = c.getContext('2d');
+  g.fillStyle = '#c9d2da'; g.fillRect(0, 0, 256, 512);
+  g.fillStyle = '#0e2440'; g.fillRect(8, 8, 240, 496);
+  const cols = 6, rows = 12, cw = 240 / cols, ch = 496 / rows;
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+    const grd = g.createLinearGradient(0, 8 + y * ch, 0, 8 + (y + 1) * ch);
+    grd.addColorStop(0, '#1d4778'); grd.addColorStop(1, '#13325a');
+    g.fillStyle = grd;
+    g.fillRect(8 + x * cw + 1.5, 8 + y * ch + 1.5, cw - 3, ch - 3);
+  }
+  g.strokeStyle = 'rgba(210,225,240,.35)'; g.lineWidth = 1;
+  for (let x = 1; x < 4; x++) { g.beginPath(); g.moveTo(8 + x * 60, 8); g.lineTo(8 + x * 60, 504); g.stroke(); }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+const panelMat = new THREE.MeshStandardMaterial({ map: panelTexture(), metalness: 0.35, roughness: 0.28 });
+const frameMat = new THREE.MeshStandardMaterial({ color: 0xb8c3cc, metalness: 0.8, roughness: 0.35 });
+const PW = 1.134, PL = 2.278, GAP = 0.04;
+const panelGeo = new THREE.BoxGeometry(PW, 0.04, PL);
+const panelMats = [frameMat, frameMat, panelMat, frameMat, frameMat, frameMat];
+
+// Materiais da casa
+const wallMat = new THREE.MeshStandardMaterial({ color: 0xf4f1ea, roughness: 0.9 });
+const roofMat = new THREE.MeshStandardMaterial({ color: 0x8a4b3a, roughness: 0.8 });
+const trimMat = new THREE.MeshStandardMaterial({ color: 0x0f2a44, roughness: 0.6 });
+const glassMat = new THREE.MeshStandardMaterial({ color: 0x9fc4dc, roughness: 0.15, metalness: 0.2 });
+
+const PITCH = THREE.MathUtils.degToRad(20);
+let house = new THREE.Group(); scene.add(house);
+let panelGroup = new THREE.Group(); scene.add(panelGroup);
+let panels = []; // {mesh, target, t0}
+let layoutKey = '';
+let fitRadius = 10;
+
+function layout(n) {
+  // Colunas ao longo da cumeeira, linhas descendo o telhado
+  const cols = Math.max(3, Math.ceil(Math.sqrt(n * 2.6)));
+  const rows = Math.max(1, Math.ceil(n / cols));
+  return { cols, rows };
+}
+
+function buildHouse(cols, rows) {
+  scene.remove(house);
+  house.traverse(o => o.geometry && o.geometry.dispose());
+  house = new THREE.Group();
+  const W = cols * (PW + GAP) + 1.6;                 // largura (eixo x)
+  const S = Math.max(rows * (PL + GAP) + 1.0, 4.2);  // comprimento da água
+  const D = 2 * S * Math.cos(PITCH);                 // profundidade (eixo z)
+  const H = 3.0;                                     // pé-direito
+  const R = S * Math.sin(PITCH);                     // altura do telhado
+
+  const body = new THREE.Mesh(new THREE.BoxGeometry(W - 0.6, H, D - 0.6), wallMat);
+  body.position.y = H / 2; body.castShadow = body.receiveShadow = true;
+  house.add(body);
+
+  // Oitões (triângulos)
+  const tri = new THREE.Shape();
+  tri.moveTo(-(D - 0.6) / 2, 0); tri.lineTo((D - 0.6) / 2, 0); tri.lineTo(0, R - 0.1); tri.closePath();
+  const gable = new THREE.ExtrudeGeometry(tri, { depth: 0.02, bevelEnabled: false });
+  [-1, 1].forEach(s => {
+    const m = new THREE.Mesh(gable, wallMat);
+    m.rotation.y = Math.PI / 2; m.position.set(s * (W - 0.6) / 2 - (s > 0 ? 0.02 : 0), H, 0);
+    m.castShadow = true; house.add(m);
+  });
+
+  // Águas do telhado: frente (+z, voltada para o norte) e fundo
+  [1, -1].forEach(s => {
+    const slab = new THREE.Mesh(new THREE.BoxGeometry(W, 0.14, S + 0.2), roofMat);
+    slab.position.set(0, H + R / 2, s * D / 4);
+    slab.rotation.x = s * PITCH;
+    slab.castShadow = slab.receiveShadow = true;
+    house.add(slab);
+  });
+  const ridge = new THREE.Mesh(new THREE.BoxGeometry(W + 0.05, 0.16, 0.3), trimMat);
+  ridge.position.set(0, H + R + 0.05, 0); house.add(ridge);
+
+  // Porta e janelas na fachada frontal
+  const fz = (D - 0.6) / 2 + 0.01;
+  const door = new THREE.Mesh(new THREE.BoxGeometry(1, 2.1, 0.05), trimMat);
+  door.position.set(0, 1.05, fz); house.add(door);
+  const nWin = Math.max(1, Math.floor((W - 3) / 3));
+  for (let i = 0; i < nWin; i++) {
+    [-1, 1].forEach(s => {
+      const x = s * (1.6 + i * 2.6);
+      if (Math.abs(x) > (W - 0.6) / 2 - 0.9) return;
+      const w = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.1, 0.05), glassMat);
+      w.position.set(x, 1.7, fz); house.add(w);
+    });
+  }
+  scene.add(house);
+
+  // Árvore para dar escala
+  const tree = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.2, 1.6), new THREE.MeshStandardMaterial({ color: 0x6b4b34 }));
+  trunk.position.y = 0.8;
+  const crown = new THREE.Mesh(new THREE.IcosahedronGeometry(1.4, 0), new THREE.MeshStandardMaterial({ color: 0x5e8f4a, flatShading: true }));
+  crown.position.y = 2.6;
+  [trunk, crown].forEach(m => { m.castShadow = true; tree.add(m); });
+  tree.position.set(W / 2 + 2.5, 0, D / 2 + 0.5);
+  house.add(tree);
+
+  fitRadius = Math.max(W, D, H + R) * 0.95 + 3;
+  return { W, S, D, H, R };
+}
+
+function placePanels(n) {
+  const { cols, rows } = layout(Math.max(n, 1));
+  const key = cols + 'x' + rows;
+  let dims = buildHouse.dims;
+  if (key !== layoutKey) { dims = buildHouse.dims = buildHouse(cols, rows); layoutKey = key; panels.forEach(p => panelGroup.remove(p.mesh)); panels = []; }
+  const { H, R, D, S } = dims;
+
+  // Posição de cada placa sobre a água frontal (inclinada em direção a +z)
+  const targets = [];
+  for (let i = 0; i < n; i++) {
+    const r = Math.floor(i / cols), c = i % cols;
+    const inRow = Math.min(cols, n - r * cols);
+    const x = (c - (inRow - 1) / 2) * (PW + GAP);
+    const along = 0.5 + r * (PL + GAP) + PL / 2 + (S - 1.0 - rows * (PL + GAP)) / 2; // distância desde a cumeeira
+    const y = H + R - along * Math.sin(PITCH) + 0.16;
+    const z = along * Math.cos(PITCH);
+    targets.push(new THREE.Vector3(x, y, z));
+  }
+
+  // Remove excedentes
+  while (panels.length > n) { const p = panels.pop(); panelGroup.remove(p.mesh); }
+  const now = performance.now();
+  targets.forEach((t, i) => {
+    let p = panels[i];
+    if (!p) {
+      const m = new THREE.Mesh(panelGeo, panelMats);
+      m.rotation.x = PITCH; m.castShadow = true; m.receiveShadow = true;
+      m.position.set(t.x, t.y + 6, t.z);
+      panelGroup.add(m);
+      p = panels[i] = { mesh: m, from: m.position.clone(), t0: now + (reduce ? 0 : (i - (panels.length - 1)) * 0 + i * 18), dur: reduce ? 1 : 520 };
+      p.from.y = t.y + 6;
+    } else {
+      p.from = p.mesh.position.clone(); p.t0 = now; p.dur = reduce ? 1 : 300;
+    }
+    p.target = t;
+  });
+  // Novos painéis entram em sequência a partir do último existente
+  let k = 0;
+  panels.forEach(p => { if (p.from.y - p.target.y > 5) p.t0 = now + (reduce ? 0 : (k++) * 22); });
+}
+
+// Integração com a calculadora
+let pending = null;
+const apply = n => { controls._userZoomed = false; placePanels(Math.min(n, 120)); };
+window.SunCalc.listeners.push(n => { clearTimeout(pending); pending = setTimeout(() => apply(n), 120); });
+apply(window.SunCalc.last ? window.SunCalc.last.panels : 0);
+
+// Tamanho
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+resize();
+
+// Loop
+const ease = t => 1 - Math.pow(1 - t, 3);
+let visible = true;
+new IntersectionObserver(([e]) => visible = e.isIntersecting).observe(stage);
+const clock = new THREE.Clock();
+let sunT = 0.35;
+function frame() {
+  requestAnimationFrame(frame);
+  if (!visible) return;
+  const dt = clock.getDelta();
+  const now = performance.now();
+
+  // Sol em arco pelo céu do norte
+  if (!reduce) sunT = (sunT + dt * 0.02) % 1;
+  const a = Math.PI * (0.15 + 0.7 * sunT);
+  const sr = fitRadius * 2.2;
+  sunBall.position.set(Math.cos(a) * sr, Math.sin(a) * sr * 0.75 + 4, sr * 0.55);
+  sun.position.copy(sunBall.position);
+  const sc = sun.shadow.camera; const ext = fitRadius * 1.3;
+  if (sc.right !== ext) { sc.left = -ext; sc.right = ext; sc.top = ext; sc.bottom = -ext; sc.far = sr * 3; sc.updateProjectionMatrix(); }
+
+  // Enquadramento suave
+  const vf = Math.sin(THREE.MathUtils.degToRad(camera.fov / 2));
+  const wantDist = fitRadius / vf * 0.62 / Math.min(1, camera.aspect * 1.1);
+  const dir = camera.position.clone().sub(controls.target).normalize();
+  const dist = camera.position.distanceTo(controls.target);
+  if (!controls._userZoomed) camera.position.copy(controls.target).addScaledVector(dir, dist + (wantDist - dist) * 0.06);
+  controls.target.lerp(new THREE.Vector3(0, 0.4, 0), 0.08);
+
+  panels.forEach(p => {
+    const t = Math.min(Math.max((now - p.t0) / p.dur, 0), 1);
+    p.mesh.position.lerpVectors(p.from, p.target, ease(t));
+  });
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+renderer.domElement.addEventListener('wheel', () => controls._userZoomed = true, { passive: true });
+renderer.domElement.addEventListener('touchstart', e => { if (e.touches.length > 1) controls._userZoomed = true; }, { passive: true });
+frame();
+</script>
+</body>
+</html>
