@@ -28,7 +28,13 @@ export function PlayerProvider({ tracks, children }: { tracks: Track[]; children
     const on = () => setPlaying(!a.paused);
     const t = () => setTime(a.currentTime);
     const d = () => setDuration(a.duration || 0);
-    const fim = () => { tocarAoTrocar.current = true; setIdx((i) => (i + 1) % Math.max(1, tracks.length)); };
+    // só avança se a música realmente chegou ao fim (o Safari às vezes dispara um "fim" falso ao pular trechos)
+    const fim = () => {
+      const fimDeVerdade = Number.isFinite(a.duration) && a.duration > 10 && a.currentTime >= a.duration - 1.5;
+      if (!fimDeVerdade) return;
+      tocarAoTrocar.current = true;
+      setIdx((i) => (i + 1) % Math.max(1, tracks.length));
+    };
     a.addEventListener("play", on); a.addEventListener("pause", on);
     a.addEventListener("timeupdate", t); a.addEventListener("loadedmetadata", d); a.addEventListener("ended", fim);
     return () => {
