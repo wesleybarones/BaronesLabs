@@ -1,14 +1,14 @@
 import { GoogleButton } from "@/components/GoogleButton";
 import { safeNext } from "@/lib/safe-next";
 import { Hearts } from "@/components/Hearts";
-import { LaneTitle } from "@/components/LaneTitle";
+import { LaneTitleLazy as LaneTitle } from "@/components/LaneTitleLazy";
 
 export default async function Entrar({ searchParams }: { searchParams: Promise<{ next?: string; erro?: string }> }) {
   const { next, erro } = await searchParams;
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-8 px-6 text-center">
       <Hearts />
-      <div className="surgir relative space-y-3">
+      <div className="relative space-y-3">
         <p className="text-sm uppercase tracking-[.3em] text-suave">um lugar só nosso</p>
         <h1><LaneTitle className="text-8xl" /></h1>
         <p className="font-serif text-xl italic text-tinta/80">

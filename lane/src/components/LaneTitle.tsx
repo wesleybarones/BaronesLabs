@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
-import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from "motion/react";
+import { AnimatePresence, LazyMotion, domAnimation, m as motion, useAnimationControls, useReducedMotion } from "motion/react";
 
 const LETRAS = ["L", "a", "n", "e"];
 const CORES = ["#e8b4b8", "#b83a55", "#e9d8bf", "#7a1f3d"];
@@ -61,6 +61,7 @@ export function LaneTitle({ className = "text-7xl" }: { className?: string }) {
   }
 
   return (
+    <LazyMotion features={domAnimation} strict>
     <div className="flex flex-col items-center">
       <button
         ref={caixa}
@@ -105,7 +106,7 @@ export function LaneTitle({ className = "text-7xl" }: { className?: string }) {
         <AnimatePresence mode="wait">
           <motion.p
             key={frase}
-            initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
+            initial={frase < 0 ? false : { opacity: 0, y: 8, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
             transition={{ duration: 0.45 }}
@@ -116,5 +117,6 @@ export function LaneTitle({ className = "text-7xl" }: { className?: string }) {
         </AnimatePresence>
       </div>
     </div>
+    </LazyMotion>
   );
 }

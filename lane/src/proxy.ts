@@ -31,12 +31,18 @@ export async function proxy(request: NextRequest) {
     return r;
   };
 
+  if (!isApi) {
+    // Telas: só confere se há sessão no cookie (sem ida ao servidor). A conferência completa
+    // (usuário + lista de membros) é feita no layout ao abrir o app, e o banco protege os dados com RLS.
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return deny("/entrar", 401);
+    return response;
+  }
+
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return deny("/entrar", 401);
-
   const { data: member } = await sb.rpc("is_member");
   if (!member) return deny("/so-nosso", 403);
-
   return response;
 }
 

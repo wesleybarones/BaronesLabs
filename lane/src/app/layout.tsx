@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { EB_Garamond, Inter } from "next/font/google";
+import { EB_Garamond } from "next/font/google";
 import "./globals.css";
 
-const garamond = EB_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal", "italic"], variable: "--font-garamond" });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const garamond = EB_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"], style: ["normal"], variable: "--font-garamond" });
+// itálico só baixa quando aparece na tela (poemas, frases), sem atrasar a abertura
+const garamondItalico = EB_Garamond({ subsets: ["latin"], weight: ["400", "500"], style: ["italic"], variable: "--font-garamond-italico", preload: false });
 
 export const metadata: Metadata = {
   title: "Lane",
@@ -16,7 +17,7 @@ export const viewport: Viewport = { themeColor: "#fbf6ef", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${garamond.variable} ${inter.variable}`}>
+    <html lang="pt-BR" className={`${garamond.variable} ${garamondItalico.variable}`}>
       <body>{children}</body>
     </html>
   );

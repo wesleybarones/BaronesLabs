@@ -21,7 +21,7 @@ export function MemoryFireworks() {
         }}
         className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-[#8d2a4b] to-vinho-escuro px-4 py-2 text-sm font-medium text-creme shadow-[0_3px_0_#3f0c1d,0_8px_16px_-6px_rgb(63_12_29/.5)]"
       >
-        🎆 Soltar fogos
+        Soltar fogos
       </motion.button>
     </>
   );

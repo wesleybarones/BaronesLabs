@@ -9,8 +9,8 @@
   --color-rosa-claro: #f6e3e4;
   --color-tinta: #3b2a2f;
   --color-suave: #8a767b;
-  --font-serif: var(--font-garamond), Georgia, serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-garamond), var(--font-garamond-italico), Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 html { background: var(--color-creme); color: var(--color-tinta); -webkit-tap-highlight-color: transparent; }

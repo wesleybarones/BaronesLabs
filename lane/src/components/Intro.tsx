@@ -24,11 +24,11 @@ function useCeu(canvas: React.RefObject<HTMLCanvasElement | null>, ativo: boolea
     const c = canvas.current;
     const ctx = c?.getContext("2d");
     if (!c || !ctx || !ativo) return;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const dpr = Math.min(1.5, window.devicePixelRatio || 1);
     const W = innerWidth, H = innerHeight;
     c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const CORES = ["#f5c96b", "#f2c6ca", "#e9d8bf", "#ffffff"];
-    const poeira = Array.from({ length: 140 }, () => ({
+    const poeira = Array.from({ length: 90 }, () => ({
       x: (Math.random() - 0.5) * W * 1.6, y: (Math.random() - 0.5) * H * 1.6, z: Math.random() * 900 + 100,
       cor: CORES[Math.floor(Math.random() * CORES.length)],
     }));
@@ -214,8 +214,8 @@ export function Intro() {
             <motion.div className="flex [perspective:700px] [filter:drop-shadow(0_3px_0_#5a3a0a)_drop-shadow(0_14px_22px_rgb(0_0_0/.55))]" animate={{ opacity: fase === "mergulho" ? 0 : 1 }} transition={{ duration: 0.25 }}>
               {LETRAS.map(({ l, x, y, r }, i) => (
                 <motion.span key={i} className="nome-dourado inline-block font-serif text-8xl font-semibold leading-none"
-                  initial={reduzir ? false : { opacity: 0, x, y, z: -500, rotateY: r, rotateX: r / 2, filter: "blur(12px)" }}
-                  animate={{ opacity: 1, x: 0, y: 0, z: 0, rotateY: 0, rotateX: 0, filter: "blur(0px)" }}
+                  initial={reduzir ? false : { opacity: 0, x, y, z: -500, rotateY: r, rotateX: r / 2, scale: 1.4 }}
+                  animate={{ opacity: 1, x: 0, y: 0, z: 0, rotateY: 0, rotateX: 0, scale: 1 }}
                   transition={{ duration: 1.1, delay: T.nome + i * 0.09, ease: [0.16, 1, 0.3, 1] }}>
                   {l}
                 </motion.span>

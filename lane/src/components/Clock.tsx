@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { elapsed, wallClock, type Parts } from "@/lib/elapsed";
 import { NAMORO, CASAMENTO, anniversaryToday } from "@/lib/couple";
-import { AnniversaryBanner } from "./AnniversaryBanner";
+import { AnniversaryBannerLazy as AnniversaryBanner } from "./AnniversaryBannerLazy";
 
 const plural = (n: number, um: string, varios: string) => `${n} ${n === 1 ? um : varios}`;
 const two = (n: number) => String(n).padStart(2, "0");

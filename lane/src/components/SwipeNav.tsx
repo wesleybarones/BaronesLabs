@@ -11,6 +11,11 @@ export function SwipeNav() {
   const path = usePathname();
 
   useEffect(() => {
+    const c = document.getElementById("conteudo");
+    if (c) { c.style.transition = ""; c.style.transform = ""; c.style.opacity = ""; c.style.willChange = ""; }
+  }, [path]);
+
+  useEffect(() => {
     for (const lado of ["esquerda", "direita"] as const) {
       const alvo = swipeTarget(path, lado);
       if (alvo) router.prefetch(alvo);
@@ -28,6 +33,7 @@ export function SwipeNav() {
       if (!c) return;
       c.style.transition = animar ? "transform .25s ease-out" : "";
       c.style.transform = "";
+      c.style.willChange = "";
       if (animar) setTimeout(() => { c.style.transition = ""; }, 260);
     };
 
@@ -45,15 +51,24 @@ export function SwipeNav() {
       if (!horizontal) return;
       const temAlvo = swipeTarget(window.location.pathname, dx < 0 ? "esquerda" : "direita") !== null;
       const c = conteudo();
-      if (c) { c.style.transition = ""; c.style.transform = `translateX(${dx * (temAlvo ? 0.35 : 0.12)}px)`; }
+      if (c) { c.style.willChange = "transform"; c.style.transition = ""; c.style.transform = `translateX(${dx * (temAlvo ? 0.45 : 0.12)}px)`; }
     };
     const fim = () => {
       if (!ativo) return;
       ativo = false;
       const lado = horizontal ? isSwipe(x - x0, y - y0, Date.now() - t0) : null;
       const alvo = lado ? swipeTarget(window.location.pathname, lado) : null;
-      if (alvo) { soltarTela(false); router.push(alvo); }
-      else soltarTela(true);
+      if (alvo && lado) {
+        // a tela atual sai para o lado do gesto; a próxima entra pelo outro lado
+        const c = conteudo();
+        if (c) {
+          c.style.transition = "transform .18s ease-in, opacity .18s ease-in";
+          c.style.transform = `translateX(${lado === "esquerda" ? -38 : 38}%)`;
+          c.style.opacity = "0";
+          setTimeout(() => { if (c.style.opacity === "0") { c.style.transition = ""; c.style.transform = ""; c.style.opacity = ""; } }, 2500);
+        }
+        router.push(alvo);
+      } else soltarTela(true);
     };
 
     document.addEventListener("touchstart", inicio, { passive: true });
