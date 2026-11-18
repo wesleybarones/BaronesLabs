@@ -15,7 +15,7 @@ const LETRAS = [
   { l: "e", x: 170, y: 140, r: -90 },
 ];
 const T = { cometa: 0.9, cheio: 2.2, batida: 2.95, nome: 3.2, dias: 4.25, auto: 6.7 }; // segundos depois do toque
-const INICIO_MUSICA = 3; // a música começa no segundo 3 da faixa (pula o silêncio inicial)
+const INICIO_MUSICA = 2; // a música começa no segundo 2 da faixa (pula o silêncio inicial)
 
 type Faisca = { x: number; y: number; z: number; vx: number; vy: number; vida: number; max: number; cor: string; r: number };
 
