@@ -1,2 +1,0 @@
-Coloque aqui o arquivo original do logotipo como logo.png (fundo transparente).
-Enquanto ele não existir, a página carrega o logotipo direto de sunprize.com.br.
