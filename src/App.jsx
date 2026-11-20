@@ -180,52 +180,52 @@ export default function App() {
           {siteMounted && (
             <>
           <Marquee />
-          <Deferred>
+          <Deferred name="problem">
             <S.Problem />
           </Deferred>
-          <Deferred>
+          <Deferred name="scantransition">
             <S.ScanTransition />
           </Deferred>
-          <Deferred>
+          <Deferred name="solution">
             <S.Solution />
           </Deferred>
-          <Deferred>
+          <Deferred name="tunneltransition">
             <S.TunnelTransition />
           </Deferred>
-          <Deferred>
+          <Deferred name="portfolio">
             <S.Portfolio />
           </Deferred>
-          <Deferred>
+          <Deferred name="reach">
             <S.Reach />
           </Deferred>
-          <Deferred>
+          <Deferred name="audience">
             <S.Audience />
           </Deferred>
-          <Deferred>
+          <Deferred name="moneyrain">
             <S.MoneyRain />
           </Deferred>
-          <Deferred>
+          <Deferred name="process">
             <S.Process />
           </Deferred>
-          <Deferred>
+          <Deferred name="pricing">
             <S.Pricing />
           </Deferred>
-          <Deferred>
+          <Deferred name="guaranteebonus">
             <S.GuaranteeBonus />
           </Deferred>
-          <Deferred>
+          <Deferred name="about">
             <S.About />
           </Deferred>
-          <Deferred>
+          <Deferred name="testimonials">
             <S.Testimonials />
           </Deferred>
-          <Deferred>
+          <Deferred name="faq">
             <S.FAQ />
           </Deferred>
-          <Deferred>
+          <Deferred name="finalcta">
             <S.FinalCTA />
           </Deferred>
-          <Deferred>
+          <Deferred name="footer">
             <S.Footer />
           </Deferred>
             </>

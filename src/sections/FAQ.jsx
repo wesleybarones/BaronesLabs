@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'motion/react'
+import { motion } from 'motion/react'
 import { useId, useState } from 'react'
 import { useLang } from '../i18n/LangContext'
 import { EASE } from '../lib/motion'
@@ -31,22 +31,20 @@ function Item({ q, a, open, onToggle, idx }) {
           </motion.span>
         </button>
       </h3>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            id={`${uid}-a`}
-            role="region"
-            aria-labelledby={`${uid}-q`}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: EASE }}
-            className="overflow-hidden"
-          >
-            <p className="px-5 pb-6 pl-[3.6rem] pr-6 text-[16.5px] leading-[1.7] text-ink md:px-7 md:pb-7 md:pl-[4.6rem] md:text-[17px]">{a}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* the answer is always in the page (search engines read every answer); closed = height 0 */}
+      <motion.div
+        id={`${uid}-a`}
+        role="region"
+        aria-labelledby={`${uid}-q`}
+        aria-hidden={!open}
+        data-faq-answer
+        initial={false}
+        animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: EASE }}
+        className="overflow-hidden"
+      >
+        <p className="px-5 pb-6 pl-[3.6rem] pr-6 text-[16.5px] leading-[1.7] text-ink md:px-7 md:pb-7 md:pl-[4.6rem] md:text-[17px]">{a}</p>
+      </motion.div>
     </div>
   )
 }

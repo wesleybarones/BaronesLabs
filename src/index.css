@@ -883,3 +883,11 @@ html { scrollbar-gutter: stable; }
 @keyframes sig-spin { to { transform: rotate(360deg); } }
 @keyframes sig-sweep { 0% { transform: translateX(-120%); } 40%, 100% { transform: translateX(160%); } }
 @media (prefers-reduced-motion: reduce) { .sig-edge::before, .sig-sweep { animation: none; } }
+
+/* static copies of the sections (SEO, see src/components/Deferred.jsx): in the page from the start, but the browser
+   only lays them out when they come near the screen, so the full HTML doesn't slow the first load */
+#bl-static > [data-sec],
+[data-sec-slot] > [data-sec] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}

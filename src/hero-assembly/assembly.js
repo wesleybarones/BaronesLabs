@@ -210,23 +210,37 @@ export function createAssembly({ root, layer, mobile = false, labels = {}, video
       if (kicker?.contains(n) || !n.nodeValue.trim()) continue
       nodes.push(n)
     }
+    // letters grouped per word, with real spaces between words (the heading's text never loses its spaces)
     typed = nodes.map((node) => {
-      const spans = [...node.nodeValue].map((ch) => {
-        const s = document.createElement('span')
-        s.className = 'ha-ch'
-        s.textContent = ch
-        return s
-      })
-      node.replaceWith(...spans)
-      return { node, spans }
+      const parts = []
+      const spans = []
+      for (const piece of node.nodeValue.split(/(\s+)/)) {
+        if (!piece) continue
+        if (/^\s+$/.test(piece)) {
+          parts.push(document.createTextNode(piece))
+          continue
+        }
+        const word = document.createElement('span')
+        word.className = 'ha-w'
+        for (const ch of piece) {
+          const s = document.createElement('span')
+          s.className = 'ha-ch'
+          s.textContent = ch
+          word.appendChild(s)
+          spans.push(s)
+        }
+        parts.push(word)
+      }
+      node.replaceWith(...parts)
+      return { node, spans, parts }
     })
     h1.classList.add('ha-typing')
   }
   function restoreTitle() {
     if (!typed) return
-    for (const { node, spans } of typed) {
-      if (spans[0].parentNode) spans[0].before(node)
-      spans.forEach((s) => s.remove())
+    for (const { node, parts } of typed) {
+      if (parts[0]?.parentNode) parts[0].before(node)
+      parts.forEach((p) => p.remove())
     }
     typed = null
     $('#hero-title')?.classList.remove('ha-typing')

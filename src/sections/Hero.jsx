@@ -4,7 +4,7 @@ import { useLang } from '../i18n/LangContext'
 import { scrollToId, useApp } from '../lib/AppContext'
 import { useFinePointer, useIsDesktop, useReducedMotion } from '../lib/hooks'
 import { EASE } from '../lib/motion'
-import { waLink } from '../config'
+import { GOOGLE_REVIEWS_URL, waLink } from '../config'
 import RevealHeading from '../components/ui/RevealHeading'
 import Button from '../components/ui/Button'
 import { LogoSymbol } from '../components/Logo'
@@ -251,6 +251,7 @@ export default function Hero() {
             as="h1"
             id="hero-title"
             kickerId="hero-kicker"
+            plain
             text={t.hero.title}
             kicker={t.hero.kicker}
             kickerClassName="mb-4 font-mono text-[12px] font-medium uppercase tracking-[0.2em] text-cyan/80 md:text-[13px]"
@@ -306,7 +307,14 @@ export default function Hero() {
             {t.hero.proof.map((p, i) => (
               <li key={p} id={i === 0 ? 'proof-48h' : undefined} className="flex items-center gap-5">
                 {i > 0 && <span aria-hidden className="hidden text-cyan/50 sm:inline">·</span>}
-                {p}
+                {/Google/.test(p) ? (
+                  // the Google rating links to the real reviews on the Business Profile
+                  <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="link-u transition-colors hover:text-cyan">
+                    {p}
+                  </a>
+                ) : (
+                  p
+                )}
               </li>
             ))}
           </motion.ul>

@@ -86,10 +86,17 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 - Ritmo e ordem: funções `copyTrack`, `uiTrack`, `wesleyTrack` e `deployTrack` dentro de `play()`.
   Nomes e cores dos cursores: `CURSORS` no topo do arquivo. Textos (PT/EN/ES): `hero.assembly` em `translations.js`.
 
-## Primeira tela estática (desempenho no celular)
+## HTML estático completo (SEO e robôs de IA)
 
-- `src/hero-shell.html` é o HTML do cabeçalho + hero já renderizado, colocado dentro de `#root` no build
-  (plugin em `vite.config.js`). Ele aparece antes do JavaScript; o React substitui pelo mesmo conteúdo.
-- Na primeira visita uma capa escura (o fundo da intro) cobre a tela até a intro começar.
-- **Depois de mudar o cabeçalho ou a hero, regenere:** `npx vite build && node scripts/capture-hero-shell.cjs`
-  e faça o build de novo.
+- O build coloca a página inteira no `index.html`: o cabeçalho + hero dentro de `#root` (`src/hero-shell.html`) e
+  todas as seções abaixo em `#bl-static` (`src/sections-static.html`, com as respostas do FAQ abertas). Quem não roda
+  JavaScript (curl, GPTBot, ClaudeBot, PerplexityBot) lê tudo; sem JavaScript a capa da intro some (`<noscript>`).
+- Com JavaScript, cada `<Deferred name="…">` (`src/components/Deferred.jsx`) pega a cópia estática no lugar (o texto
+  nunca sai do DOM) e troca pela seção animada quando a pessoa chega perto. Robôs recebem as seções vivas na hora.
+  As cópias estáticas usam `content-visibility: auto` para não pesar no carregamento.
+- O FAQ mantém todas as respostas no DOM (fechadas só visualmente) e bate palavra por palavra com o FAQPage do JSON-LD.
+- O H1 é texto corrido com espaços normais ("Criação de landing pages em Niterói-RJ: Seu site profissional no ar em 48h.");
+  a digitação da montagem agrupa as letras por palavra, com espaços de verdade.
+- **Depois de mudar qualquer texto, preço, seção, cabeçalho ou hero, regenere:**
+  `npx vite build && node scripts/capture-hero-shell.cjs && npx vite build`.
+  O build avisa ("sections-static.html está desatualizado") quando o FAQ estático não bate com `translations.js`.

@@ -52,18 +52,34 @@ function preloadCritical() {
         // static first screen (header + hero) inside #root: paints before any JavaScript; React replaces
         // it with identical markup. Asset URLs are re-pointed to this build's hashed files.
         if (!process.env.INLINE && existsSync('src/hero-shell.html')) {
-          let shell = readFileSync('src/hero-shell.html', 'utf8').replace(/\/assets\/([\w-]+?)-[\w-]{8}\.(webp|png|jpg|svg)/g, (m, base, ext) => {
-            const f = files.find((x) => new RegExp(`^assets/${base}-[\\w-]{8}\\.${ext}$`).test(x))
-            return f ? `/${f}` : m
-          })
+          const repoint = (h) =>
+            h.replace(/\/assets\/([\w-]+?)-[\w-]{8}\.(webp|png|jpg|svg)/g, (m, base, ext) => {
+              const f = files.find((x) => new RegExp(`^assets/${base}-[\\w-]{8}\\.${ext}$`).test(x))
+              return f ? `/${f}` : m
+            })
+          let shell = repoint(readFileSync('src/hero-shell.html', 'utf8'))
           // images come with React (keeps the first paint light on phones, where the LCP is the text)
           shell = shell.replace(/<img\b([^>]*?)\s(?:src|srcset)="[^"]*"/g, '<img$1').replace(/<img\b([^>]*?)\s(?:src|srcset)="[^"]*"/g, '<img$1')
           shell = shell.replace(/<img\b([^>]*?)\salt="[^"]*"/g, '<img$1 alt=""')
           // first visit: a dark cover (the intro's own background) hides the shell until the intro starts
           const cover =
+            // (without JavaScript nothing would remove it: <noscript> hides it, so the static page is readable)
+            '<noscript><style>#bl-cover{display:none}</style></noscript>' +
             '<div id="bl-cover" style="position:fixed;inset:0;z-index:250;background:#07080D"></div>' +
             '<script>try{var s=sessionStorage.getItem("bl-booted"),b=/(bot|crawl|spider|slurp|facebookexternalhit|embedly|preview)|^whatsapp\\//i.test(navigator.userAgent),r=matchMedia("(prefers-reduced-motion: reduce)").matches;if(s||b||r)document.getElementById("bl-cover").remove()}catch(e){}</script>'
-          out = out.replace('<div id="root"></div>', () => `<div id="root">${shell}${cover}</div>`)
+          // every section below the hero as static HTML (search engines and AI crawlers read the whole page
+          // without running JavaScript); React takes each copy into place and swaps it for the live section
+          // on demand (src/components/Deferred.jsx). Regenerate with scripts/capture-hero-shell.cjs.
+          let sections = ''
+          if (existsSync('src/sections-static.html')) {
+            sections = repoint(readFileSync('src/sections-static.html', 'utf8'))
+            // safety net: warn when the copy no longer matches the site's text (it must be regenerated)
+            const pt = readFileSync('src/i18n/translations.js', 'utf8').split('const en = {')[0]
+            const faq = pt.slice(pt.indexOf('faq: {'))
+            const stale = [...faq.matchAll(/\b[qa]: '((?:[^'\\]|\\.)*)'/g)].map((m) => m[1]).filter((txt) => !sections.includes(txt))
+            if (stale.length) this.warn(`src/sections-static.html está desatualizado (${stale.length} textos do FAQ não batem). Rode: npx vite build && node scripts/capture-hero-shell.cjs && npx vite build`)
+          } else this.warn('src/sections-static.html não existe: a página sai sem o conteúdo estático das seções')
+          out = out.replace('<div id="root"></div>', () => `<div id="root">${shell}${cover}</div>${sections ? `<div id="bl-static">${sections}</div>` : ''}`)
         }
         return { html: out, tags }
       },

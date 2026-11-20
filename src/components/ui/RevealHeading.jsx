@@ -60,6 +60,7 @@ export default function RevealHeading({
   kicker, // optional visible lead-in inside the heading (e.g. the page's keyword for SEO)
   kickerClassName = '',
   kickerId,
+  plain = false,
 }) {
   const M = motion[as]
   const words = parseWords(text)
@@ -85,6 +86,16 @@ export default function RevealHeading({
           <span className="sr-only">: </span>
         </motion.span>
       )}
+      {plain ? (
+        <span className="-mb-[0.14em] block overflow-hidden pb-[0.14em]">
+          <motion.span
+            className="block will-change-transform"
+            variants={{ hidden: { y: '105%' }, show: { y: '0%', transition: { duration: 0.9, ease: EASE } } }}
+          >
+            <Rich text={text} glitch={glitch} />
+          </motion.span>
+        </span>
+      ) : (
       <span>
         {words.map((p, i) => (
           <Fragment key={i}>
@@ -111,6 +122,7 @@ export default function RevealHeading({
           </Fragment>
         ))}
       </span>
+      )}
     </M>
   )
 }
