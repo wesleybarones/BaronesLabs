@@ -106,7 +106,7 @@ npm run build    # gera /dist para publicar (Vercel, Netlify, Hostinger etc.)
 - A primeira rota aplica a todas as páginas os cabeçalhos de segurança: Content-Security-Policy (só carrega código do próprio
   site e do Google Tag Manager/GA4/Meta/Google Ads), X-Frame-Options DENY e `frame-ancestors 'none'` (ninguém exibe o
   site dentro de outro), X-Content-Type-Options, Referrer-Policy, Permissions-Policy (sem câmera, microfone, localização)
-  e Cross-Origin-Opener-Policy. O HTTPS obrigatório (HSTS) já vem da Vercel.
+ . Sem Cross-Origin-Opener-Policy de propósito: ele corta a ligação com a janela do Tag Assistant (modo Visualizar do GTM). O HTTPS obrigatório (HSTS) já vem da Vercel.
 - **Projeto novo no portfólio:** inclua o domínio dele em `frame-src` na CSP, senão a janela "Navegar no site" fica em branco.
-- **Nova ferramenta de terceiros** (chat, mapa, outro pixel): inclua os domínios dela na CSP (`script-src`, `connect-src`, `frame-src`).
+- **Nova ferramenta de terceiros** (chat, mapa, outro pixel): inclua os domínios dela na CSP (`script-src`, `connect-src`, `frame-src`). O Tag Assistant (tagassistant.google.com) já está liberado.
 - `/assets/*` (arquivos com hash no nome) ficam em cache por 1 ano (`immutable`); o HTML continua sempre atualizado.
