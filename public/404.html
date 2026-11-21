@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Página não encontrada | Barones Labs</title>
+<meta name="robots" content="noindex, follow" />
+<meta name="theme-color" content="#07080D" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" href="/favicon-96.png" sizes="96x96" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<!--
+  Página de erro da Barones Labs (endereço que não existe). Servida com status 404 pela Vercel (vercel.json),
+  fica fora do Google (noindex) e não carrega o app: só este HTML, leve, com dois caminhos de volta.
+-->
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #07080d; --surface: #0d1018; --line: rgba(0, 240, 255, 0.14);
+    --cyan: #00f0ff; --magenta: #e040d8; --lime: #d4ff24;
+    --ink: #e8f7fa; --ink-2: #8a9bb0; --ink-3: #55637a;
+    --display: 'Chakra Petch', 'Segoe UI', system-ui, sans-serif;
+    --body: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  /* background: circuit grid + glows + scanlines */
+  .bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .bg::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(70% 60% at 50% 45%, #000 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(70% 60% at 50% 45%, #000 30%, transparent 100%);
+  }
+  .bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(40% 35% at 50% 42%, rgba(0, 240, 255, 0.14), transparent 70%), radial-gradient(30% 30% at 20% 85%, rgba(224, 64, 216, 0.08), transparent 70%);
+  }
+  .scan { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.35;
+    background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px); }
+
+  .frame {
+    position: relative; z-index: 2; min-height: 100%;
+    display: grid; grid-template-rows: auto 1fr auto;
+    padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  /* HUD corners */
+  .hud { position: fixed; inset: 16px; pointer-events: none; z-index: 2; }
+  .hud i { position: absolute; width: 22px; height: 22px; border-color: rgba(0, 240, 255, 0.55); border-style: solid; border-width: 0; }
+  .hud i:nth-child(1) { left: 0; top: 0; border-left-width: 1px; border-top-width: 1px; }
+  .hud i:nth-child(2) { right: 0; top: 0; border-right-width: 1px; border-top-width: 1px; }
+  .hud i:nth-child(3) { left: 0; bottom: 0; border-left-width: 1px; border-bottom-width: 1px; }
+  .hud i:nth-child(4) { right: 0; bottom: 0; border-right-width: 1px; border-bottom-width: 1px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; max-width: 1180px; width: 100%; margin: 0 auto; padding: 8px 8px 0; }
+  .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
+  .brand img { width: 40px; height: auto; filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.45)); }
+  .brand b { font-family: var(--display); font-size: 19px; letter-spacing: 0.04em; line-height: 1; }
+  .brand b span { display: block; font-size: 10px; letter-spacing: 0.5em; color: var(--cyan); margin-top: 4px; }
+  .coords { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--ink-3); text-transform: uppercase; }
+  @media (max-width: 560px) { .coords { display: none; } }
+
+  main { display: grid; place-items: center; text-align: center; padding: 40px 0; }
+  .wrap { max-width: 640px; display: grid; justify-items: center; gap: 18px; }
+  .label { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--magenta); display: inline-flex; align-items: center; gap: 10px; }
+  .label::before { content: ''; width: 26px; height: 1px; background: currentColor; }
+
+  /* the big neon 404 with chromatic shadow and a short glitch every few seconds */
+  .code {
+    position: relative; margin: 4px 0 0; font-family: var(--display); font-weight: 700;
+    font-size: clamp(110px, 26vw, 220px); line-height: 0.9; letter-spacing: 0.02em;
+    color: var(--cyan); text-shadow: -4px 0 var(--magenta), 0 0 24px rgba(0, 240, 255, 0.55), 0 0 60px rgba(0, 240, 255, 0.35);
+    animation: flicker 6s steps(1) infinite;
+  }
+  .code::before, .code::after { content: attr(data-text); position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+  .code::before { color: var(--magenta); animation: glitch-a 6s steps(1) infinite; }
+  .code::after { color: var(--lime); animation: glitch-b 6s steps(1) infinite; }
+  @keyframes flicker { 0%, 93%, 100% { opacity: 1; } 93.5% { opacity: 0.55; } 94% { opacity: 1; } 95% { opacity: 0.7; } 95.5% { opacity: 1; } }
+  @keyframes glitch-a { 0%, 95.4%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 0 0); } 95.5% { opacity: 0.9; transform: translate(-6px, 2px); clip-path: inset(12% 0 55% 0); } 96.3% { opacity: 0.9; transform: translate(4px, -1px); clip-path: inset(62% 0 8% 0); } 97.1% { opacity: 0; } }
+  @keyframes glitch-b { 0%, 95.6%, 100% { opacity: 0; transform: none; } 95.8% { opacity: 0.6; transform: translate(5px, -2px); clip-path: inset(70% 0 6% 0); } 96.8% { opacity: 0; } }
+
+  h1 { margin: 6px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(28px, 6vw, 44px); line-height: 1.08; text-wrap: balance; }
+  h1 .hl { color: var(--cyan); text-shadow: -2px 0 var(--magenta); }
+  .lead { margin: 0; max-width: 46ch; color: var(--ink-2); font-size: 16.5px; line-height: 1.65; }
+
+  .term {
+    width: min(100%, 520px); margin-top: 6px; text-align: left; border: 1px solid var(--line);
+    background: rgba(13, 16, 24, 0.75); padding: 12px 14px; font-family: var(--mono); font-size: 12.5px; line-height: 1.8; color: var(--ink-2);
+    overflow-wrap: anywhere;
+  }
+  .term .ok { color: var(--lime); }
+  .term .err { color: var(--magenta); }
+  .term .path { color: var(--ink); }
+  .caret { display: inline-block; width: 8px; height: 14px; background: var(--cyan); vertical-align: -2px; margin-left: 4px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 12px; width: 100%; }
+  .btn {
+    --c: 14px; position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: 54px; padding: 0 26px; font-family: var(--display); font-weight: 700; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+    clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s, background 0.25s, color 0.25s;
+  }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .btn.primary { background: var(--cyan); color: #07080d; box-shadow: 0 0 28px rgba(0, 240, 255, 0.35); }
+  .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 0 44px rgba(0, 240, 255, 0.6); }
+  .btn.ghost { color: var(--cyan); background: rgba(13, 16, 24, 0.6); box-shadow: inset 0 0 0 1px rgba(0, 240, 255, 0.55); }
+  .btn.ghost:hover { transform: translateY(-2px); background: rgba(0, 240, 255, 0.1); }
+  .btn:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+  @media (max-width: 480px) { .btn { width: 100%; } }
+
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; max-width: 1180px; width: 100%; margin: 0 auto; padding: 0 8px 4px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); }
+  footer .on { color: rgba(0, 240, 255, 0.8); display: inline-flex; align-items: center; gap: 8px; }
+  footer .on::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 8px var(--lime); }
+
+  @media (prefers-reduced-motion: reduce) { .code, .code::before, .code::after, .caret { animation: none; } }
+</style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="scan" aria-hidden="true"></div>
+  <div class="hud" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  <div class="frame">
+    <header>
+      <a class="brand" href="/" aria-label="Barones Labs, página inicial">
+        <img src="/404-symbol.webp" alt="" width="40" height="44" />
+        <b>BARONES<span>LABS</span></b>
+      </a>
+      <span class="coords">LAT −22.90 · LON −43.17</span>
+    </header>
+
+    <main>
+      <div class="wrap">
+        <span class="label">// ERRO_404 · ROTA NÃO ENCONTRADA</span>
+        <p class="code" data-text="404" aria-hidden="true">404</p>
+        <h1>Essa página <span class="hl">saiu do ar.</span></h1>
+        <p class="lead">O endereço pode estar digitado errado ou a página mudou de lugar. O seu site, por outro lado, pode estar no ar em 48h.</p>
+        <div class="term" role="status">
+          <div>&gt; GET <span class="path" id="path">/</span></div>
+          <div>&gt; <span class="err">404 NOT_FOUND</span> · rota inexistente</div>
+          <div>&gt; <span class="ok">próximo passo: voltar ao início</span><span class="caret" aria-hidden="true"></span></div>
+        </div>
+        <div class="ctas">
+          <a class="btn primary" href="/">
+            Voltar ao início
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5" /></svg>
+          </a>
+          <a class="btn ghost" href="https://wa.me/5521990296352?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Barones%20Labs%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z" /></svg>
+            Falar no WhatsApp
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>© Barones Labs · baroneslabs.com.br</span>
+      <span class="on">System online</span>
+    </footer>
+  </div>
+
+  <script>
+    // shows the address the visitor tried to open in the little terminal
+    try {
+      var p = decodeURIComponent(location.pathname + location.search)
+      document.getElementById('path').textContent = p.length > 60 ? p.slice(0, 57) + '…' : p
+    } catch (e) {}
+  </script>
+</body>
+</html>

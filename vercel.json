@@ -18,6 +18,14 @@
     {
       "src": "^/portfolio/?$",
       "dest": "/index.html"
+    },
+    {
+      "handle": "error"
+    },
+    {
+      "status": 404,
+      "src": "/(.*)",
+      "dest": "/404.html"
     }
   ]
 }
