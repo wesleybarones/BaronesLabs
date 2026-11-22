@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Safety Park · Protótipo da Home</title>
+<meta name="description" content="Protótipo da nova home da Safety Park: simulador de receita, painel do parceiro, unidades e calculadora do mensalista.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: asfalto escuro como chão; faixas de sinalização brancas e o vermelho da marca como única cor forte.
+   Seções em blocos largos, cada uma com um "painel" de instrumento (simulador, painel, unidades). */
+:root {
+  --asfalto: #131112;
+  --asfalto-2: #1b1819;
+  --asfalto-3: #242021;
+  --linha: #332d2d;
+  --giz: #f4efe9;
+  --nevoa: #a8a09b;
+  --nevoa-2: #7b7370;
+  --sinal: #e2382c;
+  --sinal-escuro: #b91c1c;
+  --sinal-suave: rgba(226, 56, 44, .14);
+  --ok: #3fbf7f;
+  --faixa: #f1c232;
+
+  --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --f-texto: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-dado: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --r: 10px;
+  --largura: 1200px;
+  color-scheme: dark;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--asfalto);
+  color: var(--giz);
+  font-family: var(--f-texto);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg, canvas { max-width: 100%; }
+[hidden] { display: none !important; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--sinal); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+.secao { padding-block: clamp(64px, 9vw, 120px); }
+.secao + .secao { border-top: 1px solid var(--linha); }
+
+.rotulo {
+  font-family: var(--f-dado);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--nevoa);
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.rotulo::before { content: ""; width: 18px; height: 2px; background: var(--sinal); }
+h1, h2, h3 { font-family: var(--f-display); font-stretch: 112%; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 { font-size: clamp(38px, 5.6vw, 78px); line-height: .98; font-weight: 800; font-stretch: 100%; overflow-wrap: break-word; }
+h2 { font-size: clamp(32px, 4.6vw, 56px); line-height: 1; font-weight: 800; }
+h3 { font-size: 20px; font-weight: 700; font-stretch: 100%; }
+.lead { font-size: clamp(17px, 1.6vw, 20px); color: var(--nevoa); max-width: 60ch; margin: 0; }
+.cabeca-secao { display: grid; gap: 18px; margin-bottom: 44px; max-width: 780px; }
+.aviso {
+  font-family: var(--f-dado); font-size: 11.5px; color: var(--nevoa-2);
+  border: 1px dashed var(--linha); padding: 8px 12px; border-radius: 6px; display: inline-block;
+}
+
+/* Botões */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: var(--f-texto); font-weight: 700; font-size: 15px;
+  padding: 14px 22px; border-radius: 8px; border: 1px solid transparent;
+  text-decoration: none; cursor: pointer; transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-sinal { background: var(--sinal-escuro); color: #fff; }
+.btn-sinal:hover { background: var(--sinal); }
+.btn-linha { background: transparent; color: var(--giz); border-color: #4a4242; }
+.btn-linha:hover { border-color: var(--giz); }
+
+/* Cabeçalho */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--asfalto); }
+.topo {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: rgba(19, 17, 18, .86); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--linha);
+}
+.topo .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 68px; }
+.marca { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.marca-p {
+  width: 34px; height: 34px; border-radius: 7px; background: var(--sinal-escuro);
+  display: grid; place-items: center; font-family: var(--f-display); font-weight: 900; font-size: 20px; font-stretch: 100%;
+}
+.marca-nome { font-family: var(--f-display); font-weight: 800; font-size: 19px; font-stretch: 118%; letter-spacing: .01em; }
+.nav { display: flex; gap: 26px; font-size: 14.5px; font-weight: 600; }
+.nav a { text-decoration: none; color: var(--nevoa); }
+.nav a:hover { color: var(--giz); }
+.topo .btn { padding: 10px 16px; font-size: 14px; }
+@media (max-width: 900px) { .nav { display: none; } }
+@media (max-width: 460px) { .marca-nome { font-size: 16px; } .topo .btn { padding: 9px 12px; font-size: 13px; } .numeros strong { font-size: 30px; } }
+
+/* Hero */
+.hero { padding-block: clamp(40px, 6vw, 80px) clamp(48px, 7vw, 96px); position: relative; overflow: hidden; }
+.hero-grade { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+.hero-texto { display: grid; gap: 26px; min-width: 0; }
+.hero h1 em { font-style: normal; color: var(--sinal); }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.busca {
+  display: flex; gap: 0; background: var(--asfalto-2); border: 1px solid var(--linha); border-radius: 10px; padding: 6px;
+  max-width: 520px;
+}
+.busca input {
+  flex: 1; min-width: 0; background: transparent; border: 0; color: var(--giz); font: inherit; font-size: 15.5px; padding: 10px 12px;
+}
+.busca input::placeholder { color: var(--nevoa-2); }
+.busca input:focus { outline: none; }
+.busca:focus-within { border-color: var(--nevoa-2); }
+.busca .btn { padding: 10px 16px; }
+.estacionamento {
+  background: var(--asfalto-2); border: 1px solid var(--linha); border-radius: 14px; overflow: hidden; min-width: 0;
+}
+.estac-topo {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid var(--linha);
+  font-family: var(--f-dado); font-size: 12px; color: var(--nevoa);
+}
+.estac-topo b { color: var(--giz); font-weight: 600; }
+.ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); display: inline-block; margin-right: 8px; box-shadow: 0 0 0 4px rgba(63,191,127,.15); }
+#patio { display: block; width: 100%; aspect-ratio: 16 / 11; }
+.estac-base {
+  display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--linha);
+}
+.estac-base div { padding: 12px 16px; font-family: var(--f-dado); font-size: 11px; color: var(--nevoa); text-transform: uppercase; letter-spacing: .08em; }
+.estac-base div + div { border-left: 1px solid var(--linha); }
+.estac-base strong { display: block; font-size: 20px; color: var(--giz); letter-spacing: 0; font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) { .hero-grade { grid-template-columns: 1fr; } }
+
+/* Números */
+.numeros { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--linha); border-radius: 14px; overflow: hidden; }
+.numeros div { padding: 26px 24px; background: var(--asfalto-2); }
+.numeros div + div { border-left: 1px solid var(--linha); }
+.numeros strong { display: block; font-family: var(--f-display); font-size: clamp(34px, 4vw, 48px); font-weight: 800; font-stretch: 112%; line-height: 1; }
+.numeros span { color: var(--nevoa); font-size: 14px; }
+@media (max-width: 760px) {
+  .numeros { grid-template-columns: 1fr 1fr; }
+  .numeros div:nth-child(3) { border-left: 0; }
+  .numeros div:nth-child(n+3) { border-top: 1px solid var(--linha); }
+}
+
+/* Públicos */
+.publicos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.publico {
+  position: relative; display: grid; gap: 14px; padding: 30px; border-radius: 14px; text-decoration: none;
+  background: var(--asfalto-2); border: 1px solid var(--linha); transition: border-color .2s ease;
+}
+.publico:hover { border-color: var(--nevoa-2); }
+.publico .seta { font-family: var(--f-dado); font-size: 13px; color: var(--sinal); font-weight: 600; }
+.publico h3 { font-family: var(--f-display); font-size: 28px; font-stretch: 112%; font-weight: 800; }
+.publico p { margin: 0; color: var(--nevoa); }
+.publico-empresa { background: var(--sinal-escuro); border-color: var(--sinal-escuro); }
+.publico-empresa p { color: #f7d7d4; }
+.publico-empresa .seta { color: #fff; }
+@media (max-width: 760px) { .publicos { grid-template-columns: 1fr; } }
+
+/* Simulador */
+.sim { display: grid; grid-template-columns: 420px 1fr; gap: 0; border: 1px solid var(--linha); border-radius: 16px; overflow: hidden; }
+.sim-form { background: var(--asfalto-2); padding: 28px; display: grid; gap: 22px; align-content: start; border-right: 1px solid var(--linha); }
+.campo { display: grid; gap: 8px; }
+.campo label, .campo .legenda { font-size: 13px; font-weight: 700; color: var(--nevoa); }
+.campo-linha { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.campo output { font-family: var(--f-dado); font-size: 15px; color: var(--giz); font-variant-numeric: tabular-nums; }
+select, .entrada {
+  width: 100%; background: var(--asfalto); color: var(--giz); border: 1px solid var(--linha); border-radius: 8px;
+  padding: 12px 12px; font: inherit; font-size: 15px;
+}
+select:focus, .entrada:focus { outline: none; border-color: var(--nevoa-2); }
+input[type=range] { width: 100%; accent-color: var(--sinal); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;
+  background: transparent; color: var(--nevoa); border: 1px solid var(--linha); border-radius: 999px; padding: 7px 13px;
+}
+.chip[aria-pressed="true"] { background: var(--giz); color: var(--asfalto); border-color: var(--giz); }
+.sim-saida { padding: 28px; display: grid; gap: 26px; align-content: start; min-width: 0; background: var(--asfalto); }
+.res-topo { display: grid; gap: 6px; }
+.res-valor {
+  font-family: var(--f-display); font-weight: 800; font-stretch: 108%; line-height: 1;
+  font-size: clamp(36px, 5.2vw, 64px); font-variant-numeric: tabular-nums;
+}
+.res-valor small { font-size: .42em; color: var(--nevoa); font-weight: 600; font-stretch: 100%; }
+.res-sub { color: var(--nevoa); font-size: 14.5px; }
+.res-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--linha); border: 1px solid var(--linha); border-radius: 10px; overflow: hidden; }
+.res-grade div { background: var(--asfalto-2); padding: 14px 16px; }
+.res-grade span { display: block; font-size: 12px; color: var(--nevoa); }
+.res-grade strong { font-family: var(--f-dado); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.mix { display: grid; gap: 8px; }
+.mix-barra { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--asfalto-3); }
+.mix-barra i { display: block; height: 100%; transition: width .4s ease; }
+.mix-legenda { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--nevoa); }
+.mix-legenda b { color: var(--giz); font-family: var(--f-dado); font-weight: 600; }
+.qd { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.curva-caixa { display: grid; gap: 10px; }
+.curva-cab { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; color: var(--nevoa); }
+#curva { width: 100%; height: auto; display: block; }
+.lead-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; padding-top: 22px; border-top: 1px solid var(--linha); }
+.lead-form .entrada { background: var(--asfalto-2); }
+.lead-ok { font-size: 14px; color: var(--ok); grid-column: 1 / -1; margin: 0; }
+@media (max-width: 980px) {
+  .sim { grid-template-columns: 1fr; }
+  .sim-form { border-right: 0; border-bottom: 1px solid var(--linha); }
+}
+@media (max-width: 560px) {
+  .res-grade { grid-template-columns: 1fr 1fr; }
+  .res-grade div:last-child { grid-column: 1 / -1; }
+  .lead-form { grid-template-columns: 1fr; }
+}
+
+/* Painel do parceiro */
+.painel { border: 1px solid var(--linha); border-radius: 16px; overflow: hidden; background: var(--asfalto-2); }
+.painel-barra {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid var(--linha); background: var(--asfalto-3);
+}
+.janela { display: flex; gap: 6px; }
+.janela i { width: 10px; height: 10px; border-radius: 50%; background: #4a4242; }
+.abas { display: flex; gap: 6px; flex-wrap: wrap; }
+.aba {
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; padding: 7px 12px; border-radius: 6px;
+  background: transparent; border: 1px solid transparent; color: var(--nevoa);
+}
+.aba[aria-selected="true"] { background: var(--asfalto); border-color: var(--linha); color: var(--giz); }
+.selo-ficticio { font-family: var(--f-dado); font-size: 11px; color: var(--faixa); border: 1px solid rgba(241,194,50,.35); padding: 4px 8px; border-radius: 4px; }
+.painel-corpo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--linha); }
+.kpi { background: var(--asfalto-2); padding: 18px 20px; display: grid; gap: 6px; min-width: 0; }
+.kpi span { font-size: 12.5px; color: var(--nevoa); }
+.kpi strong { font-family: var(--f-dado); font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.kpi em { font-style: normal; font-family: var(--f-dado); font-size: 12px; }
+.sobe { color: var(--ok); }
+.desce { color: var(--sinal); }
+.painel-meio { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1px; background: var(--linha); border-top: 1px solid var(--linha); }
+.bloco { background: var(--asfalto-2); padding: 20px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.bloco h4 { margin: 0; font-size: 13px; font-weight: 700; color: var(--nevoa); }
+#ocup-dia { width: 100%; height: auto; display: block; }
+.barras { display: grid; gap: 12px; }
+.barra-linha { display: grid; grid-template-columns: 110px 1fr 48px; align-items: center; gap: 10px; font-size: 13px; }
+.barra-linha .trilho { height: 8px; background: var(--asfalto-3); border-radius: 4px; overflow: hidden; }
+.barra-linha .trilho i { display: block; height: 100%; background: var(--giz); border-radius: 4px; transition: width .5s ease; }
+.barra-linha b { font-family: var(--f-dado); font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+.eventos { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; font-family: var(--f-dado); font-size: 12.5px; max-height: 196px; overflow: hidden; }
+.eventos li { display: grid; grid-template-columns: 52px 1fr auto; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--linha); color: var(--nevoa); }
+.eventos li b { color: var(--giz); font-weight: 600; }
+.eventos li.novo { animation: entra .5s ease; }
+@keyframes entra { from { background: var(--sinal-suave); } to { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .eventos li.novo { animation: none; } }
+.painel-pe { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--linha); border-top: 1px solid var(--linha); }
+@media (max-width: 900px) {
+  .painel-corpo { grid-template-columns: 1fr 1fr; }
+  .painel-meio, .painel-pe { grid-template-columns: 1fr; }
+}
+.pontos-painel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+.pontos-painel div { display: grid; gap: 6px; }
+.pontos-painel b { font-size: 15px; }
+.pontos-painel span { color: var(--nevoa); font-size: 14px; }
+@media (max-width: 760px) { .pontos-painel { grid-template-columns: 1fr; } }
+
+/* Unidades */
+.uni-ctrl { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
+.uni-ctrl .busca { flex: 1 1 320px; }
+.uni-cont { font-family: var(--f-dado); font-size: 13px; color: var(--nevoa); margin: 0 0 14px; }
+.uni-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.uni {
+  display: grid; gap: 4px; padding: 16px 18px; border-radius: 10px; background: var(--asfalto-2); border: 1px solid var(--linha);
+  text-decoration: none; transition: border-color .15s ease;
+}
+.uni:hover { border-color: var(--nevoa-2); }
+.uni b { font-size: 15px; }
+.uni span { font-size: 13px; color: var(--nevoa); }
+.uni i { font-style: normal; font-family: var(--f-dado); font-size: 11.5px; color: var(--sinal); margin-top: 6px; }
+.uni-mais { margin-top: 16px; }
+
+/* Mensalista */
+.mens { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+.mens-calc { background: var(--asfalto-2); border: 1px solid var(--linha); border-radius: 16px; padding: 28px; display: grid; gap: 20px; }
+.mens-dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mens-res { display: grid; gap: 4px; padding-top: 20px; border-top: 1px solid var(--linha); }
+.mens-res strong { font-family: var(--f-display); font-size: clamp(34px, 4.4vw, 52px); font-weight: 800; font-stretch: 108%; line-height: 1; color: var(--ok); font-variant-numeric: tabular-nums; }
+.mens-res span { color: var(--nevoa); font-size: 14px; }
+.passos { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 16px; counter-reset: p; }
+.passos li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; counter-increment: p; }
+.passos li::before {
+  content: counter(p); width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--linha);
+  display: grid; place-items: center; font-family: var(--f-dado); font-weight: 600; color: var(--sinal);
+}
+.passos b { display: block; }
+.passos span { color: var(--nevoa); font-size: 14.5px; }
+@media (max-width: 900px) { .mens { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .mens-dupla { grid-template-columns: 1fr; } }
+
+/* Confiança */
+.prova { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.prova div { border-top: 2px solid var(--giz); padding-top: 18px; display: grid; gap: 8px; }
+.prova strong { font-family: var(--f-display); font-size: clamp(34px, 4vw, 48px); font-weight: 800; font-stretch: 112%; line-height: 1; }
+.prova span { color: var(--nevoa); font-size: 14.5px; }
+@media (max-width: 860px) { .prova { grid-template-columns: 1fr 1fr; } }
+.parceiros { overflow: hidden; margin-top: 56px; border-block: 1px solid var(--linha); padding-block: 18px; }
+.trilha { display: flex; gap: 48px; width: max-content; animation: corre 48s linear infinite; }
+.trilha span { font-family: var(--f-display); font-weight: 700; font-size: 20px; font-stretch: 100%; color: var(--nevoa-2); white-space: nowrap; }
+@keyframes corre { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .trilha { animation: none; flex-wrap: wrap; width: auto; gap: 12px 32px; } .trilha .dup { display: none; } }
+
+/* Rodapé */
+.rodape { border-top: 1px solid var(--linha); padding-block: 48px; font-size: 14px; color: var(--nevoa); }
+.rodape .wrap { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; }
+.rodape h5 { margin: 0 0 10px; font-size: 12px; font-family: var(--f-dado); letter-spacing: .1em; text-transform: uppercase; color: var(--nevoa-2); }
+.rodape p { margin: 0 0 6px; }
+.rodape blockquote { margin: 16px 0 0; font-size: 15px; color: var(--giz); max-width: 46ch; }
+.rodape cite { display: block; margin-top: 8px; font-style: normal; color: var(--nevoa); font-size: 13px; }
+@media (max-width: 760px) { .rodape .wrap { grid-template-columns: 1fr; } }
+.zap {
+  position: fixed; z-index: 25;
+  right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  background: #1f9d55; color: #fff; text-decoration: none; font-weight: 700; font-size: 14px;
+  padding: 12px 16px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+.faixa-prototipo { background: var(--faixa); color: #1a1500; font-family: var(--f-dado); font-size: 12px; text-align: center; padding: 6px 16px; }
+</style>
+</head>
+<body>
+
+<div class="faixa-prototipo">Protótipo de proposta · números e painéis são ilustrativos</div>
+
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="#inicio" aria-label="Safety Park, início">
+      <span class="marca-p" aria-hidden="true">P</span>
+      <span class="marca-nome">SAFETY PARK</span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#mensalista">Mensalista</a>
+      <a href="#simulador">Para empresas</a>
+      <a href="#painel">Painel do parceiro</a>
+      <a href="#unidades">Unidades</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn btn-sinal" href="#simulador">Simular receita</a>
+  </div>
+</header>
+
+<main id="inicio">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grade">
+    <div class="hero-texto">
+      <span class="rotulo">Desde 2002 · RJ e SP</span>
+      <h1>Mais que estacionamento. <em>HUB de mobilidade.</em></h1>
+      <p class="lead">Mais de 50 operações no Rio de Janeiro e em São Paulo. A gente cuida da sua vaga pra você cuidar do resto do dia.</p>
+      <form class="busca" id="hero-busca" role="search">
+        
+        <input id="hero-q" aria-label="Para onde você vai?" type="search" placeholder="Para onde você vai? Bairro, cidade ou unidade" autocomplete="off">
+        <button class="btn btn-sinal" type="submit">Encontrar</button>
+      </form>
+      <div class="hero-ctas">
+        <a class="btn btn-linha" href="#mensalista">Quero ser mensalista</a>
+        <a class="btn btn-linha" href="#simulador">Tenho um espaço para operar</a>
+      </div>
+    </div>
+
+    <figure class="estacionamento" aria-label="Animação de um pátio Safety Park com carros entrando e saindo">
+      <div class="estac-topo">
+        <span><span class="ponto"></span>Pátio exemplo · <b>Icaraí</b></span>
+        <span>cancela: <b id="ult-tag">Sem Parar</b></span>
+      </div>
+      <canvas id="patio"></canvas>
+      <div class="estac-base">
+        <div>Vagas livres<strong id="livres">12</strong></div>
+        <div>Entradas hoje<strong id="entradas">418</strong></div>
+        <div>Recarga EV<strong>2 pontos</strong></div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- NÚMEROS + PÚBLICOS -->
+<section class="secao" style="padding-top:0">
+  <div class="wrap">
+    <div class="numeros">
+      <div><strong>+20</strong><span>anos de operação</span></div>
+      <div><strong>+50</strong><span>operações em 2 estados</span></div>
+      <div><strong>~500 mil</strong><span>pessoas atendidas por mês</span></div>
+      <div><strong>+6.000</strong><span>vagas locáveis</span></div>
+    </div>
+    <div class="publicos">
+      <a class="publico" href="#mensalista">
+        <span class="rotulo">Para você</span>
+        <h3>Sua vaga garantida, todo dia.</h3>
+        <p>Preço fixo no mês, contratação online e o padrão Safety de segurança.</p>
+        <span class="seta">Calcular minha economia →</span>
+      </a>
+      <a class="publico publico-empresa" href="#simulador">
+        <span class="rotulo" style="color:#f7d7d4">Para sua empresa</span>
+        <h3>Seu espaço parado vira receita.</h3>
+        <p>A gente opera, você acompanha tudo por sistema. Descubra em 1 minuto quanto sua garagem pode render.</p>
+        <span class="seta">Simular receita →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULADOR -->
+<section class="secao" id="simulador">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">Simulador para empresas</span>
+      <h2>Quanto o seu estacionamento pode render?</h2>
+      <p class="lead">Escolha o tipo de empreendimento, a região e o número de vagas. O cálculo usa o perfil de uso de cada segmento que a Safety já opera.</p>
+    </div>
+
+    <div class="sim">
+      <form class="sim-form" id="sim-form" onsubmit="return false">
+        <div class="campo">
+          <label for="s-tipo">Tipo de empreendimento</label>
+          <select id="s-tipo"></select>
+        </div>
+        <div class="campo">
+          <label for="s-regiao">Região</label>
+          <select id="s-regiao"></select>
+        </div>
+        <div class="campo">
+          <div class="campo-linha"><label for="s-vagas">Número de vagas</label><output id="s-vagas-o" for="s-vagas">120</output></div>
+          <input id="s-vagas" type="range" min="20" max="1500" step="10" value="120">
+        </div>
+        <div class="campo">
+          <span class="legenda" id="s-hor-l">Funcionamento</span>
+          <div class="chips" role="group" aria-labelledby="s-hor-l" id="s-hor">
+            <button type="button" class="chip" data-h="12" aria-pressed="false">Comercial (12h)</button>
+            <button type="button" class="chip" data-h="18" aria-pressed="true">Estendido (18h)</button>
+            <button type="button" class="chip" data-h="24" aria-pressed="false">24 horas</button>
+          </div>
+        </div>
+        <div class="campo">
+          <span class="legenda" id="s-ext-l">Serviços extras</span>
+          <div class="chips" role="group" aria-labelledby="s-ext-l" id="s-ext">
+            <button type="button" class="chip" data-x="valet" aria-pressed="false">Valet</button>
+            <button type="button" class="chip" data-x="ev" aria-pressed="true">Recarga EV</button>
+            <button type="button" class="chip" data-x="lockers" aria-pressed="false">Smart lockers</button>
+          </div>
+        </div>
+        <p class="aviso">Parâmetros de exemplo. Na versão final, as faixas de ticket e giro vêm da própria Safety.</p>
+      </form>
+
+      <div class="sim-saida" aria-live="polite">
+        <div class="res-topo">
+          <span class="rotulo">Receita bruta estimada</span>
+          <div class="res-valor" id="r-faixa">R$ 0</div>
+          <div class="res-sub" id="r-sub">por mês</div>
+        </div>
+        <div class="res-grade">
+          <div><span>Por vaga / mês</span><strong id="r-vaga">R$ 0</strong></div>
+          <div><span>Ocupação média</span><strong id="r-ocup">0%</strong></div>
+          <div><span>Em 12 meses</span><strong id="r-ano">R$ 0</strong></div>
+        </div>
+        <div class="mix">
+          <div class="mix-barra" aria-hidden="true">
+            <i id="m-rot" style="background:var(--giz)"></i>
+            <i id="m-men" style="background:var(--sinal)"></i>
+            <i id="m-ext" style="background:var(--faixa)"></i>
+          </div>
+          <div class="mix-legenda">
+            <span><i class="qd" style="background:var(--giz)"></i>Rotativo <b id="l-rot">0</b></span>
+            <span><i class="qd" style="background:var(--sinal)"></i>Mensalistas <b id="l-men">0</b></span>
+            <span><i class="qd" style="background:var(--faixa)"></i>Extras <b id="l-ext">0</b></span>
+          </div>
+        </div>
+        <div class="curva-caixa">
+          <div class="curva-cab"><span>Ocupação típica ao longo do dia · <b id="c-nome" style="color:var(--giz)">Shopping</b></span><span>pico às <b id="c-pico" style="color:var(--giz)">18h</b></span></div>
+          <svg id="curva" viewBox="0 0 600 170" role="img" aria-label="Curva de ocupação por hora"></svg>
+        </div>
+        <form class="lead-form" id="lead-form">
+          <input class="entrada" id="lf-nome" placeholder="Seu nome" required autocomplete="name">
+          <input class="entrada" id="lf-tel" placeholder="WhatsApp" required autocomplete="tel" inputmode="tel">
+          <button class="btn btn-sinal" type="submit">Receber estudo completo</button>
+          <p class="lead-ok" id="lead-ok" hidden>Pedido registrado. No site real, o estudo chega no WhatsApp e o comercial recebe o contato com a simulação anexada.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAINEL DO PARCEIRO -->
+<section class="secao" id="painel">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">Transparência</span>
+      <h2>Veja o painel que o parceiro acompanha.</h2>
+      <p class="lead">Você não precisa confiar no que a gente diz. Abra o sistema, veja cada entrada e confira o faturamento quando quiser.</p>
+    </div>
+
+    <div class="painel">
+      <div class="painel-barra">
+        <div class="janela" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="abas" role="tablist" aria-label="Operação">
+          <button class="aba" role="tab" aria-selected="true" data-op="shopping">Shopping</button>
+          <button class="aba" role="tab" aria-selected="false" data-op="hospital">Hospital</button>
+          <button class="aba" role="tab" aria-selected="false" data-op="predio">Prédio comercial</button>
+        </div>
+        <span class="selo-ficticio">DADOS FICTÍCIOS</span>
+      </div>
+      <div class="painel-corpo">
+        <div class="kpi"><span>Faturamento no mês</span><strong id="k-fat">R$ 0</strong><em id="k-fat-v" class="sobe">+0%</em></div>
+        <div class="kpi"><span>Ocupação agora</span><strong id="k-ocu">0%</strong><em id="k-ocu-v">0 de 0 vagas</em></div>
+        <div class="kpi"><span>Entradas hoje</span><strong id="k-ent">0</strong><em id="k-ent-v" class="sobe">+0% vs. semana passada</em></div>
+        <div class="kpi"><span>Ticket médio</span><strong id="k-tic">R$ 0</strong><em id="k-tic-v">permanência 0h</em></div>
+      </div>
+      <div class="painel-meio">
+        <div class="bloco">
+          <h4>Ocupação nas últimas 24 horas</h4>
+          <svg id="ocup-dia" viewBox="0 0 600 180" role="img" aria-label="Gráfico de ocupação nas últimas 24 horas"></svg>
+        </div>
+        <div class="bloco">
+          <h4>Entradas por forma de pagamento</h4>
+          <div class="barras" id="barras"></div>
+        </div>
+      </div>
+      <div class="painel-pe">
+        <div class="bloco">
+          <h4>Movimento ao vivo</h4>
+          <ul class="eventos" id="eventos"></ul>
+        </div>
+        <div class="bloco">
+          <h4>Repasses ao parceiro</h4>
+          <ul class="eventos" id="repasses"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="pontos-painel">
+      <div><b>Cancela com Sem Parar e ConectCar</b><span>Cada entrada por tag aparece no painel com placa e horário.</span></div>
+      <div><b>Sistema em nuvem</b><span>Acesso do parceiro pelo navegador, sem servidor no local.</span></div>
+      <div><b>CFTV e central própria</b><span>Monitoramento em alta resolução e SAC da própria Safety.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MENSALISTA -->
+<section class="secao" id="mensalista">
+  <div class="wrap mens">
+    <div>
+      <div class="cabeca-secao" style="margin-bottom:0">
+        <span class="rotulo">Mensalista</span>
+        <h2>Pare de pagar diária todo dia.</h2>
+        <p class="lead">Veja quanto você gasta estacionando avulso e quanto economiza com a vaga fixa. A contratação acontece toda pelo site.</p>
+      </div>
+      <ol class="passos">
+        <li><div><b>Escolha a unidade</b><span>Preço do mês e disponibilidade aparecem na hora.</span></div></li>
+        <li><div><b>Pague por Pix ou cartão</b><span>Contrato aceito online, sem papel.</span></div></li>
+        <li><div><b>A unidade libera seu acesso</b><span>Se estiver lotada, você entra na lista de espera e é avisado pelo WhatsApp.</span></div></li>
+      </ol>
+    </div>
+    <div class="mens-calc">
+      <div class="campo">
+        <div class="campo-linha"><label for="m-dias">Dias que você estaciona por semana</label><output id="m-dias-o" for="m-dias">5</output></div>
+        <input id="m-dias" type="range" min="1" max="7" value="5">
+      </div>
+      <div class="mens-dupla">
+        <div class="campo">
+          <label for="m-diaria">Quanto paga por dia avulso (R$)</label>
+          <input class="entrada" id="m-diaria" type="number" min="0" step="1" value="35" inputmode="decimal">
+        </div>
+        <div class="campo">
+          <label for="m-mensal">Mensalidade da unidade (R$)</label>
+          <input class="entrada" id="m-mensal" type="number" min="0" step="10" value="420" inputmode="decimal">
+        </div>
+      </div>
+      <div class="mens-res" aria-live="polite">
+        <span id="m-titulo">Economia por ano</span>
+        <strong id="m-eco">R$ 0</strong>
+        <span id="m-det">Avulso: R$ 0 por mês · Mensalista: R$ 0</span>
+      </div>
+      <a class="btn btn-sinal" href="#unidades">Escolher minha unidade</a>
+      <p class="aviso">Valores de exemplo. A mensalidade real aparece ao escolher a unidade.</p>
+    </div>
+  </div>
+</section>
+
+<!-- UNIDADES -->
+<section class="secao" id="unidades">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">Unidades</span>
+      <h2>Tem uma Safety pertinho de você.</h2>
+      <p class="lead">Cada unidade ganha uma página própria com fotos, horários, preço e serviços. Assim ela aparece quando alguém busca "estacionamento em Icaraí".</p>
+    </div>
+    <div class="uni-ctrl">
+      <div class="busca">
+        <input id="u-q" type="search" placeholder="Busque por bairro, cidade ou nome" autocomplete="off" aria-label="Buscar unidade">
+      </div>
+      <div class="chips" role="group" aria-label="Filtrar por cidade" id="u-cidades"></div>
+    </div>
+    <p class="uni-cont" id="u-cont"></p>
+    <div class="uni-grade" id="u-grade"></div>
+    <button class="btn btn-linha uni-mais" id="u-mais" type="button">Ver todas</button>
+  </div>
+</section>
+
+<!-- CONFIANÇA -->
+<section class="secao">
+  <div class="wrap">
+    <div class="cabeca-secao">
+      <span class="rotulo">Por que a Safety</span>
+      <h2>Mais de 20 anos sem um processo com parceiro.</h2>
+    </div>
+    <div class="prova">
+      <div><strong>0</strong><span>ações judiciais com contratos ou parceiros em toda a história</span></div>
+      <div><strong>R$ 1,5 mi</strong><span>apólice global mínima, RC Garagista e RC Operação</span></div>
+      <div><strong>+300</strong><span>colaboradores CLT, equipe própria</span></div>
+      <div><strong>+300 mil</strong><span>veículos por mês nas operações</span></div>
+    </div>
+  </div>
+  <div class="parceiros" aria-label="Parceiros">
+    <div class="trilha" id="trilha"></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="rodape" id="contato">
+  <div class="wrap">
+    <div>
+      <a class="marca" href="#inicio"><span class="marca-p" aria-hidden="true">P</span><span class="marca-nome">SAFETY PARK</span></a>
+      <blockquote>Nosso objetivo é oferecer um serviço de qualidade que proporcione segurança, conforto e praticidade aos nossos clientes, lucratividade e renda aos nossos parceiros e colaboradores.<cite>Ricardo da Matta, CEO</cite></blockquote>
+    </div>
+    <div>
+      <h5>Contato</h5>
+      <p>Comercial: comercial@safetypark.com.br</p>
+      <p>SAC: sac@safetypark.com.br</p>
+      <p>(21) 2704-9490 · (21) 3629-2253</p>
+      <p>WhatsApp: (21) 97376-1183</p>
+    </div>
+    <div>
+      <h5>Endereço</h5>
+      <p>Rua Primeiro de Março, 149/151<br>Centro, Rio de Janeiro/RJ</p>
+      <p style="margin-top:14px">CNPJ 22.982.004/0001-55</p>
+    </div>
+  </div>
+</footer>
+
+<a class="zap" href="https://wa.me/5521973761183" target="_blank" rel="noopener">WhatsApp</a>
+
+<script>
+(function () {
+  "use strict";
+  var reduz = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function (id) { return document.getElementById(id); };
+  var brl = function (v) { return "R$ " + Math.round(v).toLocaleString("pt-BR"); };
+  var brlK = function (v) {
+    if (v >= 1e6) return "R$ " + (v / 1e6).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " mi";
+    if (v >= 1e4) return "R$ " + Math.round(v / 1e3).toLocaleString("pt-BR") + " mil";
+    return brl(v);
+  };
+
+  /* ---------- Curvas de ocupação por hora (0..1), 24 valores ---------- */
+  var CURVAS = {
+    shopping:     [.05,.03,.02,.02,.02,.03,.05,.08,.14,.22,.38,.55,.70,.74,.70,.68,.72,.80,.88,.86,.76,.58,.34,.14],
+    comercial:    [.04,.03,.03,.03,.04,.08,.22,.55,.84,.92,.93,.90,.82,.86,.92,.92,.88,.74,.46,.22,.12,.08,.06,.05],
+    hospital:     [.40,.36,.34,.33,.34,.40,.56,.74,.86,.90,.92,.88,.84,.86,.90,.88,.82,.76,.72,.68,.60,.54,.48,.44],
+    hotel:        [.72,.74,.75,.75,.74,.70,.62,.52,.42,.36,.32,.32,.36,.40,.42,.46,.52,.60,.68,.74,.78,.78,.76,.74],
+    universidade: [.04,.03,.03,.03,.04,.10,.40,.78,.86,.84,.80,.62,.48,.56,.66,.64,.56,.58,.80,.84,.78,.50,.18,.06],
+    varejo:       [.04,.02,.02,.02,.03,.06,.14,.24,.34,.44,.52,.58,.60,.54,.50,.52,.60,.74,.84,.80,.64,.40,.16,.06]
+  };
+
+  /* ---------- Parâmetros de exemplo do simulador ---------- */
+  var TIPOS = {
+    shopping:     { nome: "Shopping",           giro: 2.6, dias: 30, mens: .08, curva: "shopping" },
+    predio:       { nome: "Prédio comercial",   giro: 1.3, dias: 22, mens: .55, curva: "comercial" },
+    hospital:     { nome: "Hospital",           giro: 2.4, dias: 30, mens: .20, curva: "hospital" },
+    clinica:      { nome: "Clínica",            giro: 3.0, dias: 24, mens: .10, curva: "comercial" },
+    hotel:        { nome: "Hotel",              giro: 1.1, dias: 30, mens: .05, curva: "hotel" },
+    universidade: { nome: "Universidade",       giro: 1.7, dias: 22, mens: .35, curva: "universidade" },
+    supermercado: { nome: "Supermercado",       giro: 3.6, dias: 30, mens: .02, curva: "varejo" },
+    outlet:       { nome: "Outlet",             giro: 2.2, dias: 30, mens: .04, curva: "shopping" },
+    galeria:      { nome: "Galeria",            giro: 2.0, dias: 26, mens: .30, curva: "comercial" },
+    garagem:      { nome: "Edifício-garagem",   giro: 1.8, dias: 30, mens: .45, curva: "comercial" }
+  };
+  var REGIOES = {
+    niteroi:   { nome: "Niterói",                 ticket: 13, mensal: 320 },
+    rcentro:   { nome: "Rio · Centro",            ticket: 24, mensal: 520 },
+    rzs:       { nome: "Rio · Zona Sul",          ticket: 22, mensal: 480 },
+    rbarra:    { nome: "Rio · Barra e Jacarepaguá", ticket: 15, mensal: 380 },
+    baixada:   { nome: "Baixada Fluminense",      ticket: 9,  mensal: 220 },
+    sp:        { nome: "São Paulo",               ticket: 19, mensal: 450 }
+  };
+  var FATOR_H = { 12: .62, 18: .85, 24: 1 };
+  var EXTRA = { valet: .07, ev: .025, lockers: .015 };
+
+  var estado = { tipo: "shopping", regiao: "niteroi", vagas: 120, horas: 18, extras: { ev: true } };
+
+  function preencher(sel, obj, atual) {
+    Object.keys(obj).forEach(function (k) {
+      var o = document.createElement("option");
+      o.value = k; o.textContent = obj[k].nome; if (k === atual) o.selected = true;
+      sel.appendChild(o);
+    });
+  }
+  preencher($("s-tipo"), TIPOS, estado.tipo);
+  preencher($("s-regiao"), REGIOES, estado.regiao);
+
+  function ocupMedia(curva, horas) {
+    var c = CURVAS[curva], ini = horas === 24 ? 0 : (horas === 18 ? 6 : 8), soma = 0;
+    for (var i = 0; i < horas; i++) soma += c[(ini + i) % 24];
+    return soma / horas;
+  }
+
+  function calcular() {
+    var t = TIPOS[estado.tipo], r = REGIOES[estado.regiao], v = estado.vagas;
+    var vRot = v * (1 - t.mens), vMen = v * t.mens;
+    var rot = vRot * t.giro * FATOR_H[estado.horas] * r.ticket * t.dias;
+    var men = vMen * r.mensal;
+    var base = rot + men, ext = 0;
+    Object.keys(estado.extras).forEach(function (k) { if (estado.extras[k]) ext += base * EXTRA[k]; });
+    var total = base + ext;
+    return { total: total, rot: rot, men: men, ext: ext, porVaga: total / v, ocup: ocupMedia(t.curva, estado.horas) };
+  }
+
+  function desenharCurva(svg, dados, horas, destaque) {
+    var W = 600, H = svg.viewBox.baseVal.height, pe = 22, topo = 10, esq = 30, dir = 8;
+    var x = function (i) { return esq + i * (W - esq - dir) / 23; };
+    var y = function (v) { return topo + (1 - v) * (H - pe - topo); };
+    var ini = horas === 24 ? 0 : (horas === 18 ? 6 : 8), fim = (ini + horas) % 24;
+    var aberto = function (h) { return horas === 24 || (h >= ini && h < (fim === 0 ? 24 : fim)); };
+    var s = "";
+    [0, .5, 1].forEach(function (g) {
+      s += '<line x1="' + esq + '" x2="' + (W - dir) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="#332d2d" stroke-width="1"/>';
+      s += '<text x="' + (esq - 6) + '" y="' + (y(g) + 4) + '" fill="#7b7370" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="end">' + Math.round(g * 100) + '%</text>';
+    });
+    if (horas < 24) {
+      s += '<rect x="' + x(ini) + '" y="' + topo + '" width="' + (x(Math.min(ini + horas, 23)) - x(ini)) + '" height="' + (H - pe - topo) + '" fill="rgba(244,239,233,.04)"/>';
+    }
+    var area = "M" + x(0) + " " + y(0), linha = "";
+    dados.forEach(function (v, i) { area += " L" + x(i) + " " + y(v); linha += (i ? " L" : "M") + x(i) + " " + y(v); });
+    area += " L" + x(23) + " " + y(0) + " Z";
+    s += '<path d="' + area + '" fill="' + destaque + '" fill-opacity=".16"/>';
+    s += '<path d="' + linha + '" fill="none" stroke="' + destaque + '" stroke-width="2.2" stroke-linejoin="round"/>';
+    var pico = 0; dados.forEach(function (v, i) { if (v > dados[pico]) pico = i; });
+    s += '<circle cx="' + x(pico) + '" cy="' + y(dados[pico]) + '" r="4.5" fill="' + destaque + '" stroke="#131112" stroke-width="2"/>';
+    for (var h = 0; h < 24; h += 3) {
+      s += '<text x="' + x(h) + '" y="' + (H - 6) + '" fill="#7b7370" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">' + h + 'h</text>';
+    }
+    svg.innerHTML = s;
+    return pico;
+  }
+
+  function atualizarSim() {
+    var r = calcular(), t = TIPOS[estado.tipo];
+    var baixo = r.total * .88, alto = r.total * 1.12;
+    $("r-faixa").innerHTML = brlK(baixo) + ' <small>a</small> ' + brlK(alto);
+    $("r-sub").textContent = "por mês, para " + estado.vagas.toLocaleString("pt-BR") + " vagas · " + t.nome.toLowerCase() + " · " + REGIOES[estado.regiao].nome;
+    $("r-vaga").textContent = brl(r.porVaga);
+    $("r-ocup").textContent = Math.round(r.ocup * 100) + "%";
+    $("r-ano").textContent = brlK(r.total * 12);
+    var tot = r.total || 1;
+    $("m-rot").style.width = (r.rot / tot * 100) + "%";
+    $("m-men").style.width = (r.men / tot * 100) + "%";
+    $("m-ext").style.width = (r.ext / tot * 100) + "%";
+    $("l-rot").textContent = brlK(r.rot);
+    $("l-men").textContent = brlK(r.men);
+    $("l-ext").textContent = brlK(r.ext);
+    $("c-nome").textContent = t.nome;
+    var pico = desenharCurva($("curva"), CURVAS[t.curva], estado.horas, "#e2382c");
+    $("c-pico").textContent = pico + "h";
+  }
+
+  $("s-tipo").addEventListener("change", function (e) { estado.tipo = e.target.value; atualizarSim(); });
+  $("s-regiao").addEventListener("change", function (e) { estado.regiao = e.target.value; atualizarSim(); });
+  $("s-vagas").addEventListener("input", function (e) {
+    estado.vagas = +e.target.value; $("s-vagas-o").textContent = estado.vagas.toLocaleString("pt-BR"); atualizarSim();
+  });
+  $("s-hor").addEventListener("click", function (e) {
+    var b = e.target.closest(".chip"); if (!b) return;
+    this.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+    estado.horas = +b.dataset.h; atualizarSim();
+  });
+  $("s-ext").addEventListener("click", function (e) {
+    var b = e.target.closest(".chip"); if (!b) return;
+    var on = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+    estado.extras[b.dataset.x] = on; atualizarSim();
+  });
+  $("lead-form").addEventListener("submit", function (e) { e.preventDefault(); $("lead-ok").hidden = false; });
+  atualizarSim();
+
+  /* ---------- Pátio animado (hero) ---------- */
+  var cv = $("patio"), ctx = cv.getContext("2d");
+  var COLS = 8, vagas = [], TAGS = ["Sem Parar", "ConectCar", "Mensalista", "Ticket", "Veloe"];
+  var CORES = ["#5b5556", "#8a8384", "#3c3738", "#c9c3bd", "#6e6869", "#e2382c", "#2b2728", "#9c9693"];
+  for (var i = 0; i < COLS * 2; i++) {
+    var ev = (i === 3 || i === 4);
+    vagas.push({ ocupada: Math.random() < .65 || i === 5, cor: CORES[i % CORES.length], t: 1, ev: ev });
+  }
+  var entradas = 418;
+  function tamanho() {
+    var r = cv.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+    cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d);
+    ctx.setTransform(d, 0, 0, d, 0, 0);
+  }
+  function rr(x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function desenharPatio(agora) {
+    var W = cv.clientWidth, H = cv.clientHeight;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#1b1819"; ctx.fillRect(0, 0, W, H);
+    var mx = W * .05, larg = (W - mx * 2) / COLS, alt = H * .34, corredor = H - alt * 2 - H * .08;
+    var yTopo = H * .04, yBaixo = yTopo + alt + corredor;
+    // faixa central tracejada
+    ctx.strokeStyle = "rgba(241,194,50,.55)"; ctx.lineWidth = 2; ctx.setLineDash([14, 12]);
+    ctx.beginPath(); ctx.moveTo(mx, yTopo + alt + corredor / 2); ctx.lineTo(W - mx, yTopo + alt + corredor / 2); ctx.stroke();
+    ctx.setLineDash([]);
+    // setas do corredor
+    ctx.fillStyle = "rgba(244,239,233,.18)"; ctx.font = "600 " + Math.max(10, H * .045) + "px JetBrains Mono, monospace";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("→  ENTRADA", W * .3, yTopo + alt + corredor / 4 + 2);
+    ctx.fillText("SAÍDA  →", W * .7, yTopo + alt + corredor * .75);
+    for (var f = 0; f < 2; f++) {
+      var y0 = f === 0 ? yTopo : yBaixo;
+      ctx.strokeStyle = "rgba(244,239,233,.7)"; ctx.lineWidth = 2;
+      for (var c = 0; c <= COLS; c++) {
+        var xl = mx + c * larg;
+        ctx.beginPath(); ctx.moveTo(xl, y0); ctx.lineTo(xl, y0 + alt); ctx.stroke();
+      }
+      ctx.beginPath();
+      if (f === 0) { ctx.moveTo(mx, y0); ctx.lineTo(W - mx, y0); } else { ctx.moveTo(mx, y0 + alt); ctx.lineTo(W - mx, y0 + alt); }
+      ctx.stroke();
+      for (var c2 = 0; c2 < COLS; c2++) {
+        var v = vagas[f * COLS + c2], x0 = mx + c2 * larg;
+        if (v.ev) {
+          var pulso = reduz ? .5 : .35 + .25 * Math.sin(agora / 500 + c2);
+          ctx.fillStyle = "rgba(63,191,127," + (pulso * .35) + ")"; ctx.fillRect(x0 + 2, y0 + (f ? 0 : 2), larg - 4, alt - 2);
+          ctx.fillStyle = "#3fbf7f"; ctx.font = "700 " + Math.max(10, larg * .28) + "px Manrope, sans-serif";
+          ctx.fillText("⚡", x0 + larg / 2, f === 0 ? y0 + alt * .12 + 6 : y0 + alt * .88 - 6);
+        }
+        var p = v.ocupada ? v.t : 1 - v.t;
+        if (p > .01) {
+          var cw = larg * .62, ch = alt * .78, cx = x0 + (larg - cw) / 2;
+          var alvo = f === 0 ? y0 + alt * .14 : y0 + alt * .08;
+          var desde = f === 0 ? y0 + alt + corredor * .3 : y0 - corredor * .3;
+          var cy = desde + (alvo - desde) * ease(p);
+          ctx.globalAlpha = Math.min(1, p * 1.6);
+          ctx.fillStyle = "rgba(0,0,0,.35)"; rr(cx + 3, cy + 4, cw, ch, 8); ctx.fill();
+          ctx.fillStyle = v.cor; rr(cx, cy, cw, ch, 8); ctx.fill();
+          ctx.fillStyle = "rgba(19,17,18,.55)";
+          var vid = f === 0 ? cy + ch * .62 : cy + ch * .14;
+          rr(cx + cw * .14, vid, cw * .72, ch * .22, 4); ctx.fill();
+          rr(cx + cw * .18, f === 0 ? cy + ch * .14 : cy + ch * .66, cw * .64, ch * .16, 3); ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+  }
+  function ease(t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+  function contarLivres() {
+    var n = 0; vagas.forEach(function (v) { if (!v.ocupada) n++; }); $("livres").textContent = n;
+  }
+  function trocar() {
+    var i = Math.floor(Math.random() * vagas.length), v = vagas[i];
+    v.ocupada = !v.ocupada; v.t = 0;
+    if (v.ocupada) {
+      entradas++; $("entradas").textContent = entradas.toLocaleString("pt-BR");
+      $("ult-tag").textContent = TAGS[Math.floor(Math.random() * TAGS.length)];
+    }
+    contarLivres();
+  }
+  var ultimo = 0, ultimaTroca = 0;
+  function loop(agora) {
+    var dt = Math.min(64, agora - ultimo); ultimo = agora;
+    vagas.forEach(function (v) { if (v.t < 1) v.t = Math.min(1, v.t + dt / 900); });
+    if (agora - ultimaTroca > 1600) { trocar(); ultimaTroca = agora; }
+    desenharPatio(agora);
+    requestAnimationFrame(loop);
+  }
+  tamanho(); contarLivres();
+  window.addEventListener("resize", function () { tamanho(); desenharPatio(performance.now()); });
+  if (reduz) { desenharPatio(0); } else { requestAnimationFrame(loop); }
+
+  /* ---------- Painel do parceiro (dados fictícios) ---------- */
+  var OPS = {
+    shopping: { vagas: 840, fat: 612400, fatV: 8.4, ent: 6120, entV: 5.1, tic: 16.4, perm: "2h10", curva: "shopping",
+                pag: [["Sem Parar", 34], ["ConectCar", 12], ["Cartão/Pix", 38], ["Mensalistas", 6], ["Validação lojas", 10]] },
+    hospital: { vagas: 260, fat: 238900, fatV: 3.2, ent: 1480, entV: 1.8, tic: 21.7, perm: "3h40", curva: "hospital",
+                pag: [["Sem Parar", 22], ["ConectCar", 9], ["Cartão/Pix", 41], ["Mensalistas", 21], ["Convênio", 7]] },
+    predio:   { vagas: 180, fat: 96300, fatV: -1.4, ent: 410, entV: -2.3, tic: 27.9, perm: "7h20", curva: "comercial",
+                pag: [["Sem Parar", 18], ["ConectCar", 7], ["Cartão/Pix", 15], ["Mensalistas", 58], ["Visitantes", 2]] }
+  };
+  var opAtual = "shopping";
+  var horaAgora = new Date().getHours();
+  function placa() {
+    var L = "ABCDEFGHJKLMNPRSTUVWXYZ", r = function (s) { return s[Math.floor(Math.random() * s.length)]; };
+    return r(L) + r(L) + r(L) + Math.floor(Math.random() * 10) + r(L) + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10);
+  }
+  function hhmm(d) { return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
+  function evento(novo) {
+    var o = OPS[opAtual], tipos = o.pag.map(function (p) { return p[0]; });
+    var li = document.createElement("li");
+    var entra = Math.random() < .58;
+    li.innerHTML = "<span>" + hhmm(new Date()) + "</span><span><b>" + placa() + "</b> " + (entra ? "entrou" : "saiu") + "</span><span>" + tipos[Math.floor(Math.random() * tipos.length)] + "</span>";
+    if (novo) li.className = "novo";
+    var ul = $("eventos"); ul.insertBefore(li, ul.firstChild);
+    while (ul.children.length > 7) ul.removeChild(ul.lastChild);
+  }
+  function montarPainel() {
+    var o = OPS[opAtual], c = CURVAS[o.curva], ocNow = c[horaAgora];
+    $("k-fat").textContent = brl(o.fat);
+    $("k-fat-v").textContent = (o.fatV > 0 ? "+" : "") + o.fatV.toLocaleString("pt-BR") + "% vs. mês anterior";
+    $("k-fat-v").className = o.fatV >= 0 ? "sobe" : "desce";
+    $("k-ocu").textContent = Math.round(ocNow * 100) + "%";
+    $("k-ocu-v").textContent = Math.round(ocNow * o.vagas) + " de " + o.vagas + " vagas";
+    $("k-ent").textContent = o.ent.toLocaleString("pt-BR");
+    $("k-ent-v").textContent = (o.entV > 0 ? "+" : "") + o.entV.toLocaleString("pt-BR") + "% vs. semana passada";
+    $("k-ent-v").className = o.entV >= 0 ? "sobe" : "desce";
+    $("k-tic").textContent = "R$ " + o.tic.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+    $("k-tic-v").textContent = "permanência média " + o.perm;
+    var ult = [];
+    for (var k = 0; k < 24; k++) ult.push(c[(horaAgora + 1 + k) % 24]);
+    desenharCurva($("ocup-dia"), ult, 24, "#f4efe9");
+    var bar = $("barras"); bar.innerHTML = "";
+    o.pag.forEach(function (p) {
+      var d = document.createElement("div"); d.className = "barra-linha";
+      d.innerHTML = "<span>" + p[0] + "</span><span class='trilho'><i style='width:0'></i></span><b>" + p[1] + "%</b>";
+      bar.appendChild(d);
+      requestAnimationFrame(function () { d.querySelector("i").style.width = (p[1] / 60 * 100) + "%"; });
+    });
+    $("eventos").innerHTML = "";
+    for (var e = 0; e < 7; e++) evento(false);
+    var rep = $("repasses"); rep.innerHTML = "";
+    var meses = ["Out", "Set", "Ago", "Jul", "Jun", "Mai", "Abr"];
+    meses.forEach(function (m, i) {
+      var li = document.createElement("li");
+      var val = o.fat * (0.42 + ((i * 37) % 9) / 200);
+      li.innerHTML = "<span>" + m + "</span><span><b>" + brl(val) + "</b> repassado</span><span style='color:#3fbf7f'>pago</span>";
+      rep.appendChild(li);
+    });
+  }
+  document.querySelectorAll(".aba").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".aba").forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); });
+      opAtual = b.dataset.op; montarPainel();
+    });
+  });
+  montarPainel();
+  if (!reduz) setInterval(function () { evento(true); }, 2600);
+
+  /* ---------- Unidades (lista pública do site atual) ---------- */
+  var U = [
+    ["Alvares de Azevedo","Icaraí","Niterói"],["Andrade Neves","Centro","Niterói"],["Barcas Shopping","Centro","Niterói"],
+    ["Center IV","Icaraí","Niterói"],["Central Park","Icaraí","Niterói"],["Centro Clínico de Icaraí","Icaraí","Niterói"],
+    ["Conceição","Centro","Niterói"],["Conf. Beira-mar","Icaraí","Niterói"],["Empresarial Chicago","Icaraí","Niterói"],
+    ["Global Offices","Centro","Niterói"],["Hospital Itaipu","Itaipu","Niterói"],["IB Santa Rosa","Santa Rosa","Niterói"],
+    ["João Pessoa","Icaraí","Niterói"],["Mem de Sá","Icaraí","Niterói"],["Reserva Cultural","Centro","Niterói"],
+    ["Rink Offices","Centro","Niterói"],["Salesiano","Santa Rosa","Niterói"],["Sardinha 118","Santa Rosa","Niterói"],
+    ["Shopping Central Prime","Icaraí","Niterói"],["Shopping Crystal","Icaraí","Niterói"],["Shopping Futura","Badu","Niterói"],
+    ["Stadium Offices","Icaraí","Niterói"],["São Pedro 178","Centro","Niterói"],
+    ["ACM Rio Lapa","Lapa","Rio de Janeiro"],["ABBR Jardim Botânico","Jardim Botânico","Rio de Janeiro"],
+    ["BVEP Nigri Plaza","Centro","Rio de Janeiro"],["Barra Mall","Barra da Tijuca","Rio de Janeiro"],["Bokel","Centro","Rio de Janeiro"],
+    ["Centro Comercial Américas","Barra da Tijuca","Rio de Janeiro"],["Clube Israelita Brasileiro","Copacabana","Rio de Janeiro"],
+    ["Copacabana Medical Center","Copacabana","Rio de Janeiro"],["Eletrobras","Centro","Rio de Janeiro"],["Filial Asa","Botafogo","Rio de Janeiro"],
+    ["Filial USU","Botafogo","Rio de Janeiro"],["Global Offices Freguesia","Freguesia","Rio de Janeiro"],["Humaitá","Humaitá","Rio de Janeiro"],
+    ["Ipanema VP 152","Ipanema","Rio de Janeiro"],["Itaúna","Barra da Tijuca","Rio de Janeiro"],["Lagoa Aventuras","Lagoa","Rio de Janeiro"],
+    ["Madureira New Center","Madureira","Rio de Janeiro"],["Paróquia Copa","Copacabana","Rio de Janeiro"],
+    ["Paróquia São João Batista","Botafogo","Rio de Janeiro"],["Primeiro de Março","Centro","Rio de Janeiro"],
+    ["Residencial Miami Center","Copacabana","Rio de Janeiro"],["Duque de Caxias","Parque Duque","Duque de Caxias"],
+    ["Rede Economia","Itaipuaçu","Maricá"],["Hospital CS Fátima","Centro","Nova Iguaçu"],["Top Commerce","Centro","Nova Iguaçu"],
+    ["Telha Norte Santos","Vila Matias","Santos"],["Telha Norte Morumbi","Jardim das Acácias","São Paulo"]
+  ];
+  var cidades = ["Todas", "Niterói", "Rio de Janeiro", "Baixada e região", "São Paulo"];
+  var grupo = function (c) { return (c === "Duque de Caxias" || c === "Nova Iguaçu" || c === "Maricá") ? "Baixada e região" : (c === "Santos" ? "São Paulo" : c); };
+  var filtroCidade = "Todas", mostrarTudo = false;
+  var semAcento = function (s) { return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); };
+  cidades.forEach(function (c) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = c;
+    b.setAttribute("aria-pressed", c === filtroCidade ? "true" : "false");
+    b.addEventListener("click", function () {
+      filtroCidade = c;
+      $("u-cidades").querySelectorAll(".chip").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      listar();
+    });
+    $("u-cidades").appendChild(b);
+  });
+  function listar() {
+    var q = semAcento($("u-q").value.trim());
+    var res = U.filter(function (u) {
+      var okC = filtroCidade === "Todas" || grupo(u[2]) === filtroCidade;
+      var okQ = !q || semAcento(u.join(" ")).indexOf(q) > -1;
+      return okC && okQ;
+    });
+    var limite = (mostrarTudo || q || filtroCidade !== "Todas") ? res.length : 12;
+    $("u-cont").textContent = res.length + (res.length === 1 ? " unidade encontrada" : " unidades encontradas");
+    var g = $("u-grade"); g.innerHTML = "";
+    if (!res.length) {
+      g.innerHTML = "<p style='color:var(--nevoa);margin:0'>Nenhuma unidade com esse nome. Tente o bairro ou a cidade.</p>";
+    }
+    res.slice(0, limite).forEach(function (u) {
+      var a = document.createElement("a"); a.className = "uni";
+      a.href = "https://www.google.com/maps/search/" + encodeURIComponent("Safety Park " + u[0] + " " + u[1] + " " + u[2]);
+      a.target = "_blank"; a.rel = "noopener";
+      a.innerHTML = "<b>" + u[0] + "</b><span>" + u[1] + " · " + u[2] + "</span><i>Ver página da unidade →</i>";
+      g.appendChild(a);
+    });
+    $("u-mais").hidden = limite >= res.length;
+  }
+  $("u-q").addEventListener("input", listar);
+  $("u-mais").addEventListener("click", function () { mostrarTudo = true; listar(); });
+  $("hero-busca").addEventListener("submit", function (e) {
+    e.preventDefault(); $("u-q").value = $("hero-q").value; filtroCidade = "Todas";
+    $("u-cidades").querySelectorAll(".chip").forEach(function (x) { x.setAttribute("aria-pressed", x.textContent === "Todas" ? "true" : "false"); });
+    listar(); $("unidades").scrollIntoView({ behavior: reduz ? "auto" : "smooth" });
+  });
+  listar();
+
+  /* ---------- Calculadora do mensalista ---------- */
+  function calcMens() {
+    var dias = +$("m-dias").value, diaria = Math.max(0, +$("m-diaria").value || 0), mensal = Math.max(0, +$("m-mensal").value || 0);
+    $("m-dias-o").textContent = dias;
+    var avulsoMes = dias * diaria * 4.33, eco = (avulsoMes - mensal) * 12;
+    if (eco > 0) {
+      $("m-titulo").textContent = "Economia por ano";
+      $("m-eco").textContent = brl(eco); $("m-eco").style.color = "var(--ok)";
+    } else {
+      $("m-titulo").textContent = "Com esse uso, o avulso ainda compensa";
+      $("m-eco").textContent = brl(Math.abs(eco)) + " a mais"; $("m-eco").style.color = "var(--nevoa)";
+    }
+    $("m-det").textContent = "Avulso: " + brl(avulsoMes) + " por mês · Mensalista: " + brl(mensal);
+  }
+  ["m-dias", "m-diaria", "m-mensal"].forEach(function (id) { $(id).addEventListener("input", calcMens); });
+  calcMens();
+
+  /* ---------- Parceiros ---------- */
+  var P = ["Saint-Gobain","Hospital Itaipu","Unimed","Casa de Saúde N. Sra. de Fátima","ANP","Sem Parar","ConectCar","Intelbras","Shopping Barra Mall","Reserva Cultural","Soul Malls","Central Prime","Megasys","Berkley","Transpetro","HubPar Mobilidade","Soter Engenharia","Telha Norte"];
+  var tr = $("trilha");
+  [0, 1].forEach(function (k) { P.forEach(function (n) { var s = document.createElement("span"); s.textContent = n; if (k) { s.className = "dup"; s.setAttribute("aria-hidden", "true"); } tr.appendChild(s); }); });
+})();
+</script>
+</body>
+</html>
