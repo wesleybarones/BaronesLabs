@@ -26,7 +26,13 @@
       <a href="empresas.html">Para empresas</a>
       <a href="#contato">Contato</a>
     </nav>
+    <div class="topo-acoes">
+    <div class="idioma" role="group" aria-label="Idioma">
+      <button type="button" class="idioma-btn" aria-pressed="true" lang="pt-BR">PT</button>
+      <button type="button" class="idioma-btn" aria-pressed="false" lang="en" data-en>EN</button>
+    </div>
     <a class="btn btn-sinal" href="#unidades">Encontrar unidade</a>
+    </div>
   </div>
 </header>
 
@@ -188,6 +194,7 @@
   </div>
 </footer>
 
+<div class="aviso-idioma" id="aviso-idioma" role="status" hidden><b>English version</b> · A versão em inglês entra no site final, com todas as páginas traduzidas.</div>
 <a class="zap" href="https://wa.me/5521973761183" target="_blank" rel="noopener">WhatsApp</a>
 
 <script>
@@ -394,6 +401,16 @@
   var tr = $("trilha");
   [0, 1].forEach(function (k) { P.forEach(function (n) { var s = document.createElement("span"); s.textContent = n; if (k) { s.className = "dup"; s.setAttribute("aria-hidden", "true"); } tr.appendChild(s); }); });
 
+})();
+</script>
+<script>
+(function () {
+  var b = document.querySelector("[data-en]"), t = document.getElementById("aviso-idioma"), tm;
+  if (!b || !t) return;
+  b.addEventListener("click", function () {
+    t.hidden = false; clearTimeout(tm);
+    tm = setTimeout(function () { t.hidden = true; }, 4000);
+  });
 })();
 </script>
 </body>

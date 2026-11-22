@@ -27,7 +27,13 @@
       <a href="#painel">Painel do parceiro</a>
       <a href="#servicos">Serviços</a>
     </nav>
+    <div class="topo-acoes">
+    <div class="idioma" role="group" aria-label="Idioma">
+      <button type="button" class="idioma-btn" aria-pressed="true" lang="pt-BR">PT</button>
+      <button type="button" class="idioma-btn" aria-pressed="false" lang="en" data-en>EN</button>
+    </div>
     <a class="btn btn-sinal" href="#proposta">Quero uma proposta</a>
+    </div>
   </div>
 </header>
 
@@ -322,6 +328,7 @@
   </div>
 </footer>
 
+<div class="aviso-idioma" id="aviso-idioma" role="status" hidden><b>English version</b> · A versão em inglês entra no site final, com todas as páginas traduzidas.</div>
 <a class="zap" href="https://wa.me/5521973761183" target="_blank" rel="noopener">WhatsApp</a>
 
 <script>
@@ -551,6 +558,16 @@
     var t = TIPOS[estado.tipo];
     $("p-nome").value = $("lf-nome").value; $("p-tel").value = $("lf-tel").value; $("p-vagas").value = estado.vagas;
     $("p-msg").value = "Simulação: " + t.nome + ", " + REGIOES[estado.regiao].nome + ", " + estado.vagas + " vagas, " + estado.horas + "h. Estimativa: " + $("r-faixa").textContent + " por mês.";
+  });
+})();
+</script>
+<script>
+(function () {
+  var b = document.querySelector("[data-en]"), t = document.getElementById("aviso-idioma"), tm;
+  if (!b || !t) return;
+  b.addEventListener("click", function () {
+    t.hidden = false; clearTimeout(tm);
+    tm = setTimeout(function () { t.hidden = true; }, 4000);
   });
 })();
 </script>
