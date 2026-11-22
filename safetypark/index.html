@@ -16,9 +16,9 @@
 
 <header class="topo">
   <div class="wrap">
-    <a class="marca" href="#inicio" aria-label="Safety Park, início">
-      <span class="marca-p" aria-hidden="true">P</span>
-      <span class="marca-nome">SAFETY PARK</span>
+    <a class="marca" href="#inicio" >
+      <img class="logo logo-positivo" src="logo-safety-park.png" alt="Safety Park" width="300" height="41">
+      <img class="logo logo-negativo" src="logo-safety-park-negativo.png" alt="Safety Park" width="300" height="41">
     </a>
     <nav class="nav" aria-label="Principal">
       <a href="#mensalista">Mensalista</a>
@@ -169,7 +169,8 @@
 <footer class="rodape" id="contato">
   <div class="wrap">
     <div>
-      <a class="marca" href="#inicio"><span class="marca-p" aria-hidden="true">P</span><span class="marca-nome">SAFETY PARK</span></a>
+      <a class="marca" href="#inicio"><img class="logo logo-positivo" src="logo-safety-park.png" alt="Safety Park" width="300" height="41">
+      <img class="logo logo-negativo" src="logo-safety-park-negativo.png" alt="Safety Park" width="300" height="41"></a>
       <blockquote>Nosso objetivo é oferecer um serviço de qualidade que proporcione segurança, conforto e praticidade aos nossos clientes, lucratividade e renda aos nossos parceiros e colaboradores.<cite>Ricardo da Matta, CEO</cite></blockquote>
     </div>
     <div>
@@ -204,7 +205,9 @@
   /* ---------- Pátio ---------- */
   var cv = $("patio"), ctx = cv.getContext("2d");
   var COLS = 8, vagas = [], TAGS = ["Sem Parar", "ConectCar", "Mensalista", "Ticket", "Veloe"];
-  var CORES = ["#5b5556", "#8a8384", "#3c3738", "#c9c3bd", "#6e6869", "#e2382c", "#2b2728", "#9c9693"];
+  var CORES = ["#6e6869", "#9c9693", "#3c3738", "#b9b3ae", "#57514f", "#d1281d", "#2b2728", "#857e7b"];
+  var raiz = document.documentElement;
+  var cor = function (n) { return getComputedStyle(raiz).getPropertyValue(n).trim(); };
   for (var i = 0; i < COLS * 2; i++) {
     var ev = (i === 3 || i === 4);
     vagas.push({ ocupada: Math.random() < .65 || i === 5, cor: CORES[i % CORES.length], t: 1, ev: ev });
@@ -222,21 +225,23 @@
   function desenharPatio(agora) {
     var W = cv.clientWidth, H = cv.clientHeight;
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = "#1b1819"; ctx.fillRect(0, 0, W, H);
+    var cTexto = cor("--texto"), cOk = cor("--ok");
+    ctx.fillStyle = cor("--superficie-2"); ctx.fillRect(0, 0, W, H);
     var mx = W * .05, larg = (W - mx * 2) / COLS, alt = H * .34, corredor = H - alt * 2 - H * .08;
     var yTopo = H * .04, yBaixo = yTopo + alt + corredor;
     // faixa central tracejada
-    ctx.strokeStyle = "rgba(241,194,50,.55)"; ctx.lineWidth = 2; ctx.setLineDash([14, 12]);
+    ctx.strokeStyle = cor("--faixa"); ctx.lineWidth = 2; ctx.setLineDash([14, 12]);
     ctx.beginPath(); ctx.moveTo(mx, yTopo + alt + corredor / 2); ctx.lineTo(W - mx, yTopo + alt + corredor / 2); ctx.stroke();
     ctx.setLineDash([]);
     // setas do corredor
-    ctx.fillStyle = "rgba(244,239,233,.18)"; ctx.font = "600 " + Math.max(10, H * .045) + "px JetBrains Mono, monospace";
+    ctx.globalAlpha = .35; ctx.fillStyle = cTexto; ctx.font = "600 " + Math.max(10, H * .045) + "px JetBrains Mono, monospace";
     ctx.textAlign = "center"; ctx.textBaseline = "middle";
     ctx.fillText("→  ENTRADA", W * .3, yTopo + alt + corredor / 4 + 2);
     ctx.fillText("SAÍDA  →", W * .7, yTopo + alt + corredor * .75);
+    ctx.globalAlpha = 1;
     for (var f = 0; f < 2; f++) {
       var y0 = f === 0 ? yTopo : yBaixo;
-      ctx.strokeStyle = "rgba(244,239,233,.7)"; ctx.lineWidth = 2;
+      ctx.strokeStyle = cTexto; ctx.globalAlpha = .55; ctx.lineWidth = 2;
       for (var c = 0; c <= COLS; c++) {
         var xl = mx + c * larg;
         ctx.beginPath(); ctx.moveTo(xl, y0); ctx.lineTo(xl, y0 + alt); ctx.stroke();
@@ -244,12 +249,13 @@
       ctx.beginPath();
       if (f === 0) { ctx.moveTo(mx, y0); ctx.lineTo(W - mx, y0); } else { ctx.moveTo(mx, y0 + alt); ctx.lineTo(W - mx, y0 + alt); }
       ctx.stroke();
+      ctx.globalAlpha = 1;
       for (var c2 = 0; c2 < COLS; c2++) {
         var v = vagas[f * COLS + c2], x0 = mx + c2 * larg;
         if (v.ev) {
           var pulso = reduz ? .5 : .35 + .25 * Math.sin(agora / 500 + c2);
-          ctx.fillStyle = "rgba(63,191,127," + (pulso * .35) + ")"; ctx.fillRect(x0 + 2, y0 + (f ? 0 : 2), larg - 4, alt - 2);
-          ctx.fillStyle = "#3fbf7f"; ctx.font = "700 " + Math.max(10, larg * .28) + "px Manrope, sans-serif";
+          ctx.globalAlpha = pulso * .3; ctx.fillStyle = cOk; ctx.fillRect(x0 + 2, y0 + (f ? 0 : 2), larg - 4, alt - 2); ctx.globalAlpha = 1;
+          ctx.fillStyle = cOk; ctx.font = "700 " + Math.max(10, larg * .28) + "px Manrope, sans-serif";
           ctx.fillText("⚡", x0 + larg / 2, f === 0 ? y0 + alt * .12 + 6 : y0 + alt * .88 - 6);
         }
         var p = v.ocupada ? v.t : 1 - v.t;
@@ -259,9 +265,9 @@
           var desde = f === 0 ? y0 + alt + corredor * .3 : y0 - corredor * .3;
           var cy = desde + (alvo - desde) * ease(p);
           ctx.globalAlpha = Math.min(1, p * 1.6);
-          ctx.fillStyle = "rgba(0,0,0,.35)"; rr(cx + 3, cy + 4, cw, ch, 8); ctx.fill();
+          ctx.fillStyle = "rgba(0,0,0,.22)"; rr(cx + 3, cy + 4, cw, ch, 8); ctx.fill();
           ctx.fillStyle = v.cor; rr(cx, cy, cw, ch, 8); ctx.fill();
-          ctx.fillStyle = "rgba(19,17,18,.55)";
+          ctx.fillStyle = "rgba(19,17,18,.5)";
           var vid = f === 0 ? cy + ch * .62 : cy + ch * .14;
           rr(cx + cw * .14, vid, cw * .72, ch * .22, 4); ctx.fill();
           rr(cx + cw * .18, f === 0 ? cy + ch * .14 : cy + ch * .66, cw * .64, ch * .16, 3); ctx.fill();
@@ -293,7 +299,11 @@
   }
   tamanho(); contarLivres();
   window.addEventListener("resize", function () { tamanho(); desenharPatio(performance.now()); });
-  if (reduz) { desenharPatio(0); } else { requestAnimationFrame(loop); }
+  if (reduz) {
+    desenharPatio(0);
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq.addEventListener) mq.addEventListener("change", function () { desenharPatio(0); });
+  } else { requestAnimationFrame(loop); }
 
   /* ---------- Unidades ---------- */
   var U = [
@@ -342,7 +352,7 @@
     $("u-cont").textContent = res.length + (res.length === 1 ? " unidade encontrada" : " unidades encontradas");
     var g = $("u-grade"); g.innerHTML = "";
     if (!res.length) {
-      g.innerHTML = "<p style='color:var(--nevoa);margin:0'>Nenhuma unidade com esse nome. Tente o bairro ou a cidade.</p>";
+      g.innerHTML = "<p style='color:var(--texto-2);margin:0'>Nenhuma unidade com esse nome. Tente o bairro ou a cidade.</p>";
     }
     res.slice(0, limite).forEach(function (u) {
       var a = document.createElement("a"); a.className = "uni";
@@ -372,7 +382,7 @@
       $("m-eco").textContent = brl(eco); $("m-eco").style.color = "var(--ok)";
     } else {
       $("m-titulo").textContent = "Com esse uso, o avulso ainda compensa";
-      $("m-eco").textContent = brl(Math.abs(eco)) + " a mais"; $("m-eco").style.color = "var(--nevoa)";
+      $("m-eco").textContent = brl(Math.abs(eco)) + " a mais"; $("m-eco").style.color = "var(--texto-2)";
     }
     $("m-det").textContent = "Avulso: " + brl(avulsoMes) + " por mês · Mensalista: " + brl(mensal);
   }

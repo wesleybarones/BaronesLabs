@@ -16,9 +16,9 @@
 
 <header class="topo">
   <div class="wrap">
-    <a class="marca" href="index.html" aria-label="Safety Park, início">
-      <span class="marca-p" aria-hidden="true">P</span>
-      <span class="marca-nome">SAFETY PARK</span>
+    <a class="marca" href="index.html" >
+      <img class="logo logo-positivo" src="logo-safety-park.png" alt="Safety Park" width="300" height="41">
+      <img class="logo logo-negativo" src="logo-safety-park-negativo.png" alt="Safety Park" width="300" height="41">
     </a>
     <nav class="nav" aria-label="Principal">
       <a href="index.html">Para você</a>
@@ -109,18 +109,18 @@
         </div>
         <div class="mix">
           <div class="mix-barra" aria-hidden="true">
-            <i id="m-rot" style="background:var(--giz)"></i>
+            <i id="m-rot" style="background:var(--texto)"></i>
             <i id="m-men" style="background:var(--sinal)"></i>
             <i id="m-ext" style="background:var(--faixa)"></i>
           </div>
           <div class="mix-legenda">
-            <span><i class="qd" style="background:var(--giz)"></i>Rotativo <b id="l-rot">0</b></span>
+            <span><i class="qd" style="background:var(--texto)"></i>Rotativo <b id="l-rot">0</b></span>
             <span><i class="qd" style="background:var(--sinal)"></i>Mensalistas <b id="l-men">0</b></span>
             <span><i class="qd" style="background:var(--faixa)"></i>Extras <b id="l-ext">0</b></span>
           </div>
         </div>
         <div class="curva-caixa">
-          <div class="curva-cab"><span>Ocupação típica ao longo do dia · <b id="c-nome" style="color:var(--giz)">Shopping</b></span><span>pico às <b id="c-pico" style="color:var(--giz)">18h</b></span></div>
+          <div class="curva-cab"><span>Ocupação típica ao longo do dia · <b id="c-nome" style="color:var(--texto)">Shopping</b></span><span>pico às <b id="c-pico" style="color:var(--texto)">18h</b></span></div>
           <svg id="curva" viewBox="0 0 600 170" role="img" aria-label="Curva de ocupação por hora"></svg>
         </div>
         <form class="lead-form" id="lead-form">
@@ -303,7 +303,8 @@
 <footer class="rodape" id="contato">
   <div class="wrap">
     <div>
-      <a class="marca" href="index.html"><span class="marca-p" aria-hidden="true">P</span><span class="marca-nome">SAFETY PARK</span></a>
+      <a class="marca" href="index.html"><img class="logo logo-positivo" src="logo-safety-park.png" alt="Safety Park" width="300" height="41">
+      <img class="logo logo-negativo" src="logo-safety-park-negativo.png" alt="Safety Park" width="300" height="41"></a>
       <blockquote>Nosso objetivo é oferecer um serviço de qualidade que proporcione segurança, conforto e praticidade aos nossos clientes, lucratividade e renda aos nossos parceiros e colaboradores.<cite>Ricardo da Matta, CEO</cite></blockquote>
     </div>
     <div>
@@ -406,21 +407,21 @@
     var aberto = function (h) { return horas === 24 || (h >= ini && h < (fim === 0 ? 24 : fim)); };
     var s = "";
     [0, .5, 1].forEach(function (g) {
-      s += '<line x1="' + esq + '" x2="' + (W - dir) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="#332d2d" stroke-width="1"/>';
-      s += '<text x="' + (esq - 6) + '" y="' + (y(g) + 4) + '" fill="#7b7370" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="end">' + Math.round(g * 100) + '%</text>';
+      s += '<line x1="' + esq + '" x2="' + (W - dir) + '" y1="' + y(g) + '" y2="' + y(g) + '" style="stroke:var(--linha)" stroke-width="1"/>';
+      s += '<text x="' + (esq - 6) + '" y="' + (y(g) + 4) + '" style="fill:var(--texto-3)" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="end">' + Math.round(g * 100) + '%</text>';
     });
     if (horas < 24) {
-      s += '<rect x="' + x(ini) + '" y="' + topo + '" width="' + (x(Math.min(ini + horas, 23)) - x(ini)) + '" height="' + (H - pe - topo) + '" fill="rgba(244,239,233,.04)"/>';
+      s += '<rect x="' + x(ini) + '" y="' + topo + '" width="' + (x(Math.min(ini + horas, 23)) - x(ini)) + '" height="' + (H - pe - topo) + '" style="fill:var(--superficie-2)" fill-opacity=".7"/>';
     }
     var area = "M" + x(0) + " " + y(0), linha = "";
     dados.forEach(function (v, i) { area += " L" + x(i) + " " + y(v); linha += (i ? " L" : "M") + x(i) + " " + y(v); });
     area += " L" + x(23) + " " + y(0) + " Z";
-    s += '<path d="' + area + '" fill="' + destaque + '" fill-opacity=".16"/>';
-    s += '<path d="' + linha + '" fill="none" stroke="' + destaque + '" stroke-width="2.2" stroke-linejoin="round"/>';
+    s += '<path d="' + area + '" style="fill:' + destaque + '" fill-opacity=".14"/>';
+    s += '<path d="' + linha + '" fill="none" style="stroke:' + destaque + '" stroke-width="2.2" stroke-linejoin="round"/>';
     var pico = 0; dados.forEach(function (v, i) { if (v > dados[pico]) pico = i; });
-    s += '<circle cx="' + x(pico) + '" cy="' + y(dados[pico]) + '" r="4.5" fill="' + destaque + '" stroke="#131112" stroke-width="2"/>';
+    s += '<circle cx="' + x(pico) + '" cy="' + y(dados[pico]) + '" r="4.5" style="fill:' + destaque + ';stroke:var(--superficie)" stroke-width="2"/>';
     for (var h = 0; h < 24; h += 3) {
-      s += '<text x="' + x(h) + '" y="' + (H - 6) + '" fill="#7b7370" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">' + h + 'h</text>';
+      s += '<text x="' + x(h) + '" y="' + (H - 6) + '" style="fill:var(--texto-3)" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">' + h + 'h</text>';
     }
     svg.innerHTML = s;
     return pico;
@@ -442,7 +443,7 @@
     $("l-men").textContent = brlK(r.men);
     $("l-ext").textContent = brlK(r.ext);
     $("c-nome").textContent = t.nome;
-    var pico = desenharCurva($("curva"), CURVAS[t.curva], estado.horas, "#e2382c");
+    var pico = desenharCurva($("curva"), CURVAS[t.curva], estado.horas, "var(--sinal)");
     $("c-pico").textContent = pico + "h";
   }
 
@@ -504,7 +505,7 @@
     $("k-tic-v").textContent = "permanência média " + o.perm;
     var ult = [];
     for (var k = 0; k < 24; k++) ult.push(c[(horaAgora + 1 + k) % 24]);
-    desenharCurva($("ocup-dia"), ult, 24, "#f4efe9");
+    desenharCurva($("ocup-dia"), ult, 24, "var(--texto)");
     var bar = $("barras"); bar.innerHTML = "";
     o.pag.forEach(function (p) {
       var d = document.createElement("div"); d.className = "barra-linha";
@@ -519,7 +520,7 @@
     meses.forEach(function (m, i) {
       var li = document.createElement("li");
       var val = o.fat * (0.42 + ((i * 37) % 9) / 200);
-      li.innerHTML = "<span>" + m + "</span><span><b>" + brl(val) + "</b> repassado</span><span style='color:#3fbf7f'>pago</span>";
+      li.innerHTML = "<span>" + m + "</span><span><b>" + brl(val) + "</b> repassado</span><span style='color:var(--ok)'>pago</span>";
       rep.appendChild(li);
     });
   }
