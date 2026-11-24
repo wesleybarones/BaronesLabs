@@ -1,0 +1,232 @@
+/*
+ * Tokens de design no estilo Apple (HIG / Liquid Glass) — Barones Labs
+ * Fonte: developer.apple.com/design/human-interface-guidelines
+ * Ver design/APPLE-DESIGN-GUIDE.md para as regras de uso.
+ */
+
+:root {
+  /* ---------- Tipografia ---------- */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
+    "Inter", "Segoe UI", Roboto, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    system-ui, "Inter", sans-serif;
+  --font-serif: "New York", ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Escala iOS (Large/default): tamanho / entrelinha */
+  --text-large-title: 700 34px/41px var(--font-display);
+  --text-title1: 400 28px/34px var(--font-display);
+  --text-title2: 400 22px/28px var(--font-display);
+  --text-title3: 400 20px/25px var(--font-display);
+  --text-headline: 600 17px/22px var(--font-sans);
+  --text-body: 400 17px/22px var(--font-sans);
+  --text-callout: 400 16px/21px var(--font-sans);
+  --text-subhead: 400 15px/20px var(--font-sans);
+  --text-footnote: 400 13px/18px var(--font-sans);
+  --text-caption1: 400 12px/16px var(--font-sans);
+  --text-caption2: 400 11px/13px var(--font-sans);
+
+  /* ---------- Cores de sistema (claro) ---------- */
+  --red: #ff383c;
+  --orange: #ff8d28;
+  --yellow: #ffcc00;
+  --green: #34c759;
+  --mint: #00c8b3;
+  --teal: #00c3d0;
+  --cyan: #00c0e8;
+  --blue: #0088ff;
+  --indigo: #6155f5;
+  --purple: #cb30e0;
+  --pink: #ff2d55;
+  --brown: #ac7f5e;
+
+  --gray: #8e8e93;
+  --gray2: #aeaeb2;
+  --gray3: #c7c7cc;
+  --gray4: #d1d1d6;
+  --gray5: #e5e5ea;
+  --gray6: #f2f2f7;
+
+  /* Cor de destaque da marca — trocar pela cor oficial da Barones Labs */
+  --accent: var(--blue);
+  --on-accent: #ffffff;
+
+  /* Semânticas */
+  --bg: #ffffff;
+  --bg-secondary: var(--gray6);
+  --bg-tertiary: #ffffff;
+  --label: #000000;
+  --label-secondary: rgba(60, 60, 67, 0.6);
+  --label-tertiary: rgba(60, 60, 67, 0.3);
+  --separator: rgba(60, 60, 67, 0.29);
+  --link: var(--accent);
+
+  /* ---------- Materiais ---------- */
+  /* Liquid Glass (camada de controles/navegação) */
+  --glass-regular-bg: rgba(255, 255, 255, 0.55);
+  --glass-clear-bg: rgba(255, 255, 255, 0.12);
+  --glass-blur: blur(24px) saturate(180%);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --glass-dim: rgba(0, 0, 0, 0.35); /* dimming p/ vidro clear sobre mídia clara */
+
+  /* Standard materials (camada de conteúdo) */
+  --material-ultrathin: rgba(255, 255, 255, 0.3);
+  --material-thin: rgba(255, 255, 255, 0.5);
+  --material-regular: rgba(255, 255, 255, 0.7);
+  --material-thick: rgba(255, 255, 255, 0.85);
+  --material-blur: blur(20px) saturate(160%);
+
+  /* ---------- Forma e espaço ---------- */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 26px;
+  --radius-capsule: 999px;
+  --hit-target: 44px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* ---------- Movimento ---------- */
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration: 0.35s;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --red: #ff4245;
+    --orange: #ff9230;
+    --yellow: #ffd600;
+    --green: #30d158;
+    --mint: #00dac3;
+    --teal: #00d2e0;
+    --cyan: #3cd3fe;
+    --blue: #0091ff;
+    --indigo: #6d7cff;
+    --purple: #db34f2;
+    --pink: #ff375f;
+    --brown: #b78a66;
+
+    --gray2: #636366;
+    --gray3: #48484a;
+    --gray4: #3a3a3c;
+    --gray5: #2c2c2e;
+    --gray6: #1c1c1e;
+
+    --bg: #000000;
+    --bg-secondary: var(--gray6);
+    --bg-tertiary: var(--gray5);
+    --label: #ffffff;
+    --label-secondary: rgba(235, 235, 245, 0.6);
+    --label-tertiary: rgba(235, 235, 245, 0.3);
+    --separator: rgba(84, 84, 88, 0.6);
+
+    --glass-regular-bg: rgba(30, 30, 32, 0.55);
+    --glass-clear-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+
+    --material-ultrathin: rgba(28, 28, 30, 0.3);
+    --material-thin: rgba(28, 28, 30, 0.5);
+    --material-regular: rgba(28, 28, 30, 0.7);
+    --material-thick: rgba(28, 28, 30, 0.85);
+  }
+}
+
+/* Alto contraste: cores de sistema "Increased contrast" do HIG */
+@media (prefers-contrast: more) {
+  :root {
+    --red: #e9152d;
+    --orange: #c55300;
+    --yellow: #a16a00;
+    --green: #008932;
+    --blue: #1e6ef4;
+    --indigo: #564ade;
+    --purple: #b02fc2;
+    --pink: #e7124d;
+    --glass-regular-bg: rgba(255, 255, 255, 0.9);
+  }
+}
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  :root {
+    --red: #ff6165;
+    --orange: #ffa056;
+    --yellow: #fedf43;
+    --green: #4ad968;
+    --blue: #5cb8ff;
+    --indigo: #a7aaff;
+    --purple: #ea8dff;
+    --pink: #ff8ac4;
+    --glass-regular-bg: rgba(20, 20, 22, 0.92);
+  }
+}
+
+/* ---------- Utilitários ---------- */
+body {
+  font: var(--text-body);
+  letter-spacing: -0.43px;
+  color: var(--label);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Liquid Glass: SOMENTE para navegação e controles */
+.glass {
+  background: var(--glass-regular-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  border-radius: var(--radius-capsule);
+}
+.glass--clear {
+  background: var(--glass-clear-bg);
+}
+
+/* Material standard: para a camada de conteúdo */
+.material {
+  background: var(--material-regular);
+  -webkit-backdrop-filter: var(--material-blur);
+  backdrop-filter: var(--material-blur);
+  border-radius: var(--radius-lg);
+}
+
+/* Botão de ação principal: cor no FUNDO, um por grupo */
+.btn-prominent {
+  min-height: var(--hit-target);
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-capsule);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: var(--text-headline);
+  transition: transform var(--duration) var(--ease-spring);
+}
+.btn-prominent:active {
+  transform: scale(0.96);
+}
+
+/* Acessibilidade: reduzir transparência */
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass--clear,
+  .material {
+    background: var(--bg-secondary);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
