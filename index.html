@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Barones Labs</title>
+  <meta name="description" content="Barones Labs — laboratório de tecnologia, design e inteligência artificial.">
+  <meta name="theme-color" content="#07070c">
+  <link rel="icon" href="assets/icon-96.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preload" as="image" href="assets/hero-poster.jpg">
+  <link rel="stylesheet" href="design/apple-tokens.css">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <!-- Camada funcional: navegação em Liquid Glass flutuando sobre o conteúdo -->
+  <header class="nav-wrap" id="nav">
+    <nav class="nav glass glass--clear" aria-label="Principal">
+      <a class="nav__brand" href="#topo" aria-label="Barones Labs — início">
+        <img src="assets/icon-96.png" alt="" width="32" height="32">
+        <span>Barones Labs</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+      <a class="btn-prominent nav__cta" href="#contato">Fale conosco</a>
+    </nav>
+  </header>
+
+  <main id="topo">
+    <!-- Hero: mídia em tela cheia, estendida por baixo da navegação -->
+    <section class="hero" aria-labelledby="hero-title">
+      <video class="hero__media" autoplay muted loop playsinline preload="metadata"
+             poster="assets/hero-poster.jpg" aria-hidden="true">
+        <source src="assets/hero.mp4" type="video/mp4">
+      </video>
+      <div class="hero__shade" aria-hidden="true"></div>
+
+      <div class="hero__content">
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Laboratório de tecnologia</p>
+        <h1 id="hero-title">O futuro,<br>com <span class="neon">luz própria</span>.</h1>
+        <p class="hero__lead">Criamos produtos digitais, experiências e soluções com inteligência artificial — com o cuidado de quem projeta cada detalhe.</p>
+        <div class="hero__actions">
+          <a class="btn-prominent" href="#contato">Comece um projeto</a>
+          <a class="btn-glass glass glass--clear" href="#servicos">Ver serviços</a>
+        </div>
+      </div>
+
+      <a class="hero__scroll" href="#servicos" aria-label="Rolar para serviços">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </section>
+
+    <!-- Camada de conteúdo: materiais standard, sem vidro -->
+    <section class="section" id="servicos" aria-labelledby="servicos-title">
+      <div class="container">
+        <p class="eyebrow">Serviços</p>
+        <h2 id="servicos-title">Do conceito ao lançamento.</h2>
+        <p class="section__lead">Três frentes, um mesmo padrão de qualidade.</p>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card__icon card__icon--cyan" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M10 18h4"/></svg>
+            </div>
+            <h3>Apps e produtos digitais</h3>
+            <p>Aplicativos e sites rápidos, acessíveis e com acabamento de primeira — do protótipo à loja.</p>
+          </article>
+          <article class="card">
+            <div class="card__icon card__icon--magenta" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>
+            </div>
+            <h3>Inteligência artificial</h3>
+            <p>Agentes, automações e assistentes que trabalham de verdade dentro do seu negócio.</p>
+          </article>
+          <article class="card">
+            <div class="card__icon card__icon--yellow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Design e marca</h3>
+            <p>Identidade visual, interfaces e conteúdo com uma linguagem clara e consistente.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="sobre" aria-labelledby="sobre-title">
+      <div class="container split">
+        <figure class="split__media">
+          <img src="assets/portrait.webp" alt="Retrato com óculos futuristas iluminados em ciano" width="800" height="993" loading="lazy">
+        </figure>
+        <div class="split__text">
+          <p class="eyebrow">Sobre</p>
+          <h2 id="sobre-title">Tecnologia que se sente simples.</h2>
+          <p>A Barones Labs nasceu para unir engenharia e design. Acreditamos que a melhor tecnologia é a que some — deixa o conteúdo e as pessoas no centro.</p>
+          <ul class="facts">
+            <li><strong>Clareza</strong><span>Interfaces que explicam a si mesmas.</span></li>
+            <li><strong>Profundidade</strong><span>Camadas, movimento e materiais com propósito.</span></li>
+            <li><strong>Acessibilidade</strong><span>Feito para todo mundo, em qualquer tela.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta" id="contato" aria-labelledby="contato-title">
+      <div class="container cta__box">
+        <img class="cta__logo" src="assets/logo.webp" alt="Barones Labs" width="720" height="307" loading="lazy">
+        <h2 id="contato-title">Vamos construir algo juntos?</h2>
+        <p class="section__lead">Conte sua ideia. Respondemos em até um dia útil.</p>
+        <a class="btn-prominent" href="mailto:contato@baroneslabs.com">Fale conosco</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__row">
+      <span>© <span id="ano">2026</span> Barones Labs</span>
+      <a href="#topo">Voltar ao topo</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll edge effect: a navegação passa de vidro "clear" para "regular" ao sair do hero
+    (function () {
+      var nav = document.getElementById('nav');
+      var hero = document.querySelector('.hero');
+      if ('IntersectionObserver' in window && hero) {
+        new IntersectionObserver(function (e) {
+          nav.classList.toggle('is-scrolled', !e[0].isIntersecting);
+        }, { rootMargin: '-72px 0px 0px 0px' }).observe(hero);
+      }
+      // Respeita "reduzir movimento": pausa o vídeo e mantém o poster
+      var v = document.querySelector('.hero__media');
+      var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      function sync() { if (!v) return; mq.matches ? v.pause() : v.play().catch(function () {}); }
+      sync(); mq.addEventListener && mq.addEventListener('change', sync);
+      document.getElementById('ano').textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>

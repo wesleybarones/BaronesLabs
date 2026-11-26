@@ -47,9 +47,16 @@
   --gray5: #e5e5ea;
   --gray6: #f2f2f7;
 
-  /* Cor de destaque da marca — trocar pela cor oficial da Barones Labs */
-  --accent: var(--blue);
+  /* Cores da marca Barones Labs (extraídas do logo) */
+  --brand-cyan: #00f0ff;
+  --brand-magenta: #d54bdd;
+  --brand-yellow: #ffe600; /* o "ponto" do logo: só para status/destaque pontual */
+  --brand-ink: #07070c;
+
+  /* Accent = ciano. No claro, versão escurecida para manter contraste */
+  --accent: #008fa8;
   --on-accent: #ffffff;
+  --accent-2: #a62db0; /* magenta para fundo claro */
 
   /* Semânticas */
   --bg: #ffffff;
@@ -121,7 +128,11 @@
     --gray5: #2c2c2e;
     --gray6: #1c1c1e;
 
-    --bg: #000000;
+    --accent: var(--brand-cyan);
+    --on-accent: var(--brand-ink);
+    --accent-2: var(--brand-magenta);
+
+    --bg: var(--brand-ink);
     --bg-secondary: var(--gray6);
     --bg-tertiary: var(--gray5);
     --label: #ffffff;
