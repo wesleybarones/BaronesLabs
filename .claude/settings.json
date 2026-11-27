@@ -1,0 +1,35 @@
+{
+  "enabledPlugins": {
+    "octo@nyldn-plugins": true,
+    "painted-animation@opus-video-skills": true,
+    "kinetic-reel@opus-video-skills": true,
+    "cost-mode@claude-cost-optimizer": true,
+    "jev-opus@jev-opus": true
+  },
+  "extraKnownMarketplaces": {
+    "nyldn-plugins": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/nyldn/plugins.git"
+      }
+    },
+    "opus-video-skills": {
+      "source": {
+        "source": "github",
+        "repo": "tuzhechen2005/opus-video-skills"
+      }
+    },
+    "claude-cost-optimizer": {
+      "source": {
+        "source": "github",
+        "repo": "Sagargupta16/claude-cost-optimizer"
+      }
+    },
+    "jev-opus": {
+      "source": {
+        "source": "github",
+        "repo": "WXK-AI/jev-opus"
+      }
+    }
+  }
+}
