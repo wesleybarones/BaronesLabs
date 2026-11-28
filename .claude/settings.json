@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-assets.sh\""
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "bio-research@synced": false,
+    "legal@synced": false,
+    "privacy-legal@synced": false,
+    "sales@synced": false,
+    "data@synced": false,
+    "datarobot-agent-skills@synced": false,
+    "wix@synced": false,
+    "githubclip@synced": false,
+    "cowork-plugin-management@synced": false,
+    "16-minds@synced": false,
+    "loop-and-gate-foundation@synced": false,
+    "superpowers@synced": false,
+    "engineering@synced": false,
+    "productivity@synced": false,
+    "github-cli-health-check@synced": false,
+    "obsidian-sync@synced": false,
+    "design-drift@synced": false,
+    "searchfit-seo@synced": false,
+    "github-portfolio-builder@synced": false,
+    "omniout@synced": false,
+    "apify@synced": false,
+    "browser-use@synced": false
+  }
+}
